@@ -2,6 +2,7 @@ import type {Metadata} from "next";
 import {Nunito} from "next/font/google";
 import "../globals.css";
 import {ThemeProvider} from "@/providers/ThemeProvider";
+import Header from "@/components/shared/header/Header";
 
 const nunito = Nunito({
     subsets: ["cyrillic"],
@@ -28,6 +29,7 @@ export default function RootLayout({
             disableTransitionOnChange
             defaultTheme={'light'}
         >
+            <Header />
             <main  className={'min-h-screen'}>
                 {children}
             </main>
