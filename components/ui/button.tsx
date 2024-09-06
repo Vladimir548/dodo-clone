@@ -20,6 +20,12 @@ const buttonVariants = cva(
                 link: 'text-primary underline-offset-4 hover:underline',
                 without:''
             },
+            radius:{
+              md:'rounded-md',
+              sm:'rounded-sm',
+              lg:'rounded-lg',
+              xl:'rounded-xl',
+            },
             size: {
                 default: 'h-10 px-4 py-2',
                 sm: 'h-9 rounded-md px-3',
@@ -42,12 +48,12 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ className, variant, size, asChild = false, children, disabled, loading, ...props }, ref) => {
+    ({ className, variant, size, radius, asChild = false, children, disabled, loading, ...props }, ref) => {
         const Comp = asChild ? Slot : 'button';
         return (
             <Comp
                 disabled={disabled || loading}
-                className={cn(buttonVariants({ variant, size, className }))}
+                className={cn(buttonVariants({ variant, size, radius, className }))}
                 ref={ref}
                 {...props}>
                 {!loading ? children : <Loader className="w-5 h-5 animate-spin" />}

@@ -1,14 +1,14 @@
 import {Button} from "@/components/ui/button";
-import {ArrowRight, ArrowUp, ShoppingCart, User} from "lucide-react";
+import {ArrowRight, ShoppingCart, User} from "lucide-react";
 
 export default function HeaderButtons() {
     return (
         <div className="flex items-center gap-x-2">
             <div>
-                <Button className={'flex items-center gap-x-1'} variant={"outline"}><span><User size={16}/></span> Войти</Button>
+                <Button className={'flex items-center gap-x-1 rounded-lg'} variant={"outline"}><span><User size={16}/></span> Войти</Button>
             </div>
             <div className="group ">
-                <Button className={'flex items-center gap-x-1'} variant={"default"}>
+                <Button className={'flex items-center gap-x-1 rounded-lg'} variant={"default"}>
                     <b className={'max-w-[50px] line-clamp-1 overflow-hidden'}>210000</b><b>₽</b>
                     <span className={'w-[1px] h-full bg-white/30'}></span>
                     <div className={' relative'}>
