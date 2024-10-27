@@ -15,6 +15,7 @@ html {
 @layer base {
   :root {
     --foreground: 20 14.3% 4.1%;
+    --dark-background:0, 0%, 7%;
 
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
@@ -53,22 +54,21 @@ root[class~="dark"] {
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
   border-radius: 6px;
-  background: #fff;
+
+  background: #e7e7e7;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  background: #dbdadd;
+  /*background: #dbdadd;*/
+  @apply dark:bg-primary bg-primary;
   border-radius: 6px;
 }
 
-.scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #dbdadd;
-}
 
 @layer utilities {
   .text-balance {
@@ -93,4 +93,13 @@ root[class~="dark"] {
 
 #nprogress .spinner-icon {
   @apply border-t-primary border-l-primary !important;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: hsl(var(--primary));
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: none;
 }

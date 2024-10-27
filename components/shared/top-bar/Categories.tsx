@@ -1,48 +1,50 @@
 import {cn} from "@/lib/utils";
-import {useState} from "react";
+import {useEffect} from "react";
+import {useQuery} from "@tanstack/react-query";
+import {QueryCategory} from "@/app/api/query-category";
+import {Skeleton} from "@/components/ui/skeleton";
+import {useCategoryStore} from "@/store/category";
 
 interface Props {
-
     className?: string;
 }
+
 interface IItems {
     id: number;
-    name:string
+    name: string
 }
-export default function Categories({  className }:Props) {
-    const items:IItems[] = [
-        {
-            name:'Все',
-            id:0
-    },  {
-            name:'Мясные',
-            id:1
-    },  {
-            name:'С курицей',
-            id:2
-    }, {
-            name:'Сладкие',
-            id:3
-    },{
-            name:'Вегетариансике',
-            id:4
-    },{
-            name:'Острые',
-            id:5
-    },
-    ]
 
-    const [categoryId, setCategoryActiveId] = useState(0)
+export default function Categories({className}: Props) {
+    const {data, isPending} = useQuery({
+        queryKey: ['all-categories'],
+        queryFn: () => QueryCategory.all()
+    })
+
+    const {activeId,setActiveId} = useCategoryStore()
+
+
+    useEffect(() => {
+        if (data){
+        setActiveId(data[0]?.id)
+        }
+    }, [data,setActiveId]);
+    if(!data) return  null
+    if (isPending) return <div className={'w-full'}>
+        <Skeleton count={1} className={'w-10/12 h-[55px] dark:bg-primary'}/>
+    </div>
+    if (!data) return  null
+    const items: IItems[] = data?.filter(item => item.products.length > 0).map(category => ({name: category.name, id: category.id}))
     return (
-        <div className={cn('inline-flex gap-1 bg-gray-100 dark:bg-transparent dark:border dark:border-primary p-1 rounded-2xl', className)}>
-            {items.map(({name, id}, index) => (
-                <a onClick={()=> setCategoryActiveId(id)}
-                    className={cn(
-                        'flex items-center font-bold h-11 rounded-2xl duration-300 px-5 border border-transparent hover:border-primary',
-                        categoryId === id && 'dark:bg-primary bg-primary text-white  dark:shadow-none ',
-                    )}
-                    href={`/#${name}`}
-                    key={index}>
+        <div
+            className={cn('inline-flex gap-1 bg-gray-100 dark:bg-transparent dark:border-2 dark:border-primary p-1 rounded-2xl', className)}>
+            {items?.map(({name, id}, index) => (
+                <a onClick={() => setActiveId(id)}
+                   className={cn(
+                       'flex items-center font-bold h-11 rounded-2xl duration-300 px-5 border-2 border-transparent hover:border-primary',
+                       activeId === id && 'dark:bg-primary bg-primary text-white  dark:shadow-none ',
+                   )}
+                   href={`/#${id}`}
+                   key={index}>
                     <button>{name}</button>
                 </a>
             ))}

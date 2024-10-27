@@ -5,8 +5,13 @@ export interface ICart {
     id: number;
     userId: number;
     totalAmount: number;
+    amountGoods:number;
     createdAt: Date;
     updatedAt: Date;
     user: IUser;
     items: ICartItem[];
+    _count:Count
+}
+export interface Count {
+    items: number
 }

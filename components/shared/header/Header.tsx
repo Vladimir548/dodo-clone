@@ -7,14 +7,14 @@ import SwitchTheme from "@/components/shared/SwitchTheme";
 export default function Header() {
     return (
         <header className={'border-b dark:border-primary/30 '}>
-            <Container className={'py-8 flex justify-between gap-x-7   items-center '}>
+            <Container className={'py-8 flex justify-between gap-x-4   items-center '}>
 
-                    <HeaderLogo/>
-                    <HeaderSearch/>
-                    <HeaderButtons/>
+                <HeaderLogo/>
+                <HeaderSearch/>
+                <HeaderButtons/>
 
             </Container>
-            <div className={'absolute right-5 py-11 top-0 '}> <SwitchTheme/></div>
+            <div className={'absolute right-5 py-11 top-0 '}><SwitchTheme/></div>
 
         </header>
     );

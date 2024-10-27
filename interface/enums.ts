@@ -29,7 +29,7 @@ export enum TypeProduct {
     SAUCES = 'SAUCES',
 }
 
-export enum TypePizza {
+export enum TypeDough {
     TRADITIONAL = 'TRADITIONAL',
     THIN = 'THIN',
 }
@@ -38,3 +38,9 @@ export enum UserRole {
     USER = 'USER',
     ADMIN = 'ADMIN',
 }
+export enum PizzaSize {
+    SMALL='SMALL',
+MEDIUM='MEDIUM',
+LARGE= 'LARGE',
+}
+

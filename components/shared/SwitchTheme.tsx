@@ -3,16 +3,24 @@
 import {Button} from "@/components/ui/button";
 import {Moon, Sun} from "lucide-react";
 import {useTheme} from "next-themes";
+import {useEffect, useState} from "react";
 
 export default function SwitchTheme() {
     const { setTheme,theme } = useTheme()
-    const handleClick=()=>{
-        if(theme === 'light'){
-            setTheme('dark')
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const handleClick = () => {
+        if (theme === 'light') {
+            setTheme('dark');
+        } else {
+            setTheme('light');
         }
-        else {
-            setTheme('light')
-        }
+    };
+    if (!mounted) {
+        return null;
     }
 
     return (

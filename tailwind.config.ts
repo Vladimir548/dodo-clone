@@ -18,8 +18,14 @@ const config: Config = {
   		borderRadius: {
   			lg: 'var(--radius)',
   		},
+		boxShadow:{
+			  default:' 0px 0px 5px 2px rgba(0, 0, 0, 0.10)',
+			'inner-default':'inset 0px 0px 5px 2px rgba(0, 0, 0, 0.10)',
+
+		},
   		colors: {
   			background: 'hsl(var(--background))',
+			'dark-background': 'hsl(var(--dark-background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
@@ -49,6 +55,8 @@ const config: Config = {
   				DEFAULT: 'hsl(var(--destructive))',
   				foreground: 'hsl(var(--destructive-foreground))'
   			},
+			'secondary-white':'#dbdbdb',
+			'secondary-black':'#1a1a1a',
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
@@ -58,7 +66,8 @@ const config: Config = {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+
   		}
   	}
   },
