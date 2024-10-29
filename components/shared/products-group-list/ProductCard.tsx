@@ -6,9 +6,7 @@ import Link from "next/link";
 import {Title} from "@/components/shared/Title";
 import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
-import {useCallback, useState} from "react";
-import InputCounter from "@/components/InputCounter";
-import ButtonCounter from "@/components/ButtonCounter";
+
 import {URL_API} from "@/constants";
 
 interface ICard {
@@ -17,7 +15,6 @@ interface ICard {
 }
 
 export default function ProductCard({product}: ICard) {
-    const [isActive,setIsActive] = useState(false);
 
     return (
 
@@ -28,7 +25,7 @@ export default function ProductCard({product}: ICard) {
                     <Image loading={"lazy"}  src={`${URL_API}/${product.image}`} width={250} height={250} alt={product.name}/>
                 </div>
                 <div className={'flex flex-1 flex-col'}>
-                    <Title className={'pt-3 font-bold'} size={"sm"} text={product.name}/>
+                    <Title className={'pt-3 group-hover:text-white font-bold'} size={"sm"} text={product.name}/>
                     {product.ingredients && (
                         <p className={'text-foreground/80 group-hover:text-white/80 dark:text-white/80 text-sm'}>{product.ingredients.map(ingredient => ingredient.name).join(', ')}</p>
                     )}
