@@ -1,12 +1,13 @@
 import {PizzaSize} from "@/interface/enums";
 
-interface IPizzaSize {
+export interface IPizzaSize {
+    
     value:PizzaSize
     size:string
 }
 
 export const DATAPIZZASIZE:IPizzaSize[]=[
-    {
+    { 
         value:PizzaSize.SMALL,
         size:'25 См',
     },
@@ -14,7 +15,7 @@ export const DATAPIZZASIZE:IPizzaSize[]=[
         value:PizzaSize.MEDIUM,
         size:'30 См',
     },
-    {
+    { 
         value:PizzaSize.LARGE,
         size:'35 См',
     },

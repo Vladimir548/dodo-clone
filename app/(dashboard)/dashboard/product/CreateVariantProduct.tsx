@@ -4,7 +4,7 @@ import {Controller, SubmitHandler, useFieldArray, useForm} from "react-hook-form
 
 import {useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
-import { IProductVariant} from "@/interface/interface-product-variant";
+import { IProductVariant, ISize} from "@/interface/interface-product-variant";
 import {QueryVariantProduct} from "@/app/api/query-variant-product";
 import FormLayout from "@/app/(dashboard)/FormLayout";
 import {InputCustom} from "@/components/shared/InputCustom";
@@ -18,7 +18,7 @@ import Select, {Option} from "rc-select";
 import useTypeProduct from "@/hooks/useTypeProduct";
 import SelectParameter from "@/app/(dashboard)/dashboard/_ui/SelectParameter";
 import {DATADOUGHTYPE} from "@/data/dough-type";
-import {DATAPIZZASIZE} from "@/data/pizza-size";
+import {DATAPIZZASIZE, IPizzaSize} from "@/data/pizza-size";
 import SelectCustom from "@/components/SelectCustom";
 import {SelectItem} from "@/components/ui/select";
 import React, { useState} from "react";
@@ -48,7 +48,7 @@ export default function CreateVariantProduct() {
 
     };
     const watchProductId = watch("productId")
-    const { fields,append, remove } = useFieldArray<IProductVariant>({
+    const { fields, append, remove } = useFieldArray<IProductVariant>({
         control,
         name: "sizes",
 
@@ -58,19 +58,22 @@ export default function CreateVariantProduct() {
 
     const handleSizeChange = (value: string[]) => {
         setSelectedSizes(value);
-        const currentValues = getValues("sizes");
+        const currentValues = watch("sizes");
         currentValues.forEach((field, index) => {
             if (!value.includes(field.size)) {
                 remove(index);
             }
         });
 
-        // value.forEach((size) => {
-        //     if (!currentValues.some((field) => field.size === size)) {
-        //         append({ size, price: 0, weight: 0 });
-        //     }
-        // });
+        value.forEach((size) => {
+            if (!currentValues.some((field) => field.size === size)) {
+                append(({ size, price: 0, weight: 0, }) as ISize);
+            }
+        });
     };
+
+    const appendSize = ()=>{}
+
     const {type} = useTypeProduct(watchProductId)
 
     return (
@@ -107,49 +110,54 @@ export default function CreateVariantProduct() {
                 </Select>
                 </div>
             )}
-            {/*<>*/}
-            {/*    {type === 'PIZZA' && (*/}
-            {/*        <div className={'flex items-center gap-x-2'}>*/}
-            {/*            {fields.map((item, index) => {*/}
-            {/*                console.log(item)*/}
-            {/*                return (*/}
-            {/*                <div key={item.id}>*/}
-            {/*                    <>*/}
-            {/*                    <Controller*/}
-            {/*                        control={control}*/}
-            {/*                        name={`sizes.${index}.price`}*/}
-            {/*                        render={({ field:{onChange,value} }) => (*/}
-            {/*                            <NumericFormat*/}
-            {/*                               onValueChange={(value) => onChange(value.floatValue)}*/}
-            {/*                                value={value}*/}
-            {/*                                thousandSeparator=","*/}
-            {/*                                suffix=" ₽"*/}
-            {/*                                customInput={InputCustom}*/}
-            {/*                                label={`Цена для ${DATAPIZZASIZE.find(val => val.value ===item.size)?.size}`}*/}
-            {/*                            />*/}
-            {/*                        )}*/}
-            {/*                    />*/}
+            <>
+                {type === 'PIZZA' && (
+                    <div className={'flex items-center gap-x-2'}>
+                     {fields.map((field, index:number) => {
+                            console.log(field)
+                            const sizeLabel = DATAPIZZASIZE.find(val => val.value === (field as ISize).size)?.size;
+                            return (
+                            <div key={field.id}>
+                                <>
+                                <Controller
+                                    control={control}
+                                    name={`sizes.${index}.price`}
+                                    render={({ field:{onChange,value} }) => (
+                                        <NumericFormat
+                                           onValueChange={(value) => onChange(value.floatValue)}
+                                            value={value}
+                                            thousandSeparator=","
+                                            suffix=" ₽"
+                                            customInput={InputCustom}
+                                            label={`Цена для ${sizeLabel} `}
+                                        />
+                                    )}
+                                />
 
-            {/*                </>*/}
-            {/*                    <Controller*/}
-            {/*                        control={control}*/}
-            {/*                        name={`sizes.${index}.weight`}*/}
-            {/*                        render={({ field:{onChange,value} }) => (*/}
-            {/*                            <NumericFormat*/}
-            {/*                                onValueChange={(value) => onChange(value.floatValue)}*/}
-            {/*                                value={value}*/}
-            {/*                                thousandSeparator=","*/}
-            {/*                                suffix=" г"*/}
-            {/*                                customInput={InputCustom}*/}
-            {/*                                label={`Масса для ${DATAPIZZASIZE.find(val => val.value ===item.size)?.size}`}*/}
-            {/*                            />*/}
-            {/*                        )}*/}
-            {/*                    />*/}
-            {/*                </div>*/}
-            {/*            )})}*/}
-            {/*        </div>*/}
-            {/*    )}*/}
-            {/*</>*/}
+                            </>
+                                <Controller
+                                    control={control}
+                                    name={`sizes.${index}.weight`}
+                                    render={({ field:{onChange,value} }) => {
+                                        
+                                      
+                                        return (
+                                        <NumericFormat
+                                            onValueChange={(value) => onChange(value.floatValue)}
+                                            value={value}
+                                            thousandSeparator=","
+                                            suffix=" г"
+                                            customInput={InputCustom}
+                                            label={`Масса для ${sizeLabel}`}
+                                        />
+                                    )
+                                    }}
+                                />
+                            </div>
+                        )})}
+                    </div>
+               )}
+            </>
             <UploadImage<IProductVariant> control={control} field={'image'}/>
         </FormLayout>
     );
