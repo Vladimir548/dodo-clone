@@ -13,7 +13,6 @@ import SelectCustom from "@/components/SelectCustom";
 import SelectCategory from "@/app/(dashboard)/dashboard/_ui/select/SelectCategory";
 import SelectIngredient from "@/app/(dashboard)/dashboard/_ui/select/SelectIngredient";
 import UploadImage from "@/components/shared/upload-image/UploadImage";
-import {TextareaCustom} from "@/components/TextareaCustom";
 export default function CreateProduct() {
     const {handleSubmit, control,register,watch} = useForm<IProduct>()
     const queryClient = useQueryClient();
@@ -32,7 +31,6 @@ export default function CreateProduct() {
     });
     const onSubmit: SubmitHandler<IProduct> = (data) => {
         mutate(data)
-
     };
 const type = watch('typeProduct')
     return (

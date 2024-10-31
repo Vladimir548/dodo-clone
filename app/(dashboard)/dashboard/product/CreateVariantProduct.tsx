@@ -12,13 +12,11 @@ import InputCounter from "@/components/InputCounter";
 import {NumericFormat} from "react-number-format";
 import UploadImage from "@/components/shared/upload-image/UploadImage";
 import SelectProduct from "@/app/(dashboard)/dashboard/_ui/select/SelectProduct";
-import MultipleSelect from "@/components/select-custom/MultipleSelect";
 import Select, {Option} from "rc-select";
-
 import useTypeProduct from "@/hooks/useTypeProduct";
 import SelectParameter from "@/app/(dashboard)/dashboard/_ui/SelectParameter";
 import {DATADOUGHTYPE} from "@/data/dough-type";
-import {DATAPIZZASIZE, IPizzaSize} from "@/data/pizza-size";
+import {DATAPIZZASIZE} from "@/data/pizza-size";
 import SelectCustom from "@/components/SelectCustom";
 import {SelectItem} from "@/components/ui/select";
 import React, { useState} from "react";
@@ -26,7 +24,7 @@ import {Check} from "lucide-react";
 
 
 export default function CreateVariantProduct() {
-    const {handleSubmit, control,setValue,getValues, watch} = useForm<IProductVariant>({
+    const {handleSubmit, control, watch} = useForm<IProductVariant>({
         defaultValues: {
             sizes: [],
         },
@@ -72,8 +70,6 @@ export default function CreateVariantProduct() {
         });
     };
 
-    const appendSize = ()=>{}
-
     const {type} = useTypeProduct(watchProductId)
 
     return (
@@ -91,6 +87,7 @@ export default function CreateVariantProduct() {
                                 renderItems={DATADOUGHTYPE.map((val) => <SelectItem key={val.value}
                                                                            value={val.value}>{val.name}</SelectItem>)}/>
             )}
+
             {type === 'PIZZA' && (
                 <div className={'flex flex-col'}>
                     <label className={'text-primary'}>Размеры</label>
@@ -139,8 +136,8 @@ export default function CreateVariantProduct() {
                                     control={control}
                                     name={`sizes.${index}.weight`}
                                     render={({ field:{onChange,value} }) => {
-                                        
-                                      
+
+
                                         return (
                                         <NumericFormat
                                             onValueChange={(value) => onChange(value.floatValue)}

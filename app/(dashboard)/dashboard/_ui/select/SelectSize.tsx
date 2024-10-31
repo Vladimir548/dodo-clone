@@ -5,7 +5,7 @@ import MultipleSelect from "@/components/select-custom/MultipleSelect";
 import {IHookForm} from "@/interface/interface-hook-form";
 import {FieldValues} from "react-hook-form";
 import {useQuery} from "@tanstack/react-query";
-import {QuerySize} from "@/app/api/query-size";
+import {QuerySize} from "@/app/api/query-proportion";
 import {TypeProduct} from "@/interface/enums";
 
 interface ISize<T extends FieldValues> extends IHookForm<T>{

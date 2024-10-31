@@ -20,5 +20,5 @@ export interface IProduct {
     category: ICategory;
     productVariant: IProductVariant[];
     ingredients: IIngredient[];
-    ingredientIds:number[]
+    ingredientIds?:number[]
 }

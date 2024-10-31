@@ -3,6 +3,6 @@ import {TypeProduct} from "@/interface/enums";
 
 export interface ISize {
     id:number;
-    size:string,
+    proportion:string,
     typeProduct:TypeProduct[]
 }
