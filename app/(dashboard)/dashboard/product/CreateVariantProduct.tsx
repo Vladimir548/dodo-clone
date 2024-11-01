@@ -70,26 +70,6 @@ export default function CreateVariantProduct() {
 
             <SelectSize control={control} type={type} watch={watch} />
 
-            {/* {type === 'PIZZA' && (
-                <div className={'flex flex-col'}>
-                    <label className={'text-primary'}>Размеры</label>
-                <Select
-                    mode="multiple"
-                    className="w-[300px]  rounded-md "
-                    dropdownClassName="h-[200px] border border-primary "
-                    optionLabelProp="children"
-                    allowClear={true}
-                    menuItemSelectedIcon={<Check size={20} strokeWidth={3} />}
-                    onChange={handleSizeChange}
-                    value={selectedSizes}>
-                    {DATAPIZZASIZE.map((val) => <Option key={val.value}
-                                                        value={val.value}>{val.size}</Option>)}
-                </Select>
-                </div>
-            )} */}
-            <>
-                
-            </>
             <UploadImage<IProductVariant> control={control} field={'image'}/>
         </FormLayout>
     );
