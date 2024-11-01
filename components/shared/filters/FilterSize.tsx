@@ -3,7 +3,6 @@
 
 import {FiltersListCheckbox} from "@/components/shared/filters/FiltersListChecbox";
 import {QueryProportion} from "@/app/api/query-proportion";
-import {DATAPIZZASIZE} from "@/data/pizza-size";
 import {useQuery} from "@tanstack/react-query";
 import {TypeProduct} from "@/interface/enums";
 
@@ -19,10 +18,10 @@ export default function FilterSize({selected,onClickCheckbox,type}: IProps) {
          queryKey:['size-by-type'],
          queryFn:()=>QueryProportion.byType(TypeProduct[type])
      })
-    const item = DATAPIZZASIZE?.map(size => ({value: size.value, text: size.size}))
+    const item = data?.map(size => ({value: size.id, text: size.proportion}))
     return (
         <div>
-            <FiltersListCheckbox selected={selected} onClickCheckbox={onClickCheckbox}   name={'size'}  title={'Размеры'} defaultItems={item}     items={item?.length ?  item : []} />
+            <FiltersListCheckbox selected={selected} onClickCheckbox={onClickCheckbox}   name={'size'}  title={'Размеры'} defaultItems={item}  items={item?.length ?  item : []} />
         </div>
     );
 };

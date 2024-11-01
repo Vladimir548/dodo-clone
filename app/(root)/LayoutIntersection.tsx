@@ -14,7 +14,7 @@ export default function LayoutIntersection({children,id,className}:ILayoutInters
     const  {intersectionRef}= useIntersectionCategory(id)
 
     return (
-        <div className={cn('',className)} ref={intersectionRef}>
+        <div className={cn('min-h-[600px]',className)} ref={intersectionRef}>
             {children}
         </div>
     );

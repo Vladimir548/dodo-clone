@@ -16,7 +16,7 @@ export const QueryProportion = {
         return data as ISize[]
     },
     async byType (type:TypeProduct | undefined){
-        const {data} = await axiosClassic.get<ISize[]>('/size/by-type',{
+        const {data} = await axiosClassic.get<ISize[]>('/proportion/by-type',{
             params:{
                 type
             }

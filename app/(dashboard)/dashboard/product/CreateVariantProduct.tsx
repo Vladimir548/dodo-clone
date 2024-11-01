@@ -21,6 +21,7 @@ import SelectCustom from "@/components/SelectCustom";
 import {SelectItem} from "@/components/ui/select";
 import React, { useState} from "react";
 import {Check} from "lucide-react";
+import SelectSize from "../_ui/select/SelectSize";
 
 
 export default function CreateVariantProduct() {
@@ -29,7 +30,7 @@ export default function CreateVariantProduct() {
             sizes: [],
         },
     })
-
+    const watchProductId = watch("productId")
     const {mutate} = useMutation({
         mutationKey: ['create-variant-product'],
         mutationFn: (dto: IProductVariant) => QueryVariantProduct.create(dto),
@@ -45,30 +46,9 @@ export default function CreateVariantProduct() {
         mutate(data)
 
     };
-    const watchProductId = watch("productId")
-    const { fields, append, remove } = useFieldArray<IProductVariant>({
-        control,
-        name: "sizes",
 
-    });
 
-    const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
-
-    const handleSizeChange = (value: string[]) => {
-        setSelectedSizes(value);
-        const currentValues = watch("sizes");
-        currentValues.forEach((field, index) => {
-            if (!value.includes(field.size)) {
-                remove(index);
-            }
-        });
-
-        value.forEach((size) => {
-            if (!currentValues.some((field) => field.size === size)) {
-                append(({ size, price: 0, weight: 0, }) as ISize);
-            }
-        });
-    };
+    
 
     const {type} = useTypeProduct(watchProductId)
 
@@ -88,7 +68,9 @@ export default function CreateVariantProduct() {
                                                                            value={val.value}>{val.name}</SelectItem>)}/>
             )}
 
-            {type === 'PIZZA' && (
+            <SelectSize control={control} type={type} watch={watch} />
+
+            {/* {type === 'PIZZA' && (
                 <div className={'flex flex-col'}>
                     <label className={'text-primary'}>Размеры</label>
                 <Select
@@ -99,61 +81,14 @@ export default function CreateVariantProduct() {
                     allowClear={true}
                     menuItemSelectedIcon={<Check size={20} strokeWidth={3} />}
                     onChange={handleSizeChange}
-                    value={selectedSizes}
-
-                >
+                    value={selectedSizes}>
                     {DATAPIZZASIZE.map((val) => <Option key={val.value}
                                                         value={val.value}>{val.size}</Option>)}
                 </Select>
                 </div>
-            )}
+            )} */}
             <>
-                {type === 'PIZZA' && (
-                    <div className={'flex items-center gap-x-2'}>
-                     {fields.map((field, index:number) => {
-                            console.log(field)
-                            const sizeLabel = DATAPIZZASIZE.find(val => val.value === (field as ISize).size)?.size;
-                            return (
-                            <div key={field.id}>
-                                <>
-                                <Controller
-                                    control={control}
-                                    name={`sizes.${index}.price`}
-                                    render={({ field:{onChange,value} }) => (
-                                        <NumericFormat
-                                           onValueChange={(value) => onChange(value.floatValue)}
-                                            value={value}
-                                            thousandSeparator=","
-                                            suffix=" ₽"
-                                            customInput={InputCustom}
-                                            label={`Цена для ${sizeLabel} `}
-                                        />
-                                    )}
-                                />
-
-                            </>
-                                <Controller
-                                    control={control}
-                                    name={`sizes.${index}.weight`}
-                                    render={({ field:{onChange,value} }) => {
-
-
-                                        return (
-                                        <NumericFormat
-                                            onValueChange={(value) => onChange(value.floatValue)}
-                                            value={value}
-                                            thousandSeparator=","
-                                            suffix=" г"
-                                            customInput={InputCustom}
-                                            label={`Масса для ${sizeLabel}`}
-                                        />
-                                    )
-                                    }}
-                                />
-                            </div>
-                        )})}
-                    </div>
-               )}
+                
             </>
             <UploadImage<IProductVariant> control={control} field={'image'}/>
         </FormLayout>

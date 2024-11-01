@@ -11,15 +11,8 @@ export default function Home() {
         <>
             <TopBar/>
             <div className={'pt-5'}>
-                <Container className={'flex gap-x-[80px]'}>
-                    <div>
-                        <Suspense fallback={<div>Loading...</div>}>
-                        <Filter/>
-                        </Suspense>
-                    </div>
-                    <div className="w-full">
+                <Container> 
                      <ProductsGroupList/>
-                    </div>
                 </Container>
             </div>
         </>
