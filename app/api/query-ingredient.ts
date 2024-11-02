@@ -6,12 +6,14 @@ import {TypeProduct} from "@/interface/enums";
 
 
 export const QueryIngredient = {
+   
     async create(dto:IIngredient){
+       
         const formData = new FormData();
         formData.append("file", dto.file);
         formData.append('name', dto.name);
         formData.append('price', dto.price.toString());
-        formData.append('typeProduct', dto.typeProduct.join(','));
+        formData.append('categories', JSON.stringify(dto.categories));
 
         const {data} = await axiosData.post<IIngredient>('/ingredient/create',formData);
         return data as IIngredient;
@@ -20,7 +22,8 @@ export const QueryIngredient = {
         const {data} = await axiosData.get<IIngredient[]>('/ingredient/all')
         return data as IIngredient[]
     },
-    async byType (type:TypeProduct | undefined){
+    async byType (type:number | undefined){
+        console.log(type)
         const {data} = await axiosData.get<IIngredient[]>('/ingredient/by-type',{
             params:{
                 type

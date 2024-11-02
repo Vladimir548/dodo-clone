@@ -32,14 +32,13 @@ export default function CreateProduct() {
     const onSubmit: SubmitHandler<IProduct> = (data) => {
         mutate(data)
     };
-const type = watch('typeProduct')
+const type = watch('categoryId')
     return (
 
        <FormLayout handleFn={handleSubmit(onSubmit)} buttonVariant={"create"} title={'Создание продукта'}>
 
            <InputCustom label={"Название"} {...register('name', {required:true})}/>
 
-           <SelectCustom<IProduct> control={control} field={"typeProduct"} label={"Тип продукта"} renderItems={DATAPRODUCTYPE.map((val) => <SelectItem key={val.value} value={val.value}>{val.name}</SelectItem>) } />
 
            <SelectCategory control={control} field={'categoryId'} />
 

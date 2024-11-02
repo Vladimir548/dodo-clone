@@ -13,10 +13,8 @@ export interface IProduct {
     categoryId: number;
     createdAt: Date;
     updatedAt: Date;
-
     image:string,
     file:File
-    typeProduct: TypeProduct;
     category: ICategory;
     productVariant: IProductVariant[];
     ingredients: IIngredient[];
