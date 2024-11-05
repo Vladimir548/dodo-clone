@@ -11,10 +11,11 @@ interface ILayoutIntersection {
 }
 
 export default function LayoutIntersection({children,id,className}:ILayoutIntersection) {
+    console.log(id)
     const  {intersectionRef}= useIntersectionCategory(id)
-
+    console.log(intersectionRef);
     return (
-        <div className={cn('min-h-[600px]',className)} ref={intersectionRef}>
+        <div className={cn('min-h-[600px]',className)} id={String(id)} ref={intersectionRef}>
             {children}
         </div>
     );

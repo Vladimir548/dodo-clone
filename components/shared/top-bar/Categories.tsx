@@ -20,20 +20,23 @@ export default function Categories({className}: Props) {
         queryFn: () => QueryCategory.all()
     })
 
-    const {activeId,setActiveId} = useCategoryStore()
+    const {activeId, setActiveId} = useCategoryStore()
 
 
     useEffect(() => {
-        if (data){
-        setActiveId(data[0]?.id)
+        if (data) {
+            setActiveId(data[0]?.id)
         }
-    }, [data,setActiveId]);
-    if(!data) return  null
+    }, [data, setActiveId]);
+    if (!data) return null
     if (isPending) return <div className={'w-full'}>
         <Skeleton count={1} className={'w-10/12 h-[55px] dark:bg-primary'}/>
     </div>
-    if (!data) return  null
-    const items: IItems[] = data?.filter(item => item.products.length > 0).map(category => ({name: category.name, id: category.id}))
+    if (!data) return null
+    const items: IItems[] = data?.filter(item => item.products.length > 0).map(category => ({
+        name: category.name,
+        id: category.id
+    }))
     return (
         <div
             className={cn('inline-flex gap-1 bg-gray-100 dark:bg-transparent dark:border-2 dark:border-primary p-1 rounded-2xl', className)}>
