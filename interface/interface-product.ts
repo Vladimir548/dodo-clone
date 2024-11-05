@@ -11,6 +11,7 @@ export interface IProduct {
     id: number;
     name: string;
     categoryId: number;
+    type:TypeProduct
     createdAt: Date;
     updatedAt: Date;
     image:string,

@@ -9,11 +9,6 @@ import {InputCustom} from "@/components/shared/InputCustom";
 import FormLayout from "@/app/(dashboard)/FormLayout";
 import {QueryIngredient} from "@/app/api/query-ingredient";
 import {NumericFormat} from "react-number-format";
-import MultipleSelect from "@/components/select-custom/MultipleSelect";
-
-import {DATAPRODUCTYPE} from "@/data/type-product";
-import {Option} from "rc-select";
-import { useGetCategories } from "@/hooks/useGetCategories";
 import MultipleSelectCategory from "@/app/(dashboard)/dashboard/_ui/select/MultipleSelectCategory";
 
 export default function CreateIngredient() {

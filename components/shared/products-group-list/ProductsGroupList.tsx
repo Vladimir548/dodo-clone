@@ -20,7 +20,7 @@ export default function ProductsGroupList() {
             {data?.map(val => (
                 <div key={val.id}>
                     {val.products.length > 0 && (
-                        <LayoutIntersection id={val.id} >
+                        <LayoutIntersection slug={val.slug} >
                             <div className="flex gap-x-[80px]">
                                 <div>
                                     <Suspense fallback={<div>Loading...</div>}>

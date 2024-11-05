@@ -9,9 +9,6 @@ import {QueryParameter} from "@/app/api/query-parameter";
 import {IParameter} from "@/interface/interface-parameter";
 import FormLayout from "@/app/(dashboard)/FormLayout";
 import {InputCustom} from "@/components/shared/InputCustom";
-import MultipleSelect from "@/components/select-custom/MultipleSelect";
-import {DATAPRODUCTYPE} from "@/data/type-product";
-import {Option} from "rc-select";
 import MultipleSelectCategory from "@/app/(dashboard)/dashboard/_ui/select/MultipleSelectCategory";
 
 export default function CreateParameter() {

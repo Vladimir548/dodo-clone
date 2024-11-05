@@ -1,5 +1,4 @@
-import {IParameter} from "@/interface/interface-parameter";
-import {DATAPRODUCTYPE} from "@/data/type-product";
+
 import {Option} from "rc-select";
 import MultipleSelect from "@/components/select-custom/MultipleSelect";
 import {Control, FieldValues, Path} from "react-hook-form";

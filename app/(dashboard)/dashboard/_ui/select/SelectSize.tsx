@@ -15,16 +15,16 @@ import {IProportion} from "@/interface/IProportion";
 
 type FormValues = IProductVariant;
 interface ISizeProps extends IHookForm<FormValues>{
-    type:number | undefined
+    category:number | undefined
     watch:any
 }
 
-export default function SelectSize({control,type,watch}:ISizeProps) {
+export default function SelectSize({control,category,watch}:ISizeProps) {
 
     const {data} = useQuery({
-        queryKey:['by-type-size',type],
-        queryFn:()=> QueryProportion.byType(type),
-        enabled:!!type
+        queryKey:['by-type-size',category],
+        queryFn:()=> QueryProportion.byType(category),
+        enabled:!!category
     })
 
     const [selectedSizes, setSelectedSizes] = useState<number[]>([]);

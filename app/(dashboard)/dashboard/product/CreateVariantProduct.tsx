@@ -17,6 +17,7 @@ import {SelectItem} from "@/components/ui/select";
 import React, { useState} from "react";
 
 import SelectSize from "../_ui/select/SelectSize";
+import {TypeProduct} from "@/interface/enums";
 
 
 export default function CreateVariantProduct() {
@@ -41,21 +42,21 @@ export default function CreateVariantProduct() {
         mutate(data)
 
     };
-    const {type} = useTypeProduct(watchProductId)
+    const {category,type} = useTypeProduct(watchProductId)
 
     return (
         <FormLayout handleFn={handleSubmit(onSubmit)} buttonVariant={"create"} title={'Создание вариантов продукта'}>
 
             <SelectProduct control={control} field={'productId'}/>
 
-            <InputCounter control={control} field={'quantity'} min={1} max={30} label={"Количество шт"}
-                         />
+            <InputCounter control={control} field={'quantity'} min={1} max={30} label={"Количество шт"}/>
 
-
+            {type === TypeProduct.PIZZA && (
                 <SelectCustom control={control} field={"doughName"} label={"Тип теста"}
                                 renderItems={DATADOUGHTYPE.map((val) => <SelectItem key={val.value}
                                                                            value={val.value}>{val.name}</SelectItem>)}/>
-            <SelectSize control={control} type={type} watch={watch} />
+            )}
+            <SelectSize control={control} category={category} watch={watch} />
 
             <UploadImage<IProductVariant> control={control} field={'image'}/>
         </FormLayout>
