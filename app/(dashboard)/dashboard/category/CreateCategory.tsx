@@ -10,7 +10,7 @@ import {InputCustom} from "@/components/shared/InputCustom";
 
 export default function CreateCategory() {
 
-    const {handleSubmit, control, reset} = useForm<ICategory>()
+    const {handleSubmit, control,register, reset} = useForm<ICategory>()
     const queryClient = useQueryClient();
     const {mutate} =useMutation({
         mutationKey:['create-category'],
@@ -31,13 +31,10 @@ export default function CreateCategory() {
     };
     return (
         <FormLayout title={'Создание'}  handleFn={handleSubmit(onSubmit)} buttonVariant={"create"}>
-            <Controller
-                control={control}
-                render={({field: {onChange, value}}) => (
-                    <InputCustom  onChange={onChange} value={value} label={'Название'}/>
-                )}
-                name="name"
-            />
+
+            <InputCustom {...register('name')}  label={'Название'}/>
+            <InputCustom  {...register('slug')} label={'Слаг'}/>
+
         </FormLayout>
     );
 };

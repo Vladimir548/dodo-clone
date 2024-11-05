@@ -10,7 +10,7 @@ interface Props {
 }
 
 interface IItems {
-    id: number;
+    slug: string;
     name: string
 }
 
@@ -20,14 +20,14 @@ export default function Categories({className}: Props) {
         queryFn: () => QueryCategory.all()
     })
 
-    const {activeId, setActiveId} = useCategoryStore()
+    const {activeSlug, setActiveSlug} = useCategoryStore()
 
 
     useEffect(() => {
         if (data) {
-            setActiveId(data[0]?.id)
+            setActiveSlug(data[0]?.slug)
         }
-    }, [data, setActiveId]);
+    }, [data]);
     if (!data) return null
     if (isPending) return <div className={'w-full'}>
         <Skeleton count={1} className={'w-10/12 h-[55px] dark:bg-primary'}/>
@@ -35,18 +35,19 @@ export default function Categories({className}: Props) {
     if (!data) return null
     const items: IItems[] = data?.filter(item => item.products.length > 0).map(category => ({
         name: category.name,
-        id: category.id
+        slug: category.slug
     }))
+    console.log(activeSlug)
     return (
         <div
             className={cn('inline-flex gap-1 bg-gray-100 dark:bg-transparent dark:border-2 dark:border-primary p-1 rounded-2xl', className)}>
-            {items?.map(({name, id}, index) => (
-                <a onClick={() => setActiveId(id)}
+            {items?.map(({name,slug }, index) => (
+                <a onClick={() => setActiveSlug(slug)}
                    className={cn(
                        'flex items-center font-bold h-11 rounded-2xl duration-300 px-5 border-2 border-transparent hover:border-primary',
-                       activeId === id && 'dark:bg-primary bg-primary text-white  dark:shadow-none ',
+                       activeSlug === slug && 'dark:bg-primary bg-primary text-white  dark:shadow-none ',
                    )}
-                   href={`/#${id}`}
+                   href={`/#${slug}`}
                    key={index}>
                     <button>{name}</button>
                 </a>

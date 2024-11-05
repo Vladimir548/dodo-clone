@@ -6,16 +6,15 @@ import {cn} from "@/lib/utils";
 
 interface ILayoutIntersection {
     children:React.ReactNode;
-    id:number
+    slug:string
     className?:string
 }
 
-export default function LayoutIntersection({children,id,className}:ILayoutIntersection) {
-    console.log(id)
-    const  {intersectionRef}= useIntersectionCategory(id)
+export default function LayoutIntersection({children,slug,className}:ILayoutIntersection) {
+    const  {intersectionRef}= useIntersectionCategory(slug)
     console.log(intersectionRef);
     return (
-        <div className={cn('min-h-[600px]',className)} id={String(id)} ref={intersectionRef}>
+        <div className={cn('min-h-[600px]',className)} id={slug} ref={intersectionRef}>
             {children}
         </div>
     );
