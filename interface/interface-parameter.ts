@@ -1,8 +1,9 @@
-import {TypeProduct} from "@/interface/enums";
+
+import {ICategory} from "@/interface/interface-category";
 
 
 export interface IParameter {
     id:number;
     parameter:string,
-    typeProduct:TypeProduct[]
+    categories:ICategory[]
 }

@@ -7,12 +7,11 @@ import {IProduct} from "@/interface/interface-product";
 import {QueryProduct} from "@/app/api/query-product";
 import FormLayout from "@/app/(dashboard)/FormLayout";
 import {InputCustom} from "@/components/shared/InputCustom";
-import {SelectItem} from "@/components/ui/select"
-import {DATAPRODUCTYPE} from "@/data/type-product";
-import SelectCustom from "@/components/SelectCustom";
 import SelectCategory from "@/app/(dashboard)/dashboard/_ui/select/SelectCategory";
 import SelectIngredient from "@/app/(dashboard)/dashboard/_ui/select/SelectIngredient";
 import UploadImage from "@/components/shared/upload-image/UploadImage";
+
+
 export default function CreateProduct() {
     const {handleSubmit, control,register,watch} = useForm<IProduct>()
     const queryClient = useQueryClient();
@@ -32,13 +31,12 @@ export default function CreateProduct() {
     const onSubmit: SubmitHandler<IProduct> = (data) => {
         mutate(data)
     };
-const type = watch('categoryId')
+    const type = watch('categoryId')
     return (
 
        <FormLayout handleFn={handleSubmit(onSubmit)} buttonVariant={"create"} title={'Создание продукта'}>
 
            <InputCustom label={"Название"} {...register('name', {required:true})}/>
-
 
            <SelectCategory control={control} field={'categoryId'} />
 

@@ -15,7 +15,6 @@ export interface IProduct {
     updatedAt: Date;
     image:string,
     file:File
-    category: ICategory;
     productVariant: IProductVariant[];
     ingredients: IIngredient[];
     ingredientIds?:number[]

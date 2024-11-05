@@ -6,19 +6,18 @@ import usePriceIngredients from "@/hooks/usePriceIngredients";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import Link from "next/link";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {ICartItem} from "@/interface/interface-cart-item";
 import {QueryCartItem} from "@/app/api/query-cart-item";
-
 import {IProduct} from "@/interface/interface-product";
-import {PizzaSize, TypeDough} from "@/interface/enums";
+import { TypeDough} from "@/interface/enums";
 import {toast} from "react-toastify";
 import {IAddItemCart} from "@/interface/interface-add-item-cart";
+
 
 interface IProductPrice {
     price: number  | undefined;
     data:IProduct,
     selectDough?:TypeDough,
-    selectSizePizza:PizzaSize
+    selectSizePizza:number | undefined
 
 }
 
@@ -38,7 +37,7 @@ export default function ProductButtonPrice({price,data,selectSizePizza,selectDou
         }
     })
     const productVariantId = data.productVariant.find(val => val.doughName === selectDough)?.id
-    const sizeId =data.productVariant.find(val => val.doughName === selectDough)?.sizes.find(size => size.size === selectSizePizza)?.id
+    const sizeId =data.productVariant.find(val => val.doughName === selectDough)?.sizes.find(size => size.sizeId === selectSizePizza)?.id
     const {sumPrice,ingredients} = usePriceIngredients()
 
     const totalPrice = Number(price) + Number(sumPrice)

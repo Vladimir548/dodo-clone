@@ -1,5 +1,6 @@
 import {IProductVariant} from "@/interface/interface-product-variant";
 import {IProduct} from "@/interface/interface-product";
+import {IProportion} from "@/interface/IProportion";
 
 export type ICartItemResponse = ICartItem[]
 
@@ -29,7 +30,8 @@ export interface Ingredient {
 }
 export interface ISize {
     id: number
-    size: string
+    proportion: IProportion
+    sizeId: number
     price: number
     weight: number
     productVariantId: number

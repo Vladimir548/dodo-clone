@@ -25,7 +25,7 @@ export default function OrderItemCard({item}: Props) {
                         <h3 className={'font-bold'}>{item.product.name}</h3>
                         <div className={'flex items-center gap-x-3 dark:text-gray-200 text-black/60 text-md'}>
                             <span>{DATADOUGHTYPE.find(val => val.value === item.productVariant.doughName)?.name}</span>
-                            <span> {DATAPIZZASIZE.find(val => val.value === item.size.size)?.size}</span>
+                            <span> {item.size.proportion.value}</span>
                             <span>{item.size.weight} г</span>
                         </div>
                         {item.ingredients.length > 0 && (

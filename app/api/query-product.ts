@@ -9,8 +9,7 @@ export const QueryProduct = {
         const formData = new FormData();
         formData.append('file', dto.file)
         formData.append('name', dto.name)
-        formData.append('categoryId', dto.categoryId.toString())
-        formData.append('typeProduct', dto.typeProduct)
+        formData.append('categoryId', dto.categoryId.toString());
         if (dto.ingredientIds) {
             formData.append('ingredientIds', dto.ingredientIds.toString())
         }
@@ -24,17 +23,20 @@ export const QueryProduct = {
     async byCategory(id: number | string) {
         const {data} = await axiosClassic.get<IProduct[]>(`/product/category/${id}`)
         return data as IProduct[]
-    }, async id(id: number | string) {
+    },
+    async id(id: number | string) {
         const {data} = await axiosClassic.get<IProduct>(`/product/${id}`)
         return data as IProduct
-    }, async query(query: string) {
+    },
+    async query(query: string) {
         const {data} = await axiosClassic.get<Record<string, IProduct[]>>(`/product/search`, {
             params: {
                 query
             }
         })
         return data as Record<string, IProduct[]>
-    }, async maxPrice() {
+    },
+    async maxPrice() {
         const {data} = await axiosClassic.get<number>(`/product/max-price`)
         return data as number
     }

@@ -12,7 +12,7 @@ import {Title} from "@/components/shared/Title";
 import {useFilters} from "@/store/filters";
 
 
-export default function ProductIngredients({type}: { type: TypeProduct | undefined }) {
+export default function ProductIngredients({type}: { type: number | undefined }) {
     const {data} = useQuery({
         queryKey: ['ingredients-by-type', type],
         queryFn: () => QueryIngredient.byType(type),

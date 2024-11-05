@@ -11,10 +11,11 @@ import { IProductVariant, ISize } from "@/interface/interface-product-variant";
 import { InputCustom } from "@/components/shared/InputCustom";
 import { NumericFormat } from "react-number-format";
 import { Check } from "lucide-react";
+import {IProportion} from "@/interface/IProportion";
 
 type FormValues = IProductVariant;
 interface ISizeProps extends IHookForm<FormValues>{
-    type:TypeProduct | undefined
+    type:number | undefined
     watch:any
 }
 
@@ -26,7 +27,7 @@ export default function SelectSize({control,type,watch}:ISizeProps) {
         enabled:!!type
     })
 
-    const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
+    const [selectedSizes, setSelectedSizes] = useState<number[]>([]);
 
   
     const { fields, append, remove } = useFieldArray<FormValues>({
@@ -35,18 +36,19 @@ export default function SelectSize({control,type,watch}:ISizeProps) {
 
     });
 
-    const handleSizeChange = (value: string[]) => {
+    const handleSizeChange = (value: number[]) => {
         setSelectedSizes(value);
         const currentValues:ISize[] = watch("sizes");
         currentValues.forEach((field, index) => {
-            if (!value.includes(field.size)) {
+            if (!value.includes(field.sizeId)) {
                 remove(index);
             }
         });
 
         value.forEach((size) => {
-            if (!currentValues.some((field) => field.size === size)) {
-                append(({ size, price: 0, weight: 0, }) as ISize);
+            console.log(size)
+            if (!currentValues.some((field) => field.sizeId === size)) {
+                append(({ sizeId:size, price: 0, weight: 0, }) as ISize);
             }
         });
     };
@@ -65,14 +67,14 @@ export default function SelectSize({control,type,watch}:ISizeProps) {
                     onChange={handleSizeChange}
                     value={selectedSizes}>
                     {data?.map((val) => <Option key={val.id}
-                                                        value={val.id}>{val.proportion}</Option>)}
+                                                        value={val.id}>{val.value}</Option>)}
                 </Select>
                 </div>
                  
                     <div className={'flex items-center gap-x-2'}>
                      {fields.map((field, index:number) => {   
                         console.log(field)                 
-                            const sizeLabel = data?.find(val => Number(val.id) === Number((field as unknown as ISize).size))?.proportion;
+                            const sizeLabel = data?.find(val => Number(val.id) === (field as ISize).sizeId)?.value;
                             console.log('sizeLabel',sizeLabel)
                             return (
                             <div key={field.id}>

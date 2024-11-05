@@ -1,26 +1,26 @@
 
 import {axiosClassic} from "@/app/api/axios/axios";
-import {ISize} from "@/interface/interface-size";
-import {TypeProduct} from "@/interface/enums";
+
+import {IProportion} from "@/interface/IProportion";
 
 
 
 export const QueryProportion = {
 
-    async create(dto:ISize){
-        const {data} = await  axiosClassic.post<ISize>('/proportion/create',dto)
-        return data as ISize
+    async create(dto:IProportion){
+        const {data} = await  axiosClassic.post<IProportion>('/proportion/create',dto)
+        return data as IProportion
     },
     async all (){
-        const {data} = await axiosClassic.get<ISize[]>('/size/all')
-        return data as ISize[]
+        const {data} = await axiosClassic.get<IProportion[]>('/size/all')
+        return data as IProportion[]
     },
-    async byType (type:TypeProduct | undefined){
-        const {data} = await axiosClassic.get<ISize[]>('/proportion/by-type',{
+    async byType (type:number | undefined){
+        const {data} = await axiosClassic.get<IProportion[]>('/proportion/by-type',{
             params:{
                 type
             }
         })
-        return data as ISize[]
+        return data as IProportion[]
     },
 }

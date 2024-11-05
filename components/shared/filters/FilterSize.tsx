@@ -11,18 +11,18 @@ import { DATAPIZZASIZE } from "@/data/pizza-size";
 interface IProps {
     onClickCheckbox?: (id: string) => void;
     selected?: Set<string>;
-    type:TypeProduct
+    type:number
 }
 
 export default function FilterSize({selected,onClickCheckbox,type}: IProps) {
      const {data,isPending} = useQuery({
          queryKey:['size-by-type'],
-         queryFn:()=>QueryProportion.byType(TypeProduct[type])
+         queryFn:()=>QueryProportion.byType(type)
      })
-    const item = DATAPIZZASIZE?.map(size => ({value: size.value, text: size.size}))
+    const item = data?.map(size => ({value: String(size.id), text: size.value}))
     return (
         <div>
-            <FiltersListCheckbox selected={selected} onClickCheckbox={onClickCheckbox}   name={'size'}  title={'Размеры'} defaultItems={item}  items={item?.length ?  item : []} />
+            <FiltersListCheckbox loading={isPending} selected={selected} onClickCheckbox={onClickCheckbox}   name={'size'}  title={'Размеры'} defaultItems={item}  items={item?.length ?  item : []} />
         </div>
     );
 };

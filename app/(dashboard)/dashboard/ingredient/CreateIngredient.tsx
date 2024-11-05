@@ -14,6 +14,7 @@ import MultipleSelect from "@/components/select-custom/MultipleSelect";
 import {DATAPRODUCTYPE} from "@/data/type-product";
 import {Option} from "rc-select";
 import { useGetCategories } from "@/hooks/useGetCategories";
+import MultipleSelectCategory from "@/app/(dashboard)/dashboard/_ui/select/MultipleSelectCategory";
 
 export default function CreateIngredient() {
     const {handleSubmit, control, register} = useForm<IIngredient>()
@@ -31,7 +32,6 @@ export default function CreateIngredient() {
             toast.error('Ошибка при добавлении данных');
         }
     });
-    const {data} =useGetCategories()
     const onSubmit: SubmitHandler<IIngredient> = (data) => {
         mutate(data)
     };
@@ -42,8 +42,7 @@ export default function CreateIngredient() {
             <Controller control={control} render={({field: {onChange, value}})=> (
                 <NumericFormat onValueChange={(values) => onChange(values.value)} value={value} thousandSeparator="," label={"Цена"} suffix={" ₽"}  customInput={InputCustom}/>
             )} name={'price'}/>
-            <MultipleSelect  control={control} field={"categories"} label={"Категория"}
-             option={data?.map((val) => <Option key={val.id} value={val.id}>{val.name}</Option>) } />
+            <MultipleSelectCategory  control={control} field={"categories"}/>
             <UploadImage  control={control} field={'file'}/>
         </FormLayout>
     );

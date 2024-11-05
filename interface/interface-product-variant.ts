@@ -1,6 +1,7 @@
 import {ICartItem} from "@/interface/interface-cart-item";
 import {IProduct} from "@/interface/interface-product";
 import {PizzaSize, TypeDough} from "@/interface/enums";
+import {IProportion} from "@/interface/IProportion";
 
 
 export interface IProductVariant {
@@ -19,6 +20,7 @@ export interface ISize {
     id: number;
     price: number;
     weight: number;
-    size:string
+    sizeId:number
+    proportion:IProportion
 
 }

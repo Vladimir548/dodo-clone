@@ -11,5 +11,5 @@ export default function useTypeProduct(id:number | string) {
         enabled:!!id
     })
 
-    return {type:data?.typeProduct}
+    return {type:data?.category?.id}
 };

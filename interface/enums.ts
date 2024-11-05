@@ -40,7 +40,7 @@ export enum UserRole {
 }
 export enum PizzaSize {
     SMALL='SMALL',
-MEDIUM='MEDIUM',
-LARGE= 'LARGE',
+    MEDIUM='MEDIUM',
+    LARGE= 'LARGE',
 }
 
