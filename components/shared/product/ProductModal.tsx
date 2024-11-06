@@ -7,9 +7,8 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import {VisuallyHidden} from "@radix-ui/react-visually-hidden";
-
-import ProductId from "@/app/(root)/product/[id]/ProductId";
 import {usePathname, useRouter} from "next/navigation";
+import ProductId from "@/app/(root)/product/[id]/ProductId";
 
 export default function ProductModal() {
     const pathname = usePathname();

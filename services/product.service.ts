@@ -25,5 +25,11 @@ export const ProductService = {
            .map(val => val.sizes
                .find(val => val.sizeId === selectedSize)?.price)
            .find(val => val !== undefined) ?? 0
+    },
+    setDefaultSize (data:IProduct | undefined) {
+        if (data){
+            const getAvailableSize = data.productVariant[0].sizes.map(size => size.id)
+            return getAvailableSize.shift();
+        }
     }
 }

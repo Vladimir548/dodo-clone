@@ -1,4 +1,3 @@
-'use client'
 
 import ProductId from "@/app/(root)/product/[id]/ProductId";
 

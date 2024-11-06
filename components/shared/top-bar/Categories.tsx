@@ -37,7 +37,6 @@ export default function Categories({className}: Props) {
         name: category.name,
         slug: category.slug
     }))
-    console.log(activeSlug)
     return (
         <div
             className={cn('inline-flex gap-1 bg-gray-100 dark:bg-transparent dark:border-2 dark:border-primary p-1 rounded-2xl', className)}>
