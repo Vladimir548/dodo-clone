@@ -78,7 +78,7 @@ export default function ProductIdPizza({modalClass,data,isPending}:IProductId) {
                     </div>
                 </div>
                 <ProductButtonPrice
-                    data={data} selectSizePizza={(selectSize)} selectDough={typeDough}
+                    data={data} selectSize={(selectSize)} selectDough={typeDough}
                     price={ProductService.calcSumPrice(data,selectSize,typeDough)}/>
             </div>
         </Container>
