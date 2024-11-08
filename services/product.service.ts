@@ -19,12 +19,16 @@ export const ProductService = {
        return data?.productVariant.filter(variant =>
             variant.doughName === selectedDough).map(type => type.sizes.some(size => size.sizeId === selectedSize))[0]
     },
-    calcSumPrice(data: IProduct | undefined,selectedSize:number | undefined,selectedDough:TypeDough){
+    calcSumPrice(data: IProduct | undefined,selectedSize:number | undefined,selectedDough?:TypeDough){
+        if(selectedDough) {
        return data?.productVariant
            .filter(val => val.doughName === selectedDough)
            .map(val => val.sizes
                .find(val => val.sizeId === selectedSize)?.price)
            .find(val => val !== undefined) ?? 0
+        } else {
+            return data?.productVariant[0].sizes.find(size => size.id === selectedSize)?.price
+        }
     },
     setDefaultSize (data:IProduct | undefined) {
         if (data){

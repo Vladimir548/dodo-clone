@@ -8,7 +8,7 @@ import {useFilters} from "@/hooks/useFilters";
 import FilterDough from "@/components/shared/filters/FilterDough";
 
 
-export default function Filter({category}:{category:number}) {
+export default function Filter({categoryId}:{categoryId:number}) {
 
     const filters = useFilters();
 
@@ -21,7 +21,7 @@ export default function Filter({category}:{category:number}) {
 
             <div className={' pt-4 border-b pb-4 '}><FilterDough selected={filters.pizzaTypes} onClickCheckbox={filters.setPizzaTypes}/></div>
             <div className={' pt-4 border-b pb-4 '}>
-                <FilterSize type={category} selected={filters.sizes} onClickCheckbox={filters.setSizes} />
+                <FilterSize categoryId={categoryId} selected={filters.sizes} onClickCheckbox={filters.setSizes} />
             </div>
             <div className="pt-4 border-b pb-4">
                <FilterPrice priceTo={filters.prices.priceTo} priceFrom={filters.prices.priceFrom} setPrices={filters.setPrices} />

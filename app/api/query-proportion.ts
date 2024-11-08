@@ -15,10 +15,10 @@ export const QueryProportion = {
         const {data} = await axiosClassic.get<IProportion[]>('/size/all')
         return data as IProportion[]
     },
-    async byType (type:number | undefined){
+    async byCategory (categoryId:number | undefined){
         const {data} = await axiosClassic.get<IProportion[]>('/proportion/by-type',{
             params:{
-                type
+                categoryId
             }
         })
         return data as IProportion[]

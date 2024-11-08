@@ -24,7 +24,7 @@ export default function ProductsGroupList() {
                             <div className="flex gap-x-[80px]">
                                 <div>
                                     <Suspense fallback={<div>Loading...</div>}>
-                                        <Filter category={val.id}/>
+                                        <Filter categoryId={val.id}/>
                                     </Suspense>
                                 </div>
                                 <div className="w-full">

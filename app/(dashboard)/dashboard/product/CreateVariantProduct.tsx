@@ -56,7 +56,7 @@ export default function CreateVariantProduct() {
                                 renderItems={DATADOUGHTYPE.map((val) => <SelectItem key={val.value}
                                                                            value={val.value}>{val.name}</SelectItem>)}/>
             )}
-            <SelectSize control={control} category={category} watch={watch} />
+            <SelectSize control={control} categoryId={category} watch={watch} />
 
             <UploadImage<IProductVariant> control={control} field={'image'}/>
         </FormLayout>

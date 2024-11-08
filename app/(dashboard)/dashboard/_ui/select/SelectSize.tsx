@@ -15,16 +15,16 @@ import {IProportion} from "@/interface/IProportion";
 
 type FormValues = IProductVariant;
 interface ISizeProps extends IHookForm<FormValues>{
-    category:number | undefined
+    categoryId:number | undefined
     watch:any
 }
 
-export default function SelectSize({control,category,watch}:ISizeProps) {
+export default function SelectSize({control,categoryId,watch}:ISizeProps) {
 
     const {data} = useQuery({
-        queryKey:['by-type-size',category],
-        queryFn:()=> QueryProportion.byType(category),
-        enabled:!!category
+        queryKey:['by-type-size',categoryId],
+        queryFn:()=> QueryProportion.byCategory(categoryId),
+        enabled:!!categoryId
     })
 
     const [selectedSizes, setSelectedSizes] = useState<number[]>([]);
@@ -75,7 +75,6 @@ export default function SelectSize({control,category,watch}:ISizeProps) {
                      {fields.map((field, index:number) => {   
                         console.log(field)                 
                             const sizeLabel = data?.find(val => Number(val.id) === (field as ISize).sizeId)?.value;
-                            console.log('sizeLabel',sizeLabel)
                             return (
                             <div key={field.id}>
                                 <>
@@ -87,6 +86,7 @@ export default function SelectSize({control,category,watch}:ISizeProps) {
                                            onValueChange={(value) => onChange(value.floatValue)}
                                             value={value}
                                             thousandSeparator=","
+                                            required
                                             suffix=" ₽"
                                             customInput={InputCustom}
                                             label={`Цена для ${sizeLabel} `}
