@@ -11,16 +11,20 @@ interface IProps {
     selected?: Set<string>;
 }
 
-export default function FilterIngredient({selected,onClickCheckbox}: IProps) {
+export default function FilterIngredient({selected, onClickCheckbox}: IProps) {
 
-    const {data,isPending} = useQuery({
-        queryKey:['all-ingredients'],
-        queryFn:()=>QueryIngredient.all()
+    const {data, isPending} = useQuery({
+        queryKey: ['all-ingredients'],
+        queryFn: () => QueryIngredient.all()
     })
     const item = data?.map(ingredient => ({value: String(ingredient.id), text: ingredient.name}))
     return (
         <div>
-            <FiltersListCheckbox selected={selected} onClickCheckbox={onClickCheckbox}   name={'ingredient'}  title={'Ингредиенты'} defaultItems={item} loading={isPending}    items={item?.length ?  item : []} />
+            {data && data?.length > 0 && (
+                <FiltersListCheckbox selected={selected} onClickCheckbox={onClickCheckbox} name={'ingredient'}
+                                     title={'Ингредиенты'} defaultItems={item} loading={isPending}
+                                     items={item?.length ? item : []}/>
+            )}
         </div>
     );
 };

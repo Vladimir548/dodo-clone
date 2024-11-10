@@ -10,6 +10,7 @@ import useGetSizeByCategory from "@/hooks/useGetSizeByCategory";
 import { Button } from "@/components/ui/button";
 import { ProductService } from "@/services/product.service";
 import ProductButtonPrice from "@/components/shared/product/ProductButtonPrice";
+import ProductIngredients from "@/components/shared/product/ProductIngredients";
 
 interface IProductId {
   modalClass?: boolean;
@@ -41,22 +42,22 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
       </div>
       <div className={"flex flex-col gap-y-3"}>
         <Title
-          size={"lg"}
-          className={"font-bold text-black dark:text-white"}
-          text={data?.name ?? ""}
+            size={"lg"}
+            className={"font-bold text-black dark:text-white"}
+            text={data?.name ?? ""}
         />
         <div className={"flex gap-x-2 text-black/70 dark:text-white/70 "}>
           <span>
             {
               data.productVariant[0].sizes.find(
-                (size) => size.id === selectedSize
+                  (size) => size.id === selectedSize
               )?.proportion.value
             }
           </span>
           <span>
             {
               data.productVariant[0].sizes.find(
-                (size) => size.id === selectedSize
+                  (size) => size.id === selectedSize
               )?.weight
             }{" "}
             г
@@ -65,23 +66,26 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 
         {data.productVariant[0].sizes?.map((val) => {
           return (
-            <Button
-              variant={"outline"}
-              onClick={() => setSelectedSize(val.id)}
-              className={`w-full  border-2 ${
-                selectedSize === val.id && "bg-primary text-white"
-              } border-primary  rounded-lg hover:border-primary font-bold`}
-              key={val.id}
-            >
-              {val.proportion.value}
-            </Button>
+              <Button
+                  variant={"outline"}
+                  onClick={() => setSelectedSize(val.id)}
+                  className={`w-full  border-2 ${
+                      selectedSize === val.id && "bg-primary text-white"
+                  } border-primary  rounded-lg hover:border-primary font-bold`}
+                  key={val.id}
+              >
+                {val.proportion.value}
+              </Button>
           );
         })}
+        <div>
+          <ProductIngredients type={data?.categoryId}/>
+        </div>
         <div className="flex justify-center items-end h-full">
           <ProductButtonPrice
-            data={data}
-            selectSize={selectedSize}
-            price={ProductService.calcSumPrice(data, selectedSize)}
+              data={data}
+              selectSize={selectedSize}
+              price={ProductService.calcSumPrice(data, selectedSize)}
           />
         </div>
       </div>

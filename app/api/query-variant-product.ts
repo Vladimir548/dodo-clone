@@ -17,7 +17,6 @@ export const QueryVariantProduct = {
         }
         formData.append('sizes', JSON.stringify(dto.sizes));
 
-
         formData.append('file',dto?.image)
 
         const {data} = await axiosData.post('/product-variant/create',formData)

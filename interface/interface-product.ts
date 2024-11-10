@@ -14,9 +14,9 @@ export interface IProduct {
     type:TypeProduct
     createdAt: Date;
     updatedAt: Date;
+    description?:string
     image:string,
     file:File
     productVariant: IProductVariant[];
-    ingredients: IIngredient[];
-    ingredientIds?:number[]
+
 }

@@ -18,10 +18,11 @@ import React, { useState} from "react";
 
 import SelectSize from "../_ui/select/SelectSize";
 import {TypeProduct} from "@/interface/enums";
+import {InputCustom} from "@/components/shared/InputCustom";
 
 
 export default function CreateVariantProduct() {
-    const {handleSubmit, control, watch} = useForm<IProductVariant>({
+    const {handleSubmit, control, watch,register} = useForm<IProductVariant>({
         defaultValues: {
             sizes: [],
         },
@@ -46,6 +47,8 @@ export default function CreateVariantProduct() {
 
     return (
         <FormLayout handleFn={handleSubmit(onSubmit)} buttonVariant={"create"} title={'Создание вариантов продукта'}>
+
+            <InputCustom {...register('productAttribute.name')} label={'Название варианта'}/>
 
             <SelectProduct control={control} field={'productId'}/>
 

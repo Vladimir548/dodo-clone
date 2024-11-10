@@ -12,6 +12,6 @@ interface Props<T extends FieldValues> {
 
 export default function SelectType<T extends FieldValues>({control,field}: Props<T >) {
     return (
-        <SelectCustom renderItems={DATAPRODUCTYPE.map(val => <SelectItem key={val.value} value={(val.value).toString()}>{val.name}</SelectItem>)} control={control} field={field} label={"Категория продукта"} />
+        <SelectCustom renderItems={DATAPRODUCTYPE.map(val => <SelectItem key={val.value} value={(val.value).toString()}>{val.name}</SelectItem>)} control={control} field={field} label={"Тип продукта"} />
     );
 };

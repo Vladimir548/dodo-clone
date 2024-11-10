@@ -10,7 +10,7 @@ export default function useGetSizeByCategory(categoryId: number | undefined) {
 
     const {data,isPending} = useQuery({
         queryKey:['get-size-by-category', categoryId],
-        queryFn:()=>QueryProportion.byType(categoryId),
+        queryFn:()=>QueryProportion.byCategory(categoryId),
         enabled:!!categoryId
     })
 

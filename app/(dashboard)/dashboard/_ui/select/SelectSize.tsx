@@ -12,6 +12,7 @@ import { InputCustom } from "@/components/shared/InputCustom";
 import { NumericFormat } from "react-number-format";
 import { Check } from "lucide-react";
 import {IProportion} from "@/interface/IProportion";
+import SelectIngredient from "@/app/(dashboard)/dashboard/_ui/select/SelectIngredient";
 
 type FormValues = IProductVariant;
 interface ISizeProps extends IHookForm<FormValues>{
@@ -46,9 +47,8 @@ export default function SelectSize({control,categoryId,watch}:ISizeProps) {
         });
 
         value.forEach((size) => {
-            console.log(size)
             if (!currentValues.some((field) => field.sizeId === size)) {
-                append(({ sizeId:size, price: 0, weight: 0, }) as ISize);
+                append(({ sizeId:size, price: 0, weight: 0,ingredientIds:[]  }) as unknown as ISize);
             }
         });
     };
@@ -72,8 +72,7 @@ export default function SelectSize({control,categoryId,watch}:ISizeProps) {
                 </div>
                  
                     <div className={'flex items-center gap-x-2'}>
-                     {fields.map((field, index:number) => {   
-                        console.log(field)                 
+                     {fields.map((field, index:number) => {
                             const sizeLabel = data?.find(val => Number(val.id) === (field as ISize).sizeId)?.value;
                             return (
                             <div key={field.id}>
@@ -100,7 +99,7 @@ export default function SelectSize({control,categoryId,watch}:ISizeProps) {
                                     render={({ field:{onChange,value} }) => {
                                         return (
                                         <NumericFormat
-                                            onValueChange={(value) => onChange(value.floatValue)}
+                                            onValueChange={(value) => onChange(value.value)}
                                             value={value}
                                             thousandSeparator=","
                                             suffix=" г"
@@ -110,6 +109,7 @@ export default function SelectSize({control,categoryId,watch}:ISizeProps) {
                                     )
                                     }}
                                 />
+                                <SelectIngredient type={categoryId} control={control} field={`sizes.${index}.ingredientIds`}/>
                             </div>
                         )})}
                     </div>

@@ -11,15 +11,13 @@ interface IProps {
 
 export default function FilterDough({selected,onClickCheckbox}: IProps) {
 
-        const item = DATADOUGHTYPE.map(dough => ({value:dough.value,text:dough.name}));
-        const filters = useFilters()
+    const item = DATADOUGHTYPE.map(dough => ({value:dough.value,text:dough.name}));
+    const filters = useFilters()
     useQueryFilters(filters);
     return (
         <div>
-
                 <FiltersListCheckbox selected={selected} onClickCheckbox={onClickCheckbox} name={'dough'} title={'Тесто'}
                                      defaultItems={item} items={item?.length ? item : []}/>
-
         </div>
     );
 };

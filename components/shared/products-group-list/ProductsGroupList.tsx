@@ -15,6 +15,7 @@ export default function ProductsGroupList() {
             <Skeleton count={9} className={'w-full dark:bg-primary h-[450px]'}/>
         </div>
     )
+    console.log(data)
     return (
         <div className={'w-full flex flex-col gap-y-20'}>
             {data?.map(val => (
@@ -24,7 +25,7 @@ export default function ProductsGroupList() {
                             <div className="flex gap-x-[80px]">
                                 <div>
                                     <Suspense fallback={<div>Loading...</div>}>
-                                        <Filter categoryId={val.id}/>
+                                        <Filter typeCategory={val.type}  categoryId={val.id}/>
                                     </Suspense>
                                 </div>
                                 <div className="w-full">

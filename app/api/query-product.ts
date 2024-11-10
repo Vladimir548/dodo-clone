@@ -5,14 +5,11 @@ import {axiosClassic, axiosData} from "@/app/api/axios/axios";
 export const QueryProduct = {
 
     async create(dto: IProduct) {
-        console.log(dto.ingredientIds)
         const formData = new FormData();
         formData.append('file', dto.file)
         formData.append('name', dto.name)
         formData.append('categoryId', dto.categoryId.toString());
-        if (dto.ingredientIds) {
-            formData.append('ingredientIds', dto.ingredientIds.toString())
-        }
+
         const {data} = await axiosData.post<IProduct>('/product/create', dto)
         return data as IProduct
     },

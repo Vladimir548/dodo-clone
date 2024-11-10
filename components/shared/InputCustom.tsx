@@ -20,7 +20,7 @@ const InputCustom = React.forwardRef<HTMLInputElement, IInputCustom>(
     return (
       <div className={"relative flex flex-col gap-y-1"}>
         <label htmlFor="">
-          {required && (
+          {required ?  (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger className="text-primary">
@@ -31,7 +31,7 @@ const InputCustom = React.forwardRef<HTMLInputElement, IInputCustom>(
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          )}
+          ) : label}
         </label>
         <div className={"relative"}>
           <Input
