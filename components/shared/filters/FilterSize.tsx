@@ -17,7 +17,7 @@ export default function FilterSize({selected,onClickCheckbox,categoryId}: IProps
          queryKey:['size-by-type',categoryId],
          queryFn:()=>QueryProportion.byCategory(categoryId)
      })
-     console.log(categoryId)
+     
     const item = data?.map(size => ({value: String(size.id), text: size.value}))
     return (
         <div>

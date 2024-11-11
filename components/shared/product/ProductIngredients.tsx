@@ -1,8 +1,5 @@
 'use client'
 
-import {useQuery} from "@tanstack/react-query";
-import {QueryIngredient} from "@/app/api/query-ingredient";
-import {TypeProduct} from "@/interface/enums";
 import Image from "next/image";
 import {URL_API} from "@/constants";
 import {Button} from "@/components/ui/button";
@@ -10,16 +7,15 @@ import {Button} from "@/components/ui/button";
 import { CircleCheckBig} from "lucide-react";
 import {Title} from "@/components/shared/Title";
 import {useFilters} from "@/store/filters";
+import { IIngredient } from "@/interface/interface-ingredient";
 
 
-export default function ProductIngredients({type}: { type: number | undefined }) {
-    const {data} = useQuery({
-        queryKey: ['ingredients-by-type', type],
-        queryFn: () => QueryIngredient.byType(type),
-        enabled:!!type
-    })
+export default function ProductIngredients({data}: { data:IIngredient[] | undefined }) {
+   
     const {toggleIngredients,ingredients} = useFilters()
     return (
+        <>
+        {data && data?.length > 0 && (
         <>
             <Title size={"md"} className={'font-bold pb-2'} text={'Добавить по вкусу'}/>
             <div className={'w-full grid grid-cols-3 gap-3  scrollbar px-2  '}>
@@ -36,6 +32,8 @@ export default function ProductIngredients({type}: { type: number | undefined })
                     </Button>
                 ))}
             </div>
+            </>
+            )}
         </>
     );
 };

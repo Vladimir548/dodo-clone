@@ -19,7 +19,7 @@ export const ProductService = {
        return data?.productVariant.filter(variant =>
             variant.doughName === selectedDough).map(type => type.sizes.some(size => size.sizeId === selectedSize))[0]
     },
-    calcSumPrice(data: IProduct | undefined,selectedSize:number | undefined,selectedDough?:TypeDough){
+    calcSumPrice(data: IProduct | undefined,selectedSize:number | undefined,selectedDough?:TypeDough,selectedVariant?:number){
         if(selectedDough) {
        return data?.productVariant
            .filter(val => val.doughName === selectedDough)
@@ -27,13 +27,20 @@ export const ProductService = {
                .find(val => val.sizeId === selectedSize)?.price)
            .find(val => val !== undefined) ?? 0
         } else {
-            return data?.productVariant[0].sizes.find(size => size.id === selectedSize)?.price
+            return data?.productVariant.find(variant => variant.productAttribute.id === selectedVariant)?.sizes.find(size => size.id === selectedSize)?.price
         }
     },
-    setDefaultSize (data:IProduct | undefined) {
+    setDefaultSize (data:IProduct | undefined,selectedVariant:number | undefined) {
         if (data){
-            const getAvailableSize = data.productVariant[0].sizes.map(size => size.id)
-            return getAvailableSize.shift();
+            const getAvailableSize = data.productVariant.find(variant => variant.productAttribute.id === selectedVariant)?.sizes.map(size => size.id)
+               
+            if(getAvailableSize) return getAvailableSize.shift();
+        }
+    },
+    setDefaultVariantProduct (data:IProduct | undefined) {
+        if(data) {
+            const selectedVariant = data.productVariant[0].productAttribute.id 
+            return selectedVariant
         }
     }
 }

@@ -24,7 +24,7 @@ export interface ISize {
     price: number;
     weight: string;
     sizeId:number
-    ingredientIds?:number[]
+    ingredients?:IIngredient[]
     proportion:IProportion
 
 }

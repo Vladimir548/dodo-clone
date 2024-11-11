@@ -16,12 +16,12 @@ import {IAddItemCart} from "@/interface/interface-add-item-cart";
 interface IProductPrice {
     price: number  | undefined;
     data:IProduct,
-    selectDough?:TypeDough,
-    selectSize:number | undefined
-
+    selectedDough?:TypeDough,
+    selectedSize:number | undefined
+    selectedVariant?:number | undefined
 }
 
-export default function ProductButtonPrice({price,data,selectSize,selectDough}:IProductPrice) {
+export default function ProductButtonPrice({price,data,selectedSize,selectedDough,selectedVariant}:IProductPrice) {
     const queryClient = useQueryClient();
     const {mutate} = useMutation({
         mutationKey:['set-cart-item'],
@@ -36,11 +36,11 @@ export default function ProductButtonPrice({price,data,selectSize,selectDough}:I
             toast.error('Ошибка при добавлении в корзину');
         }
     })
-    const productVariantId = selectDough ?  data.productVariant.find(val => val.doughName === selectDough)?.id : data.productVariant[0].id
+    const productVariantId = selectedDough ?  data.productVariant.find(val => val.doughName === selectedDough)?.id : data.productVariant.find(variant => variant.productAttribute.id === selectedVariant)?.id
     
 
-    const sizeId =selectDough ? data.productVariant.find(val => val.doughName === selectDough)?.sizes.find(size => size.sizeId === selectSize)?.id 
-    : data?.productVariant[0].sizes.find(size => size.id === selectSize)?.id
+    const sizeId =selectedDough ? data.productVariant.find(val => val.doughName === selectedDough)?.sizes.find(size => size.sizeId === selectedSize)?.id 
+    : data?.productVariant[0].sizes.find(size => size.id === selectedSize)?.id
 
     const {sumPrice,ingredients} = usePriceIngredients()
 

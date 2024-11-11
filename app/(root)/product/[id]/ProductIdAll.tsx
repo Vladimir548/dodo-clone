@@ -6,7 +6,6 @@ import { URL_API } from "@/constants";
 import { useEffect, useState } from "react";
 import { Title } from "@/components/shared/Title";
 import { IProduct } from "@/interface/interface-product";
-import useGetSizeByCategory from "@/hooks/useGetSizeByCategory";
 import { Button } from "@/components/ui/button";
 import { ProductService } from "@/services/product.service";
 import ProductButtonPrice from "@/components/shared/product/ProductButtonPrice";
@@ -18,13 +17,19 @@ interface IProductId {
 }
 
 export default function ProductIdAll({ modalClass, data }: IProductId) {
-  const { data: sizesByCategory } = useGetSizeByCategory(data?.categoryId);
   const [selectedSize, setSelectedSize] = useState<number>();
-  const defaultSize = ProductService.setDefaultSize(data);
-  console.log(selectedSize);
+  const [selectedVariant, setSelectedVariant] = useState<number>();
+
+  const defaultVariant = ProductService.setDefaultVariantProduct(data);
+  const defaultSize = ProductService.setDefaultSize(data, selectedVariant);
+
+  useEffect(() => {
+    setSelectedVariant(defaultVariant);
+  }, [data]);
+
   useEffect(() => {
     setSelectedSize(defaultSize);
-  }, [data]);
+  }, [data, selectedVariant]);
 
   return (
     <Container
@@ -42,50 +47,91 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
       </div>
       <div className={"flex flex-col gap-y-3"}>
         <Title
-            size={"lg"}
-            className={"font-bold text-black dark:text-white"}
-            text={data?.name ?? ""}
+          size={"lg"}
+          className={"font-bold text-black dark:text-white"}
+          text={data?.name ?? ""}
         />
-        <div className={"flex gap-x-2 text-black/70 dark:text-white/70 "}>
+        <div className={"flex gap-x-2 text-black/70 dark:text-white/70 min-h-6 "}>
           <span>
             {
-              data.productVariant[0].sizes.find(
-                  (size) => size.id === selectedSize
-              )?.proportion.value
+              data.productVariant
+                ?.find(
+                  (variant) => variant.productAttribute.id === selectedVariant
+                )
+                ?.sizes.find((size) => size.id === selectedSize)?.proportion
+                .value
             }
           </span>
-          <span>
-            {
-              data.productVariant[0].sizes.find(
-                  (size) => size.id === selectedSize
-              )?.weight
-            }{" "}
-            г
-          </span>
+          {Number(
+            data.productVariant
+              .find(
+                (variant) => variant.productAttribute.id === selectedVariant
+              )
+              ?.sizes.find((size) => size.id === selectedSize)?.weight
+          ) > 0 && (
+            <span>
+              {
+                data.productVariant
+                  .find(
+                    (variant) => variant.productAttribute.id === selectedVariant
+                  )
+                  ?.sizes.find((size) => size.id === selectedSize)?.weight
+              }{" "}
+            </span>
+          )}
         </div>
-
-        {data.productVariant[0].sizes?.map((val) => {
-          return (
-              <Button
+        {data.productVariant[0].productAttribute.name && (
+        <div
+          className={
+            "flex justify-between p-1 gap-x-1 w-full border-2 border-primary font-bold rounded-lg "
+          }
+        >
+          {data.productVariant.map((variant) => (
+            <Button
+              onClick={() => setSelectedVariant(variant.productAttribute.id)}
+              variant={"outline"}
+              className={`w-full  border-2 ${
+                selectedVariant === variant.productAttribute.id &&
+                "bg-primary text-white"
+              } border-primary  rounded-lg hover:border-primary font-bold`}
+              key={variant.id}
+            >
+              {variant.productAttribute.name}
+            </Button>
+          ))}
+        </div>
+        )}
+        <div
+          className={
+            "flex justify-between p-1 gap-x-1 w-full border-2 border-primary font-bold rounded-lg "
+          }
+        >
+          {data.productVariant
+            .find((variant) => variant.productAttribute.id === selectedVariant)
+            ?.sizes?.map((val) => {
+              return (
+                <Button
                   variant={"outline"}
                   onClick={() => setSelectedSize(val.id)}
                   className={`w-full  border-2 ${
-                      selectedSize === val.id && "bg-primary text-white"
+                    selectedSize === val.id && "bg-primary text-white"
                   } border-primary  rounded-lg hover:border-primary font-bold`}
                   key={val.id}
-              >
-                {val.proportion.value}
-              </Button>
-          );
-        })}
+                >
+                  {val.proportion.value}
+                </Button>
+              );
+            })}
+        </div>
         <div>
-          <ProductIngredients type={data?.categoryId}/>
+          <ProductIngredients data={data.productVariant.find(variant => variant.productAttribute.id === selectedVariant)?.sizes.find(size => size.id === selectedSize)?.ingredients} />
         </div>
         <div className="flex justify-center items-end h-full">
           <ProductButtonPrice
-              data={data}
-              selectSize={selectedSize}
-              price={ProductService.calcSumPrice(data, selectedSize)}
+            data={data}
+            selectedSize={selectedSize}
+            price={ProductService.calcSumPrice(data, selectedSize,undefined,selectedVariant)}
+            selectedVariant={selectedVariant}
           />
         </div>
       </div>

@@ -15,7 +15,7 @@ export default function ProductsGroupList() {
             <Skeleton count={9} className={'w-full dark:bg-primary h-[450px]'}/>
         </div>
     )
-    console.log(data)
+
     return (
         <div className={'w-full flex flex-col gap-y-20'}>
             {data?.map(val => (

@@ -50,7 +50,7 @@ export default function ProductIdPizza({modalClass,data,isPending}:IProductId) {
                     <span>{data?.productVariant.filter(val => val.doughName === typeDough)?.map(val => val.sizes?.find(val => val.sizeId === selectSize)?.weight)} г</span>
                 </div>
                 <div className={` ${modalClass && ' pr-3 h-[400px]  scrollbar overflow-auto'}  flex flex-col gap-y-2`}>
-                    {/*<p className={'text-black/70 dark:text-gray-200'}>{data?.ingredients.map(val => val.name).join(', ')}</p>*/}
+                    {/* <p className={'text-black/70 dark:text-gray-200'}>{data?.ingredients.map(val => val.name).join(', ')}</p> */}
                     <div
                         className={'flex justify-between p-1 gap-x-1 w-full border-2 border-primary font-bold rounded-lg '}>
                         {sizesByCategory?.map(val => {
@@ -74,11 +74,11 @@ export default function ProductIdPizza({modalClass,data,isPending}:IProductId) {
                         ))}
                     </div>
                     <div>
-                        <ProductIngredients type={data?.categoryId}/>
+                        <ProductIngredients data={data.productVariant.find(variant => variant.doughName === typeDough)?.sizes.find(size => size.id === selectSize)?.ingredients}/>
                     </div>
                 </div>
                 <ProductButtonPrice
-                    data={data} selectSize={(selectSize)} selectDough={typeDough}
+                    data={data} selectedSize={(selectSize)} selectedDough={typeDough}
                     price={ProductService.calcSumPrice(data,selectSize,typeDough)}/>
             </div>
         </Container>

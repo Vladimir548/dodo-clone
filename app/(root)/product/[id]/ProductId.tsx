@@ -17,7 +17,6 @@ export default function ProductId({modalClass}:IProductId) {
         queryKey: ['get-product-id', id],
         queryFn: () => QueryProduct.id(id)
     })
-    console.log(data)
     return (
         <div>
             {TypeProduct.PIZZA === data?.type && <ProductIdPizza data={data} isPending={isPending} modalClass={modalClass} />  }
