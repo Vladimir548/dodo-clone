@@ -29,7 +29,7 @@ export default function Filter({categoryId,typeCategory}:{categoryId:number,type
                 <FilterSize categoryId={categoryId} selected={filters.sizes} onClickCheckbox={filters.setSizes} />
             </div>
             <div className="pt-4 border-b pb-4">
-               <FilterPrice priceTo={filters.prices.priceTo} priceFrom={filters.prices.priceFrom} setPrices={filters.setPrices} />
+               <FilterPrice categoryId={categoryId}  priceTo={filters.prices.priceTo} priceFrom={filters.prices.priceFrom} setPrices={filters.setPrices} />
             </div>
             <div className="pt-4">
                 <FilterIngredient selected={filters.selectedIngredients} onClickCheckbox={filters.setSelectedIngredients} />

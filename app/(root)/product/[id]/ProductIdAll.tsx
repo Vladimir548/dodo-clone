@@ -40,7 +40,7 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
       <div className={" relative  flex justify-center items-center  "}>
         <Image
           alt={data?.name ?? "image"}
-          src={`${URL_API}/${data?.productVariant[0].image}`}
+          src={`${URL_API}/${data?.productVariant.find(variant => variant.productAttribute.id === selectedVariant)?.image}`}
           width={400}
           height={400}
         />
@@ -83,7 +83,7 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
         {data.productVariant[0].productAttribute.name && (
         <div
           className={
-            "flex justify-between p-1 gap-x-1 w-full border-2 border-primary font-bold rounded-lg "
+            "flex justify-between p-1 gap-x-1 w-full border-2 border-primary font-bold rounded-lg overflow-auto scrollbar  "
           }
         >
           {data.productVariant.map((variant) => (
@@ -93,8 +93,9 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
               className={`w-full  border-2 ${
                 selectedVariant === variant.productAttribute.id &&
                 "bg-primary text-white"
-              } border-primary  rounded-lg hover:border-primary font-bold`}
+              } border-primary  rounded-lg hover:border-primary font-bold select-none  `}
               key={variant.id}
+              disabled={variant.sizes.length === 0}
             >
               {variant.productAttribute.name}
             </Button>
@@ -115,7 +116,7 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
                   onClick={() => setSelectedSize(val.id)}
                   className={`w-full  border-2 ${
                     selectedSize === val.id && "bg-primary text-white"
-                  } border-primary  rounded-lg hover:border-primary font-bold`}
+                  } border-primary  rounded-lg hover:border-primary font-bold select-none`}
                   key={val.id}
                 >
                   {val.proportion.value}

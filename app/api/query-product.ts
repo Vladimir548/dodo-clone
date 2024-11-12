@@ -33,8 +33,12 @@ export const QueryProduct = {
         })
         return data as Record<string, IProduct[]>
     },
-    async maxPrice() {
-        const {data} = await axiosClassic.get<number>(`/product/max-price`)
+    async maxPrice(categoryId:number) {
+        const {data} = await axiosClassic.get<number>(`/product/max-price`,{
+            params:{
+                categoryId
+            }
+        })
         return data as number
     }
 }

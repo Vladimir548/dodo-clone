@@ -42,7 +42,7 @@ html {
     --input: 0 0% 90%;
     --ring: 24.6 95% 53.1%;
     --radius: 18px;
-  },
+  }
 root[class~="dark"] {
   --foreground: 136, 0%, 97%;
 
@@ -55,6 +55,7 @@ root[class~="dark"] {
 
 .scrollbar::-webkit-scrollbar {
   width: 6px;
+  height: 3px;
 }
 
 .scrollbar::-webkit-scrollbar-track {

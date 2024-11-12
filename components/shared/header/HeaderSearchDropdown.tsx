@@ -32,14 +32,13 @@ export default function HeaderSearchDropdown({query}: IProps) {
     if (!data || !category) return 'Ошибка данных'
     return (
         <>
-
             <CommandList className={'bg-white dark:bg-dark-background  scrollbar  text-primary dark:text-primary'}>
                 <CommandEmpty>Ничего не найдено</CommandEmpty>
                 {Object?.keys(data).map(type => (
                     <CommandGroup key={type}
                                   heading={category?.find(val => val?.id === +type)?.name}>
                         {data[type]?.map(val => (
-                            <Link key={val.id} href={`/product/${val.id}`}>
+                            <Link scroll={false} key={val.id} href={`/product/${val.id}`}>
                                 <CommandItem
                                     className={'hover:bg-primary flex gap-x-3 items-center  font-bold dark:hover:text-white dark:text-primary data-[selected=true]:bg-primary data-[selected=true]:text-white data-[selected=true]:dark:text-white py-2 cursor-pointer '}
                                 >

@@ -13,15 +13,18 @@ import {Skeleton} from "@/components/ui/skeleton";
 interface PriceProps {
     priceFrom: number | undefined,
     priceTo: number | undefined,
+  
 }
 interface IProps extends PriceProps {
     setPrices: (name: keyof PriceProps, value: number) => void;
+    categoryId:number
 }
-export default function FilterPrice({priceTo,priceFrom,setPrices}:IProps) {
+export default function FilterPrice({priceTo,priceFrom,setPrices,categoryId}:IProps) {
 
     const {data, isPending} = useQuery({
-        queryKey: ['all-product'],
-        queryFn: () => QueryProduct.maxPrice()
+        queryKey: ['all-product',categoryId],
+        queryFn: () => QueryProduct.maxPrice(categoryId),
+        enabled:!!categoryId
     })
     const [localPrice,setLocalPrice]= useState<PriceProps>({priceFrom: 0, priceTo: 0})
     useEffect(() => {
