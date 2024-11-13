@@ -15,7 +15,7 @@ html {
 @layer base {
   :root {
     --foreground: 20 14.3% 4.1%;
-    --dark-background:0, 0%, 7%;
+    --dark-background: 0, 0%, 7%;
 
     --card: 0 0% 100%;
     --card-foreground: 20 14.3% 4.1%;
@@ -43,10 +43,9 @@ html {
     --ring: 24.6 95% 53.1%;
     --radius: 18px;
   }
-root[class~="dark"] {
-  --foreground: 136, 0%, 97%;
-
-}
+  root[class~="dark"] {
+    --foreground: 136, 0%, 97%;
+  }
 }
 
 * {
@@ -70,7 +69,6 @@ root[class~="dark"] {
   border-radius: 6px;
 }
 
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
@@ -81,7 +79,23 @@ root[class~="dark"] {
   * {
     @apply border-border;
   }
+}
 
+.before-effect::before {
+  content: [];
+
+  clip-path: polygon(
+    50% 0%,
+    83% 12%,
+    100% 43%,
+    94% 78%,
+    68% 100%,
+    32% 100%,
+    6% 78%,
+    0% 43%,
+    17% 12%
+  );
+  @apply absolute left-0 top-0 w-full h-full bg-slate-600;
 }
 
 #nprogress .bar {
