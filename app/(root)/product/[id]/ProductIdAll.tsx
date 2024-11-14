@@ -37,7 +37,7 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
         modalClass && "pt-0"
       } `}
     >
-      <div className={" relative  flex justify-center items-center  "}>
+      <div className={" relative  flex justify-center items-center "}>
         <Image
           alt={data?.name ?? "image"}
           src={`${URL_API}/${

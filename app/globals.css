@@ -81,23 +81,6 @@ html {
   }
 }
 
-.before-effect::before {
-  content: [];
-
-  clip-path: polygon(
-    50% 0%,
-    83% 12%,
-    100% 43%,
-    94% 78%,
-    68% 100%,
-    32% 100%,
-    6% 78%,
-    0% 43%,
-    17% 12%
-  );
-  @apply absolute left-0 top-0 w-full h-full bg-slate-600;
-}
-
 #nprogress .bar {
   @apply bg-primary !important;
 }
