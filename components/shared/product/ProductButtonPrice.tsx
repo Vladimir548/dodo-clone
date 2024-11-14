@@ -1,84 +1,113 @@
-'use client'
+"use client";
 
-import {Button} from "@/components/ui/button";
-import {ShoppingCart} from "lucide-react";
-import usePriceIngredients from "@/hooks/usePriceIngredients";
+import { QueryCartItem } from "@/app/api/query-cart-item";
+import { Button } from "@/components/ui/button";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import usePriceIngredients from "@/hooks/usePriceIngredients";
+import { TypeDough } from "@/interface/enums";
+import { IAddItemCart } from "@/interface/interface-add-item-cart";
+import { IProduct } from "@/interface/interface-product";
+import { ProductPriceService } from "@/services/product-price.service";
+import { useFilters } from "@/store/filters";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {QueryCartItem} from "@/app/api/query-cart-item";
-import {IProduct} from "@/interface/interface-product";
-import { TypeDough} from "@/interface/enums";
-import {toast} from "react-toastify";
-import {IAddItemCart} from "@/interface/interface-add-item-cart";
-
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 interface IProductPrice {
-    price: number  | undefined;
-    data:IProduct,
-    selectedDough?:TypeDough,
-    selectedSize:number | undefined
-    selectedVariant?:number | undefined
+  price: number | undefined;
+  data: IProduct;
+  selectedDough?: TypeDough;
+  selectedSize: number | undefined;
+  selectedVariant?: number | undefined;
 }
 
-export default function ProductButtonPrice({price,data,selectedSize,selectedDough,selectedVariant}:IProductPrice) {
-    const queryClient = useQueryClient();
-    const {mutate} = useMutation({
-        mutationKey:['set-cart-item'],
-        mutationFn:(dto:IAddItemCart)=>QueryCartItem.create(dto),
-        onSuccess:()=>{
-            queryClient.invalidateQueries({
-                queryKey:['cart-id'],
-            })
-            toast.success(`${data.name} добавлен в корзину`);
-        },
-        onError:()=>{
-            toast.error('Ошибка при добавлении в корзину');
-        }
-    })
-    const productVariantId = selectedDough ?  data.productVariant.find(val => val.doughName === selectedDough)?.id : data.productVariant.find(variant => variant.productAttribute.id === selectedVariant)?.id
-    
+export default function ProductButtonPrice({
+  price,
+  data,
+  selectedSize,
+  selectedDough,
+  selectedVariant,
+}: IProductPrice) {
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationKey: ["set-cart-item"],
+    mutationFn: (dto: IAddItemCart) => QueryCartItem.create(dto),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cart-id"],
+      });
+      toast.success(`${data.name} добавлен в корзину`);
+    },
+    onError: () => {
+      toast.error("Ошибка при добавлении в корзину");
+    },
+  });
+  const clearIngredients = useFilters((state) => state.clearIngredients);
+  useEffect(() => {
+    clearIngredients();
+  }, []);
 
-    const sizeId =selectedDough ? data.productVariant.find(val => val.doughName === selectedDough)?.sizes.find(size => size.sizeId === selectedSize)?.id 
-    : data?.productVariant[0].sizes.find(size => size.id === selectedSize)?.id
+  const productVariantId = ProductPriceService.selectedVariant(
+    data,
+    selectedDough,
+    selectedVariant
+  );
 
-    const {sumPrice,ingredients} = usePriceIngredients()
+  const sizeId = ProductPriceService.selectedSize(
+    data,
+    selectedDough,
+    selectedSize,
+    selectedVariant
+  );
 
-    const totalPrice = Number(price) + Number(sumPrice)
-    const cartId = useCurrentUser()?.cartId
-    const userId = useCurrentUser()?.userId
+  const { sumPrice, ingredients } = usePriceIngredients();
+  const totalPrice = ProductPriceService.calcTotalSum(price, sumPrice);
+  const cartId = useCurrentUser()?.cartId;
+  const userId = useCurrentUser()?.userId;
 
-    const addToCart =()=>{
-        const objItem:IAddItemCart={
-            ingredientIds:ingredients,
-            productId:data.id,
-            cartId,
-            productVariantId,
-            sizeId,
-        }
-        mutate(objItem)
-    }
-     return (
-         <>
-             {userId ? (
-        <div className={'w-full flex gap-x-2 items-center'}>
-            <Button onClick={addToCart}  className={'w-full flex gap-x-2 items-center text-lg h-12 '}>
-                <span><ShoppingCart/></span>
-                <span>В корзину</span>
-                <b>{totalPrice} ₽</b>
-            </Button>
+  const addToCart = () => {
+    const objItem: IAddItemCart = {
+      ingredientIds: ingredients,
+      productId: data.id,
+      cartId,
+      productVariantId,
+      sizeId,
+    };
+    mutate(objItem);
+  };
+  return (
+    <>
+      {userId ? (
+        <div className={"w-full flex gap-x-2 items-center"}>
+          <Button
+            onClick={addToCart}
+            className={"w-full flex gap-x-2 items-center text-lg h-12 "}
+          >
+            <span>
+              <ShoppingCart />
+            </span>
+            <span>В корзину</span>
+            <b>{totalPrice} ₽</b>
+          </Button>
         </div>
-             ) : (
-                 <Link href={'/auth?type=login'} className={'w-full flex gap-x-2 items-center'}>
-                     <Button  className={'w-full flex gap-x-2 items-center text-lg h-12 '}>
-                         <>
-                             <span><ShoppingCart/></span>
-                             <span>В корзину</span>
-                             <b>{totalPrice} ₽</b>
-                         </>
-                     </Button>
-                 </Link>
-             )}
-         </>
-     );
-};
+      ) : (
+        <Link
+          href={"/auth?type=login"}
+          className={"w-full flex gap-x-2 items-center"}
+        >
+          <Button className={"w-full flex gap-x-2 items-center text-lg h-12 "}>
+            <>
+              <span>
+                <ShoppingCart />
+              </span>
+              <span>В корзину</span>
+              <b>{totalPrice} ₽</b>
+            </>
+          </Button>
+        </Link>
+      )}
+    </>
+  );
+}
