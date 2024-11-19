@@ -1,19 +1,25 @@
-import {useIntersection} from "react-use";
-import {useEffect, useRef} from "react";
-import {useCategoryStore} from "@/store/category";
+import { useCategoryStore } from '@/store/category'
+import { useEffect, useRef } from 'react'
+import { useIntersection } from 'react-use'
 
+export const useIntersectionCategory = (categorySlug: string) => {
+	const { setActiveSlug, clickSlug, setClickSlug } = useCategoryStore()
+	const intersectionRef = useRef<HTMLDivElement>(null)
+	const intersection = useIntersection(intersectionRef, {
+		root: null,
+		rootMargin: '0px',
+		threshold: 0.4,
+	})
+	useEffect(() => {
+		if (
+			intersection?.isIntersecting && clickSlug === null
+				? true
+				: clickSlug === categorySlug
+		) {
+			setActiveSlug(categorySlug)
+			if (clickSlug !== null) return setClickSlug(null)
+		}
+	}, [intersection?.isIntersecting, categorySlug])
 
-export const useIntersectionCategory = (categorySlug:string)=>{
-    const setActiveSlug = useCategoryStore((state) => state.setActiveSlug);
-    const intersectionRef = useRef(null);
-    const intersection = useIntersection(intersectionRef, {
-        threshold:0.4
-    });
-    useEffect(() => {
-        if ( intersection?.isIntersecting ) {
-            setActiveSlug(categorySlug);
-        }
-    }, [categorySlug, intersection?.isIntersecting]);
-
-    return {intersectionRef}
+	return { intersectionRef }
 }
