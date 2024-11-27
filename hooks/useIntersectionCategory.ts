@@ -1,9 +1,22 @@
+import { TypeProduct } from '@/interface/enums'
 import { useCategoryStore } from '@/store/category'
+import { useFiltersStore } from '@/store/filters'
 import { useEffect, useRef } from 'react'
 import { useIntersection } from 'react-use'
 
-export const useIntersectionCategory = (categorySlug: string) => {
-	const { setActiveSlug, clickSlug, setClickSlug } = useCategoryStore()
+export const useIntersectionCategory = (
+	categorySlug: string,
+	categoryId: number,
+	type: TypeProduct
+) => {
+	const {
+		setActiveCategory,
+		clickCategory,
+		setClickCategory,
+		setActiveCategoryId,
+		setActiveType,
+	} = useCategoryStore()
+	const setCurrentSlug = useFiltersStore(state => state.setCurrentCategory)
 	const intersectionRef = useRef<HTMLDivElement>(null)
 	const intersection = useIntersection(intersectionRef, {
 		root: null,
@@ -12,14 +25,17 @@ export const useIntersectionCategory = (categorySlug: string) => {
 	})
 	useEffect(() => {
 		if (
-			intersection?.isIntersecting && clickSlug === null
+			intersection?.isIntersecting && clickCategory === null
 				? true
-				: clickSlug === categorySlug
+				: clickCategory === categorySlug
 		) {
-			setActiveSlug(categorySlug)
-			if (clickSlug !== null) return setClickSlug(null)
+			setActiveCategory(categorySlug)
+			setActiveCategoryId(categoryId)
+			setActiveType(type)
+			setCurrentSlug(categorySlug)
+			if (clickCategory !== null) return setClickCategory(null)
 		}
-	}, [intersection?.isIntersecting, categorySlug])
+	}, [intersection?.isIntersecting, categorySlug, categoryId, type])
 
 	return { intersectionRef }
 }

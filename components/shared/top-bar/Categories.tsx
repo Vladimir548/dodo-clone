@@ -1,6 +1,7 @@
 import { QueryCategory } from '@/app/api/query-category'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useQueryFilters } from '@/hooks/useQueryFilters'
 import { cn } from '@/lib/utils'
 import { useCategoryStore } from '@/store/category'
 import { useQuery } from '@tanstack/react-query'
@@ -20,14 +21,17 @@ export default function Categories({ className }: Props) {
 		queryKey: ['all-categories'],
 		queryFn: () => QueryCategory.all(),
 	})
-
-	const { activeSlug, setActiveSlug, setClickSlug } = useCategoryStore()
+	const { activeCategory, setActiveCategory, setClickCategory } =
+		useCategoryStore()
 
 	useEffect(() => {
 		if (data) {
-			setActiveSlug(data[0]?.slug)
+			setActiveCategory(data[0]?.slug)
 		}
-	}, [data])
+	}, [data, setActiveCategory])
+
+	useQueryFilters(activeCategory ? activeCategory : '')
+
 	if (!data) return null
 	if (isPending)
 		return (
@@ -41,6 +45,7 @@ export default function Categories({ className }: Props) {
 			name: category.name,
 			slug: category.slug,
 		}))
+
 	return (
 		<div
 			className={cn(
@@ -52,12 +57,12 @@ export default function Categories({ className }: Props) {
 				<Button
 					variant={'outline'}
 					onClick={() => {
-						setActiveSlug(slug)
-						setClickSlug(slug)
+						setActiveCategory(slug)
+						setClickCategory(slug)
 					}}
 					className={cn(
 						'flex items-center font-bold h-11 rounded-2xl duration-300 px-5 border-2 border-transparent hover:border-primary',
-						activeSlug === slug &&
+						activeCategory === slug &&
 							'dark:bg-primary bg-primary text-white  dark:shadow-none '
 					)}
 					key={index}
