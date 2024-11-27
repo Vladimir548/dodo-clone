@@ -1,30 +1,44 @@
 'use client'
 
-import {FiltersListCheckbox} from "@/components/shared/filters/FiltersListChecbox";
-import {useQuery} from "@tanstack/react-query";
-import {QueryIngredient} from "@/app/api/query-ingredient";
-import {useQueryFilters} from "@/hooks/useQueryFilters";
-import {useFilters} from "@/hooks/useFilters";
+import { QueryIngredient } from '@/app/api/query-ingredient'
+import { FiltersListCheckbox } from '@/components/shared/filters/FiltersListChecbox'
+import { useFiltersStore } from '@/store/filters'
+import { useQuery } from '@tanstack/react-query'
 
 interface IProps {
-    onClickCheckbox?: (id: string) => void;
-    selected?: Set<string>;
+	categoryId: number | null
 }
-
-export default function FilterIngredient({selected, onClickCheckbox}: IProps) {
-
-    const {data, isPending} = useQuery({
-        queryKey: ['all-ingredients'],
-        queryFn: () => QueryIngredient.all()
-    })
-    const item = data?.map(ingredient => ({value: String(ingredient.id), text: ingredient.name}))
-    return (
-        <div>
-            {data && data?.length > 0 && (
-                <FiltersListCheckbox selected={selected} onClickCheckbox={onClickCheckbox} name={'ingredient'}
-                                     title={'Ингредиенты'} defaultItems={item} loading={isPending}
-                                     items={item?.length ? item : []}/>
-            )}
-        </div>
-    );
-};
+export default function FilterIngredient({ categoryId }: IProps) {
+	const { data, isPending } = useQuery({
+		queryKey: ['all-ingredients', categoryId],
+		queryFn: () => QueryIngredient.byCategory(categoryId),
+		enabled: !!categoryId,
+	})
+	console.log('ingredient', data)
+	const { ingredients, toggleIngredients, currentCategory } = useFiltersStore(
+		state => ({
+			ingredients: state?.ingredients,
+			toggleIngredients: (id: number) => state.toggleIngredients(id),
+			currentCategory: state.currentCategory,
+		})
+	)
+	const item = data?.map(ingredient => ({
+		value: String(ingredient.id),
+		text: ingredient.name,
+	}))
+	return (
+		<div>
+			{data && data?.length > 0 && (
+				<FiltersListCheckbox
+					selected={ingredients?.[currentCategory]}
+					onClickCheckbox={toggleIngredients}
+					name={'ingredient'}
+					title={'Ингредиенты'}
+					defaultItems={item}
+					loading={isPending}
+					items={item?.length ? item : []}
+				/>
+			)}
+		</div>
+	)
+}

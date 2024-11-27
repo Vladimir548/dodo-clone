@@ -1,23 +1,29 @@
 'use client'
 
-import {FiltersListCheckbox} from "@/components/shared/filters/FiltersListChecbox";
-import {DATADOUGHTYPE} from "@/data/dough-type";
-import {useFilters} from "@/hooks/useFilters";
-import {useQueryFilters} from "@/hooks/useQueryFilters";
-interface IProps {
-    onClickCheckbox?: (id: string) => void;
-    selected?: Set<string>;
+import { FiltersListCheckbox } from '@/components/shared/filters/FiltersListChecbox'
+import { DATADOUGHTYPE } from '@/data/dough-type'
+import { useFiltersStore } from '@/store/filters'
+
+export default function FilterDough() {
+	const { doughs, toggleDough } = useFiltersStore(state => ({
+		doughs: state.dough,
+		toggleDough: (id: number) => state?.toggleDough(id),
+	}))
+
+	const item = DATADOUGHTYPE.map(dough => ({
+		value: String(dough.id),
+		text: dough.name,
+	}))
+	return (
+		<div>
+			<FiltersListCheckbox
+				selected={doughs}
+				onClickCheckbox={toggleDough}
+				name={'dough'}
+				title={'Тесто'}
+				defaultItems={item}
+				items={item?.length ? item : []}
+			/>
+		</div>
+	)
 }
-
-export default function FilterDough({selected,onClickCheckbox}: IProps) {
-
-    const item = DATADOUGHTYPE.map(dough => ({value:dough.value,text:dough.name}));
-    const filters = useFilters()
-    useQueryFilters(filters);
-    return (
-        <div>
-                <FiltersListCheckbox selected={selected} onClickCheckbox={onClickCheckbox} name={'dough'} title={'Тесто'}
-                                     defaultItems={item} items={item?.length ? item : []}/>
-        </div>
-    );
-};
