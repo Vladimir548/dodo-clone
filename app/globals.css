@@ -3,118 +3,116 @@
 @tailwind utilities;
 
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+	html {
+		scroll-behavior: auto;
+	}
 }
 
 @layer base {
-  :root {
-    --foreground: 20 14.3% 4.1%;
-    --dark-background: 0, 0%, 7%;
+	:root {
+		--foreground: 20 14.3% 4.1%;
+		--dark-background: 0, 0%, 7%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
+		--card: 0 0% 100%;
+		--card-foreground: 20 14.3% 4.1%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
+		--popover: 0 0% 100%;
+		--popover-foreground: 20 14.3% 4.1%;
 
-    --primary: 22 100% 50%;
-    --primary-foreground: 60 9.1% 97.8%;
+		--primary: 22 100% 50%;
+		--primary-foreground: 60 9.1% 97.8%;
 
-    --secondary: 32 100% 98%;
-    --secondary-foreground: 24 9.8% 10%;
+		--secondary: 32 100% 98%;
+		--secondary-foreground: 24 9.8% 10%;
 
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
+		--muted: 60 4.8% 95.9%;
+		--muted-foreground: 25 5.3% 44.7%;
 
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
+		--accent: 60 4.8% 95.9%;
+		--accent-foreground: 24 9.8% 10%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 60 9.1% 97.8%;
 
-    --border: 20 5.9% 90%;
-    --input: 0 0% 90%;
-    --ring: 24.6 95% 53.1%;
-    --radius: 18px;
-  }
-  root[class~="dark"] {
-    --foreground: 136, 0%, 97%;
-  }
+		--border: 20 5.9% 90%;
+		--input: 0 0% 90%;
+		--ring: 24.6 95% 53.1%;
+		--radius: 18px;
+	}
+	root[class~='dark'] {
+		--foreground: 136, 0%, 97%;
+	}
 }
 
 * {
-  font-family: var(--font-nunito), sans-serif;
+	font-family: var(--font-nunito), sans-serif;
 }
 
 .scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 3px;
+	width: 6px;
+	height: 3px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-  border-radius: 6px;
+	border-radius: 6px;
 
-  background: #e7e7e7;
+	background: #e7e7e7;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-  /*background: #dbdadd;*/
-  @apply dark:bg-primary bg-primary;
-  border-radius: 6px;
+	/*background: #dbdadd;*/
+	@apply dark:bg-primary bg-primary;
+	border-radius: 6px;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+	.text-balance {
+		text-wrap: balance;
+	}
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+	* {
+		@apply border-border;
+	}
 }
 
-.before-effect::before {
-  content: [];
-
-  clip-path: polygon(
-    50% 0%,
-    83% 12%,
-    100% 43%,
-    94% 78%,
-    68% 100%,
-    32% 100%,
-    6% 78%,
-    0% 43%,
-    17% 12%
-  );
-  @apply absolute left-0 top-0 w-full h-full bg-slate-600;
+.before-effect {
+	clip-path: polygon(
+		50% 0%,
+		83% 12%,
+		100% 43%,
+		94% 78%,
+		68% 100%,
+		32% 100%,
+		6% 78%,
+		0% 43%,
+		17% 12%
+	);
+	@apply absolute left-0 top-0 w-full h-full bg-slate-600;
 }
 
 #nprogress .bar {
-  @apply bg-primary !important;
+	@apply bg-primary !important;
 }
 
 #nprogress .peg {
-  @apply shadow-md shadow-primary !important;
+	@apply shadow-md shadow-primary !important;
 }
 
 #nprogress .spinner-icon {
-  @apply border-t-primary border-l-primary !important;
+	@apply border-t-primary border-l-primary !important;
 }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: hsl(var(--primary));
-  transition: background-color 5000s ease-in-out 0s;
-  box-shadow: none;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: hsl(var(--primary));
+	transition: background-color 5000s ease-in-out 0s;
+	box-shadow: none;
 }
