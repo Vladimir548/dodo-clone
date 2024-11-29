@@ -88,8 +88,8 @@ export default memo(function FilterPrice({ categoryId }: IProps) {
     );
   }
   return (
-    <div>
-      <Title text={"Цена"} size={"xs"} className={"font-bold"} />
+    <div className={"py-4 border-b"}>
+      <Title text={"Цена"} size={"sm"} className={"font-bold "} />
       <div className={"pt-4"}>
         <div className={"flex items-center gap-x-4 pb-5"}>
           <NumericFormat

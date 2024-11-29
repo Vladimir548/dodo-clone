@@ -32,8 +32,9 @@ export default function FilterSize({ categoryId }: IProps) {
     text: size.value,
   }));
 
+  if (!data || data.length === 0) return null;
   return (
-    <div>
+    <div className={"py-4 border-b"}>
       <FiltersListCheckbox
         loading={isPending}
         selected={sizes?.[currentCategory]}

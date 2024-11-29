@@ -24,23 +24,23 @@ export default function FilterIngredient({ categoryId }: IProps) {
     })
   );
   useDataParams("ingredients", toggleIngredients, "num");
+
   const item = data?.map((ingredient) => ({
     value: String(ingredient.id),
     text: ingredient.name,
   }));
+  if (!data || data.length === 0) return null;
   return (
-    <div>
-      {data && data?.length > 0 && (
-        <FiltersListCheckbox
-          selected={ingredients?.[currentCategory]}
-          onClickCheckbox={toggleIngredients}
-          name={"ingredient"}
-          title={"Ингредиенты"}
-          defaultItems={item}
-          loading={isPending}
-          items={item?.length ? item : []}
-        />
-      )}
+    <div className="py-4 border-b">
+      <FiltersListCheckbox
+        selected={ingredients?.[currentCategory]}
+        onClickCheckbox={toggleIngredients}
+        name={"ingredient"}
+        title={"Ингредиенты"}
+        defaultItems={item}
+        loading={isPending}
+        items={item?.length ? item : []}
+      />
     </div>
   );
 }

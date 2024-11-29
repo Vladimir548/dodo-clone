@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useCategoryStore } from "@/store/category";
 import { useFiltersStore } from "@/store/filters";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 interface Props {
   className?: string;
@@ -26,9 +27,16 @@ export default function Categories({ className }: Props) {
     useCategoryStore();
   const setCurrentSlug = useFiltersStore((state) => state.setCurrentCategory);
 
-  useDataParams("slug", setCurrentSlug, "str");
+  useEffect(() => {
+    if (data) {
+      console.log(data[0].slug);
+      setActiveCategory(data[0].slug);
+    }
+  }, [data]);
 
   useQueryFilters(activeCategory ? activeCategory : "");
+
+  useDataParams("slug", setCurrentSlug, "str");
 
   if (!data) return null;
   if (isPending)
