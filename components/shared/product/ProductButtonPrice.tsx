@@ -8,7 +8,7 @@ import { TypeDough } from "@/interface/enums";
 import { IAddItemCart } from "@/interface/interface-add-item-cart";
 import { IProduct } from "@/interface/interface-product";
 import { ProductPriceService } from "@/services/product-price.service";
-import { useFilters } from "@/store/filters";
+import { useFiltersStore } from "@/store/filters";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ShoppingCart } from "lucide-react";
 import Link from "next/link";
@@ -44,7 +44,7 @@ export default function ProductButtonPrice({
       toast.error("Ошибка при добавлении в корзину");
     },
   });
-  const clearIngredients = useFilters((state) => state.clearIngredients);
+  const clearIngredients = useFiltersStore((state) => state.clearIngredients);
   useEffect(() => {
     clearIngredients();
   }, []);

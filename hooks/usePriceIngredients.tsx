@@ -1,10 +1,10 @@
 import { QueryIngredient } from "@/app/api/query-ingredient";
-import { useFilters } from "@/store/filters";
+import { useFiltersStore } from "@/store/filters";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 
 export default function usePriceIngredients() {
-  const ingredients = useFilters((state) => state.ingredients);
+  const ingredients = useFiltersStore((state) => state.ingredients);
 
   const { data } = useQuery({
     queryKey: ["all-ingredients"],
@@ -12,7 +12,7 @@ export default function usePriceIngredients() {
   });
   const sumPrice = useMemo(() => {
     return data?.reduce((acc, val) => {
-      if (ingredients.some((ingr) => ingr === val.id)) {
+      if (ingredients?.some((ingredient: number) => ingredient === val.id)) {
         acc += val.price;
       }
       return acc;
