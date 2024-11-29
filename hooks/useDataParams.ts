@@ -1,21 +1,25 @@
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef } from 'react'
-
-export const useDataParams = (
-	key: string,
-	fn: (val: number | string) => void,
-	type: 'str' | 'num'
+import queryString from "query-string";
+import { useEffect, useRef } from "react";
+export const useDataParams = <T extends string | number>(
+  key: string,
+  fn: (val: T) => void,
+  type: "str" | "num"
 ) => {
-	const isMounted = useRef(false)
-	const searchParams = useSearchParams()
-	useEffect(() => {
-		if (isMounted.current) return
-		const value = searchParams.get(key)
-		if (type === 'str') {
-			fn(value)
-		} else {
-			value?.split(',').map(val => fn(Number(val)))
-		}
-		isMounted.current = true
-	}, [])
-}
+  const isMounted = useRef(false);
+  const location = window.location;
+  const parsed = queryString.parse(location.search);
+  useEffect(() => {
+    if (isMounted.current) return;
+
+    const value = parsed[key] as string | undefined;
+    if (value) {
+      const valueArr = value?.split(",");
+      if (type === "str" && value !== null) {
+        valueArr.forEach((val) => fn(val as T));
+      } else {
+        valueArr.forEach((val) => fn(Number(val) as T));
+      }
+    }
+    isMounted.current = true;
+  }, []);
+};
