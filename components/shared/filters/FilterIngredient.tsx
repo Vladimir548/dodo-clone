@@ -14,7 +14,7 @@ export default function FilterIngredient({ categoryId }: IProps) {
 		queryFn: () => QueryIngredient.byCategory(categoryId),
 		enabled: !!categoryId,
 	})
-	console.log('ingredient', data)
+
 	const { ingredients, toggleIngredients, currentCategory } = useFiltersStore(
 		state => ({
 			ingredients: state?.ingredients,

@@ -29,6 +29,8 @@ export const useFiltersStore = create<IFilters>()(set => ({
 			if (!state.currentCategory) return { ...state }
 
 			const sizes = state.sizes?.[state.currentCategory] || []
+			console.log(state.sizes)
+			console.log(sizeId)
 			const checkSizes = sizes.includes(sizeId)
 			const updateSize = checkSizes
 				? sizes.filter(id => id !== sizeId)

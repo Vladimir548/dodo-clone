@@ -20,7 +20,6 @@ export const QueryIngredient = {
 		return data as IIngredient[]
 	},
 	async byCategory(type: number | null | undefined) {
-		console.log(type)
 		const { data } = await axiosData.get<IIngredient[]>('/ingredient/by-type', {
 			params: {
 				type,

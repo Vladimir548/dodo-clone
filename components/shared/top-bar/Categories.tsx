@@ -1,9 +1,11 @@
 import { QueryCategory } from '@/app/api/query-category'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useDataParams } from '@/hooks/useDataParams'
 import { useQueryFilters } from '@/hooks/useQueryFilters'
 import { cn } from '@/lib/utils'
 import { useCategoryStore } from '@/store/category'
+import { useFiltersStore } from '@/store/filters'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
@@ -23,10 +25,13 @@ export default function Categories({ className }: Props) {
 	})
 	const { activeCategory, setActiveCategory, setClickCategory } =
 		useCategoryStore()
+	const setCurrentSlug = useFiltersStore(state => state.setCurrentCategory)
 
+	useDataParams('slug', setCurrentSlug, 'str')
 	useEffect(() => {
 		if (data) {
 			setActiveCategory(data[0]?.slug)
+			setCurrentSlug(data[0]?.slug)
 		}
 	}, [data, setActiveCategory])
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useFiltersStore } from '@/store/filters'
 import { useRouter } from 'next/navigation'
@@ -8,9 +8,10 @@ export const useQueryFilters = (slug: string) => {
 	const isMounted = React.useRef(false)
 	const router = useRouter()
 	const { prices, ingredients, sizes } = useFiltersStore()
-	console.log(prices)
-	React.useEffect(() => {
+	console.log(sizes?.[slug])
+	useEffect(() => {
 		if (isMounted.current) {
+			console.log(sizes?.[slug])
 			const params = {
 				slug: slug,
 				priceTo: prices?.[slug]?.priceTo,
@@ -18,7 +19,7 @@ export const useQueryFilters = (slug: string) => {
 				ingredients: ingredients?.[slug],
 				sizes: sizes?.[slug],
 			}
-			console.log(slug)
+
 			const query = qs.stringify(params, {
 				arrayFormat: 'comma',
 			})
@@ -29,5 +30,5 @@ export const useQueryFilters = (slug: string) => {
 		}
 
 		isMounted.current = true
-	}, [slug, ingredients, prices, sizes])
+	}, [slug, ingredients, prices, sizes, router])
 }

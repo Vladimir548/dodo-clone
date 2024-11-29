@@ -2,6 +2,7 @@
 
 import { QueryProportion } from '@/app/api/query-proportion'
 import { FiltersListCheckbox } from '@/components/shared/filters/FiltersListChecbox'
+import { useDataParams } from '@/hooks/useDataParams'
 import { useFiltersStore } from '@/store/filters'
 import { useQuery } from '@tanstack/react-query'
 
@@ -23,6 +24,11 @@ export default function FilterSize({ categoryId }: IProps) {
 		sizes: state.sizes,
 		currentCategory: state.currentCategory,
 	}))
+
+	useDataParams('sizes', toggleSizes, 'num')
+
+	console.log(sizes?.[currentCategory])
+	// toggleSizes(Number(searchParams.get('sizes')))
 
 	const item = data?.map(size => ({ value: String(size.id), text: size.value }))
 	return (
