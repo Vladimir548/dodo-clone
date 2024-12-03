@@ -4,6 +4,7 @@ import { RangeSlider } from '@/components/shared/filters/FilterRangeSlider'
 import { Title } from '@/components/shared/Title'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
+import useCustomLocation from '@/hooks/useCustomLocation'
 import { useFiltersStore } from '@/store/filters'
 import { useQuery } from '@tanstack/react-query'
 import queryString from 'query-string'
@@ -32,8 +33,8 @@ export default memo(function FilterPrice({ categoryId }: IProps) {
 	const priceFrom = useFiltersStore(
 		useShallow(state => state?.prices?.[currentSlug]?.priceFrom)
 	)
-	const location = window.location
-	const parsed = queryString.parse(location.search)
+	const location = useCustomLocation()
+	const parsed = queryString.parse(location?.search ?? '')
 
 	useEffect(() => {
 		setPrices('priceFrom', Number(parsed.priceFrom))

@@ -1,4 +1,5 @@
 import { axiosClassic, axiosData } from '@/app/api/axios/axios'
+import { IFilterParams } from '@/interface/interface-filter-params'
 import { IProduct } from '@/interface/interface-product'
 
 export const QueryProduct = {
@@ -7,6 +8,7 @@ export const QueryProduct = {
 		formData.append('file', dto.file)
 		formData.append('name', dto.name)
 		formData.append('categoryId', dto.categoryId.toString())
+		formData.append('ingredients', dto.ingredients.toString())
 
 		const { data } = await axiosData.post<IProduct>('/product/create', dto)
 		return data as IProduct
@@ -15,9 +17,14 @@ export const QueryProduct = {
 		const { data } = await axiosClassic.get<IProduct[]>('/product/all')
 		return data as IProduct[]
 	},
-	async byCategory(id: number | string) {
+	async byCategory(id: number | string, params: IFilterParams) {
 		const { data } = await axiosClassic.get<IProduct[]>(
-			`/product/category/${id}`
+			`/product/category/${id}`,
+			{
+				params: {
+					params,
+				},
+			}
 		)
 		return data as IProduct[]
 	},

@@ -7,8 +7,8 @@ import queryString from 'query-string'
 
 export const useQueryFilters = () => {
 	const isMounted = React.useRef(false)
-	const router = useRouter()
-	const { prices, ingredients, sizes } = useFiltersStore()
+	const { push } = useRouter()
+	const { prices, ingredients, sizes, dough } = useFiltersStore()
 	const activeCategory = useCategoryStore(state => state.activeCategory) ?? ''
 
 	useEffect(() => {
@@ -19,6 +19,7 @@ export const useQueryFilters = () => {
 				priceFrom: prices?.[activeCategory]?.priceFrom,
 				ingredients: ingredients?.[activeCategory],
 				sizes: sizes?.[activeCategory],
+				dough: dough.map(val => val.value),
 			}
 
 			const query = queryString.stringify(params, {
@@ -27,11 +28,11 @@ export const useQueryFilters = () => {
 				skipNull: true,
 			})
 
-			router.push(`?${decodeURIComponent(query)}`, {
+			push(`?${query}`, {
 				scroll: false,
 			})
+		} else {
+			isMounted.current = true
 		}
-
-		isMounted.current = true
-	}, [activeCategory, ingredients, prices, sizes, router])
+	}, [activeCategory, ingredients, prices, sizes, dough])
 }

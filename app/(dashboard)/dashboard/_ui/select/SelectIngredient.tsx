@@ -14,7 +14,6 @@ export default function SelectIngredient<T extends FieldValues>({
 	control,
 	type,
 }: IIngredient<T>) {
-	console.log(type)
 	const { data } = useQuery({
 		queryKey: ['by-type-ingredient', type],
 		queryFn: () => QueryIngredient.byCategory(type),
