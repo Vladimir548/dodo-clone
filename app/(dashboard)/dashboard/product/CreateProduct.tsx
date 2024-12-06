@@ -51,7 +51,7 @@ export default function CreateProduct() {
 			<SelectIngredient
 				type={categoryId}
 				control={control}
-				field={`ingredients`}
+				field={`ingredientIds`}
 			/>
 			<UploadImage control={control} field={'file'} />
 		</FormLayout>

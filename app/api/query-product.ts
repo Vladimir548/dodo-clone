@@ -8,7 +8,7 @@ export const QueryProduct = {
 		formData.append('file', dto.file)
 		formData.append('name', dto.name)
 		formData.append('categoryId', dto.categoryId.toString())
-		formData.append('ingredients', dto.ingredients.toString())
+		formData.append('ingredientIds', JSON.stringify(dto.ingredientIds))
 
 		const { data } = await axiosData.post<IProduct>('/product/create', dto)
 		return data as IProduct

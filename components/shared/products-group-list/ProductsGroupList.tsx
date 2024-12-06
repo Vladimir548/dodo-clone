@@ -31,6 +31,7 @@ export default function ProductsGroupList() {
 			blockActive.scrollIntoView({
 				behavior: 'smooth',
 				block: 'start',
+				inline: 'nearest',
 			})
 		}
 	}, [activeCategory, clickCategory, isFirstRender])

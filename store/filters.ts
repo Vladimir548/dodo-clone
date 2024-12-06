@@ -77,17 +77,17 @@ export const useFiltersStore = create<IFilters>()(set => ({
 		set(state => {
 			const checkDough = state.dough?.some(val => val.id === doughType)
 			const updateDough = checkDough
-				? state.dough.filter(id => Number(id.id) !== doughType)
+				? state.dough.filter(val => val.id !== doughType)
 				: [
 						...state.dough,
 						{
 							id: doughType,
-							value: DATADOUGHTYPE.find(val => val.id === doughType)?.value,
+							value:
+								DATADOUGHTYPE.find(val => val.id === doughType)?.value ||
+								TypeDough.TRADITIONAL,
 						},
 				  ]
-			console.log(updateDough)
-
-			return { dough: [...updateDough] }
+			return { dough: updateDough }
 		}),
 	prices: null,
 	setPrices: (name: keyof PriceProps, price: number | null) =>

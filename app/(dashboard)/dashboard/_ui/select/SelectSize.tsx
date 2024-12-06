@@ -47,7 +47,7 @@ export default function SelectSize({ control, categoryId, watch }: ISizeProps) {
 					sizeId: size,
 					price: 0,
 					weight: 0,
-					ingredientIds: [],
+					// ingredientIds: [],
 				} as unknown as ISize)
 			}
 		})
