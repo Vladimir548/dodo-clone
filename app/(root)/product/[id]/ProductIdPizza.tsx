@@ -5,11 +5,10 @@ import Container from '@/components/shared/Container'
 import ProductButtonPrice from '@/components/shared/product/ProductButtonPrice'
 import ProductIngredients from '@/components/shared/product/ProductIngredients'
 import { Title } from '@/components/shared/Title'
-import { Button } from '@/components/ui/button'
-import { DATADOUGHTYPE } from '@/data/dough-type'
-import { TypeDough } from '@/interface/enums'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
+import ChooseSize from '@/components/shared/choose/ChooseSize'
+import ChooseVariant from '@/components/shared/choose/ChooseVariant'
 import useGetSizeByCategory from '@/hooks/useGetSizeByCategory'
 import { IProduct } from '@/interface/interface-product'
 import { ProductService } from '@/services/product.service'
@@ -26,19 +25,30 @@ export default function ProductIdPizza({
 	isPending,
 }: IProductId) {
 	const { data: sizesByCategory } = useGetSizeByCategory(data?.categoryId)
-	const availableDough = ProductService.doughForPizza(data)
-	const [typeDough, setTypeDough] = useState<TypeDough>(
-		availableDough ?? TypeDough.TRADITIONAL
+	const defaultVariant = ProductService.setDefaultVariantProduct(data)
+
+	const [selectedVariant, setSelectedVariant] = useState<number>(
+		defaultVariant ?? 0
 	)
 	const [selectSize, setSelectSize] = useState<number>()
-	const checkSize = ProductService.sizeForPizza(data, typeDough)
-	const hasSize = ProductService.hasCurrentSize(data, typeDough, selectSize)
+
+	const getVariant = ProductService.getVariant(data, selectedVariant)
+
+	const getProportion = ProductService.getProportion(
+		data,
+		selectedVariant,
+		selectSize
+	)
+
+	const getImage = ProductService.getImage(data, selectedVariant)
+	const getWeight = ProductService.getWeight(data, selectedVariant, selectSize)
+	const getIngredients = ProductService.getIngredients(
+		data,
+		selectedVariant,
+		selectSize
+	)
+
 	const arrSizeImg = [400, 450, 500]
-	useEffect(() => {
-		if (!hasSize) {
-			setSelectSize(checkSize)
-		}
-	}, [selectSize, typeDough, checkSize, hasSize])
 
 	if (!data) return null
 	return (
@@ -51,10 +61,7 @@ export default function ProductIdPizza({
 				<ImageProduct
 					isLoading={isPending}
 					alt={data?.name}
-					src={
-						data?.productVariant?.find(val => val.doughName === typeDough)
-							?.image
-					}
+					src={getImage}
 					sizes={sizesByCategory?.map((val, index) => ({
 						[val.id]: arrSizeImg[index],
 					}))}
@@ -68,23 +75,9 @@ export default function ProductIdPizza({
 					text={data?.name ?? ''}
 				/>
 				<div className={'flex gap-x-2 text-black/70 dark:text-white/70 '}>
-					<span>
-						{sizesByCategory?.find(val => val.id === selectSize)?.value}
-					</span>
-					<span>
-						{DATADOUGHTYPE.find(
-							val => val.value === typeDough
-						)?.name.toLowerCase()}{' '}
-						тесто
-					</span>
-					<span>
-						{data?.productVariant
-							.filter(val => val.doughName === typeDough)
-							?.map(
-								val => val.sizes?.find(val => val.sizeId === selectSize)?.weight
-							)}{' '}
-						г
-					</span>
+					<span>{getProportion}</span>
+					<span>{getVariant?.toLowerCase()} тесто</span>
+					<span>{getWeight} г</span>
 				</div>
 				<div
 					className={` ${
@@ -94,67 +87,25 @@ export default function ProductIdPizza({
 					<p className={'text-black/70 dark:text-gray-200'}>
 						{data?.ingredients?.map(val => val.name).join(', ')}
 					</p>
-					<div
-						className={
-							'flex justify-between p-1 gap-x-1 w-full border-2 border-primary font-bold rounded-lg '
-						}
-					>
-						{sizesByCategory?.map(val => {
-							return (
-								<Button
-									disabled={ProductService.isSizeTypeDough(
-										data,
-										typeDough,
-										val.id
-									)}
-									variant={'outline'}
-									onClick={() => setSelectSize(val.id)}
-									className={`w-full  border-2 ${
-										selectSize === val.id && 'bg-primary text-white'
-									} border-primary  rounded-lg hover:border-primary font-bold`}
-									key={val.id}
-								>
-									{val.value}
-								</Button>
-							)
-						})}
-					</div>
-					<div
-						className={'flex  border-2 border-primary  p-1 gap-x-1 rounded-lg'}
-					>
-						{DATADOUGHTYPE.map(val => (
-							<Button
-								disabled={
-									!data?.productVariant.find(
-										find => find.doughName === val.value
-									)
-								}
-								onClick={() => setTypeDough(val?.value)}
-								className={`w-full  border-2 ${
-									typeDough === val.value && 'bg-primary text-white'
-								} border-primary  rounded-lg hover:border-primary font-bold`}
-								variant={'outline'}
-								key={val.value}
-							>
-								{val.name}
-							</Button>
-						))}
-					</div>
-					<div>
-						<ProductIngredients
-							data={
-								data.productVariant
-									.find(variant => variant.doughName === typeDough)
-									?.sizes.find(size => size.sizeId === selectSize)?.ingredients
-							}
+
+					<div className=' w-full flex flex-col gap-y-3'>
+						<ChooseSize
+							selectedVariant={selectedVariant}
+							setSelectSize={setSelectSize}
+							data={data}
 						/>
+						<ChooseVariant setSelectVariant={setSelectedVariant} data={data} />
+					</div>
+
+					<div>
+						<ProductIngredients data={getIngredients} />
 					</div>
 				</div>
 				<ProductButtonPrice
 					data={data}
 					selectedSize={selectSize}
-					selectedDough={typeDough}
-					price={ProductService.calcSumPrice(data, selectSize, typeDough)}
+					selectedVariant={selectedVariant}
+					price={ProductService.calcSumPrice(data, selectSize, selectedVariant)}
 				/>
 			</div>
 		</Container>

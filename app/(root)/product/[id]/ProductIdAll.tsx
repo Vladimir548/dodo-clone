@@ -1,6 +1,7 @@
 'use client'
 
-import CarouselVariant from '@/components/CarouselVariant'
+import ChooseSize from '@/components/shared/choose/ChooseSize'
+import ChooseVariant from '@/components/shared/choose/ChooseVariant'
 import Container from '@/components/shared/Container'
 import ProductButtonPrice from '@/components/shared/product/ProductButtonPrice'
 import ProductIngredients from '@/components/shared/product/ProductIngredients'
@@ -22,14 +23,26 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 
 	const defaultVariant = ProductService.setDefaultVariantProduct(data)
 	const defaultSize = ProductService.setDefaultSize(data, selectedVariant)
+	const proportion = ProductService.getProportion(
+		data,
+		selectedVariant,
+		selectedSize
+	)
+	const weight = ProductService.getWeight(data, selectedVariant, selectedSize)
 
 	useEffect(() => {
 		setSelectedVariant(defaultVariant)
 	}, [data])
 
 	useEffect(() => {
+		setSelectedSize(selectedSize)
+	}, [selectedVariant])
+
+	useEffect(() => {
 		setSelectedSize(defaultSize)
 	}, [data, selectedVariant])
+
+	console.log('selectedVariant', selectedVariant)
 	return (
 		<Container
 			className={`text-white h-full w-full grid grid-cols-2  justify-between gap-x-4 pt-8 ${
@@ -57,51 +70,21 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 				<div
 					className={'flex gap-x-2 text-black/70 dark:text-white/70 min-h-6 '}
 				>
-					<span>
-						{
-							data.productVariant
-								?.find(
-									variant => variant.productAttribute.id === selectedVariant
-								)
-								?.sizes.find(size => size.sizeId === selectedSize)?.proportion
-								.value
-						}
-					</span>
-					{Number(
-						data.productVariant
-							.find(variant => variant.productAttribute.id === selectedVariant)
-							?.sizes.find(size => size.sizeId === selectedSize)?.weight
-					) > 0 && (
+					<span>{proportion}</span>
+					{Number(weight) > 0 && (
 						<span>
-							{
-								data.productVariant
-									.find(
-										variant => variant.productAttribute.id === selectedVariant
-									)
-									?.sizes.find(size => size.sizeId === selectedSize)?.weight
-							}{' '}
+							{weight} {' г'}
 						</span>
 					)}
 				</div>
-				<CarouselVariant
-					selectedVariant={selectedVariant}
-					setSelectedVariant={setSelectedVariant}
-					data={data.productVariant.map(variant => ({
-						name: variant.productAttribute.name,
-						value: variant.productAttribute.id,
-						disabled: variant.sizes.length === 0,
-					}))}
-				/>
-				<CarouselVariant
-					selectedVariant={selectedSize}
-					setSelectedVariant={setSelectedSize}
-					data={data?.productVariant
-						.find(variant => variant.productAttribute.id === selectedVariant)
-						?.sizes?.map(variant => ({
-							name: variant.proportion.value,
-							value: variant.sizeId,
-						}))}
-				/>
+				<div className=' w-full flex flex-col gap-y-3'>
+					<ChooseVariant setSelectVariant={setSelectedVariant} data={data} />
+					<ChooseSize
+						selectedVariant={selectedVariant}
+						setSelectSize={setSelectedSize}
+						data={data}
+					/>
+				</div>
 
 				<div>
 					<ProductIngredients
@@ -121,7 +104,6 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 						price={ProductService.calcSumPrice(
 							data,
 							selectedSize,
-							undefined,
 							selectedVariant
 						)}
 						selectedVariant={selectedVariant}
