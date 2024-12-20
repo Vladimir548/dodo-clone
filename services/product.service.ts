@@ -2,23 +2,6 @@ import { TypeDough } from '@/interface/enums'
 import { IProduct } from '@/interface/interface-product'
 
 export const ProductService = {
-	sizeForPizza(data: IProduct | undefined, selectedDough: TypeDough) {
-		if (data) {
-			const getAvailableSize = data.productVariant
-				.filter(variant => variant.doughName === selectedDough)
-				.map(currentVariant => currentVariant.sizes)[0]
-				?.map(size => size.sizeId)
-			return getAvailableSize?.shift()
-		}
-	},
-	doughForPizza: (data: IProduct | undefined) => {
-		if (data) {
-			const getAvailableDough: TypeDough | undefined = data.productVariant.find(
-				val => val.doughName
-			)?.doughName
-			return getAvailableDough
-		}
-	},
 	isSizeTypeDough(
 		data: IProduct | undefined,
 		selectedDough: TypeDough,
@@ -28,34 +11,14 @@ export const ProductService = {
 			?.find(find => find?.doughName === selectedDough)
 			?.sizes.some(type => type.sizeId === sizeId)
 	},
-
-	hasCurrentSize(
-		data: IProduct | undefined,
-		selectedDough: TypeDough,
-		selectedSize: number | undefined
-	) {
-		return data?.productVariant
-			.filter(variant => variant.doughName === selectedDough)
-			.map(type => type.sizes.some(size => size.sizeId === selectedSize))[0]
-	},
 	calcSumPrice(
 		data: IProduct | undefined,
 		selectedSize: number | undefined,
-		selectedDough?: TypeDough,
 		selectedVariant?: number
 	) {
-		if (selectedDough) {
-			return (
-				data?.productVariant
-					.filter(val => val.doughName === selectedDough)
-					.map(val => val.sizes.find(val => val.sizeId === selectedSize)?.price)
-					.find(val => val !== undefined) ?? 0
-			)
-		} else {
-			return data?.productVariant
-				.find(variant => variant.productAttribute.id === selectedVariant)
-				?.sizes.find(size => size.sizeId === selectedSize)?.price
-		}
+		return data?.productVariant
+			.find(variant => variant.productAttribute.id === selectedVariant)
+			?.sizes.find(size => size.sizeId === selectedSize)?.price
 	},
 	setDefaultSize(
 		data: IProduct | undefined,
@@ -71,8 +34,85 @@ export const ProductService = {
 	},
 	setDefaultVariantProduct(data: IProduct | undefined) {
 		if (data) {
-			const selectedVariant = data.productVariant[0].productAttribute.id
-			return selectedVariant
+			const findAvailableVariant = data.productVariant.find(
+				variant => variant.sizes.length > 0
+			)?.productAttribute.id
+			return findAvailableVariant
+		}
+	},
+	getProportion(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined,
+		selectedSize: number | undefined
+	) {
+		if (data) {
+			return data.productVariant
+				?.find(variant => variant.productAttribute.id === selectedVariant)
+				?.sizes.find(size => size.sizeId === selectedSize)?.proportion.value
+		}
+	},
+	getWeight(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined,
+		selectedSize: number | undefined
+	) {
+		if (data) {
+			return data.productVariant
+				.find(variant => variant.productAttribute.id === selectedVariant)
+				?.sizes.find(size => size.sizeId === selectedSize)?.weight
+		}
+	},
+	getImage(data: IProduct | undefined, selectedVariant: number | undefined) {
+		if (data) {
+			return data.productVariant.find(
+				val => val.productAttribute.productVariantId === selectedVariant
+			)?.image
+		}
+	},
+	getPrice(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined,
+		selectedSize: number | undefined
+	) {
+		if (data) {
+			return data.productVariant
+				.find(
+					variant =>
+						variant.productAttribute.productVariantId === selectedVariant
+				)
+				?.sizes.find(size => size.sizeId === selectedSize)?.price
+		}
+	},
+	getSize(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined,
+		selectedSize: number | undefined
+	) {
+		if (data) {
+			return data.productVariant
+				.find(
+					variant =>
+						variant.productAttribute.productVariantId === selectedVariant
+				)
+				?.sizes.find(size => size.sizeId === selectedSize)?.proportion.value
+		}
+	},
+	getVariant(data: IProduct | undefined, selectedVariant: number | undefined) {
+		if (data) {
+			return data.productVariant.find(
+				variant => variant.productAttribute.productVariantId === selectedVariant
+			)?.productAttribute.name
+		}
+	},
+	getIngredients(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined,
+		selectedSize: number | undefined
+	) {
+		if (data) {
+			return data.productVariant
+				.find(variant => variant.productAttribute.id === selectedVariant)
+				?.sizes.find(size => size.sizeId === selectedSize)?.ingredients
 		}
 	},
 }
