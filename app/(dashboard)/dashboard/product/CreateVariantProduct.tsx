@@ -24,7 +24,7 @@ import SelectSize from '../_ui/select/SelectSize'
 
 export default function CreateVariantProduct() {
 	const products = useChooseProduct(state => state.products)
-	console.log(products)
+
 	const { handleSubmit, control, watch, register, setValue } =
 		useForm<IProductVariant>({
 			defaultValues: {

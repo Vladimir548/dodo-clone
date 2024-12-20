@@ -1,14 +1,13 @@
 'use client'
 
 import ImageProduct from '@/components/ImageProduct'
+import ChooseSize from '@/components/shared/choose/ChooseSize'
+import ChooseVariant from '@/components/shared/choose/ChooseVariant'
 import Container from '@/components/shared/Container'
 import ProductButtonPrice from '@/components/shared/product/ProductButtonPrice'
 import ProductIngredients from '@/components/shared/product/ProductIngredients'
 import { Title } from '@/components/shared/Title'
-import { useState } from 'react'
-
-import ChooseSize from '@/components/shared/choose/ChooseSize'
-import ChooseVariant from '@/components/shared/choose/ChooseVariant'
+import useGetSizeAndVariant from '@/hooks/useGetSizeAndVariant'
 import useGetSizeByCategory from '@/hooks/useGetSizeByCategory'
 import { IProduct } from '@/interface/interface-product'
 import { ProductService } from '@/services/product.service'
@@ -25,27 +24,27 @@ export default function ProductIdPizza({
 	isPending,
 }: IProductId) {
 	const { data: sizesByCategory } = useGetSizeByCategory(data?.categoryId)
-	const defaultVariant = ProductService.setDefaultVariantProduct(data)
-
-	const [selectedVariant, setSelectedVariant] = useState<number>(
-		defaultVariant ?? 0
-	)
-	const [selectSize, setSelectSize] = useState<number>()
+	const { selectedSize, setSelectedSize, selectedVariant, setSelectedVariant } =
+		useGetSizeAndVariant({ data })
 
 	const getVariant = ProductService.getVariant(data, selectedVariant)
 
 	const getProportion = ProductService.getProportion(
 		data,
 		selectedVariant,
-		selectSize
+		selectedSize
 	)
 
 	const getImage = ProductService.getImage(data, selectedVariant)
-	const getWeight = ProductService.getWeight(data, selectedVariant, selectSize)
+	const getWeight = ProductService.getWeight(
+		data,
+		selectedVariant,
+		selectedSize
+	)
 	const getIngredients = ProductService.getIngredients(
 		data,
 		selectedVariant,
-		selectSize
+		selectedSize
 	)
 
 	const arrSizeImg = [400, 450, 500]
@@ -65,7 +64,7 @@ export default function ProductIdPizza({
 					sizes={sizesByCategory?.map((val, index) => ({
 						[val.id]: arrSizeImg[index],
 					}))}
-					size={selectSize}
+					size={selectedSize}
 				/>
 			</div>
 			<div className={'flex flex-col gap-y-3  '}>
@@ -91,7 +90,7 @@ export default function ProductIdPizza({
 					<div className=' w-full flex flex-col gap-y-3'>
 						<ChooseSize
 							selectedVariant={selectedVariant}
-							setSelectSize={setSelectSize}
+							setSelectSize={setSelectedSize}
 							data={data}
 						/>
 						<ChooseVariant setSelectVariant={setSelectedVariant} data={data} />
@@ -103,9 +102,13 @@ export default function ProductIdPizza({
 				</div>
 				<ProductButtonPrice
 					data={data}
-					selectedSize={selectSize}
+					selectedSize={selectedSize}
 					selectedVariant={selectedVariant}
-					price={ProductService.calcSumPrice(data, selectSize, selectedVariant)}
+					price={ProductService.calcSumPrice(
+						data,
+						selectedSize,
+						selectedVariant
+					)}
 				/>
 			</div>
 		</Container>

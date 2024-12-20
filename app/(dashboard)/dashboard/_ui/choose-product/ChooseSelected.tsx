@@ -2,7 +2,6 @@
 
 import DialogCustom from '@/components/shared/DialogCustom'
 import { Title } from '@/components/shared/Title'
-import { Button } from '@/components/ui/button'
 import { URL_API } from '@/constants'
 import { useChooseProduct } from '@/store/choose-product'
 import { Trash } from 'lucide-react'
@@ -78,8 +77,6 @@ function ChooseSelected() {
 					Cтоимость{' '}
 					<span className='font-bold text-primary'>{totalPrice} ₽</span>
 				</h2>
-
-				<Button className='w-full'>Добавить</Button>
 			</div>
 		</div>
 	)

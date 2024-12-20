@@ -68,6 +68,7 @@ export const useChooseProduct = create<IChooseDough>()(set => ({
 							data,
 					  ]
 					: [...state.products, data]
+			console.log('updateProduct', updateProduct)
 			return {
 				...state,
 				products: updateProduct,

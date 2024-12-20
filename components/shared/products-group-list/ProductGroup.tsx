@@ -35,7 +35,6 @@ export default function ProductGroup({ id }: { id: number }) {
 		queryFn: () => QueryProduct.byCategory(id, filter),
 	})
 
-	console.log(data)
 	if (isPending)
 		return (
 			<div className={'grid grid-cols-3 gap-4 '}>

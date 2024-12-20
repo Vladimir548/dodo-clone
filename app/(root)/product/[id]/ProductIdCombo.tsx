@@ -1,32 +1,24 @@
 'use client'
 
-import ChooseSize from '@/components/shared/choose/ChooseSize'
 import ChooseVariant from '@/components/shared/choose/ChooseVariant'
 import Container from '@/components/shared/Container'
 import ProductButtonPrice from '@/components/shared/product/ProductButtonPrice'
-import ProductIngredients from '@/components/shared/product/ProductIngredients'
 import { Title } from '@/components/shared/Title'
 import { URL_API } from '@/constants'
 import useGetSizeAndVariant from '@/hooks/useGetSizeAndVariant'
 import { IProduct } from '@/interface/interface-product'
 import { ProductService } from '@/services/product.service'
 import Image from 'next/image'
+import SubProductList from './SubProductList'
 
 interface IProductId {
 	modalClass?: boolean
 	data: IProduct
 }
 
-export default function ProductIdAll({ modalClass, data }: IProductId) {
-	const { selectedSize, setSelectedSize, selectedVariant, setSelectedVariant } =
+function ProductIdCombo({ data, modalClass }: IProductId) {
+	const { selectedSize, selectedVariant, setSelectedVariant } =
 		useGetSizeAndVariant({ data })
-
-	const proportion = ProductService.getProportion(
-		data,
-		selectedVariant,
-		selectedSize
-	)
-	const weight = ProductService.getWeight(data, selectedVariant, selectedSize)
 
 	return (
 		<Container
@@ -52,36 +44,21 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 					className={'font-bold text-black dark:text-white'}
 					text={data?.name ?? ''}
 				/>
-				<div
-					className={'flex gap-x-2 text-black/70 dark:text-white/70 min-h-6 '}
-				>
-					<span>{proportion}</span>
-					{Number(weight) > 0 && (
-						<span>
-							{weight} {' г'}
-						</span>
-					)}
-				</div>
+
 				<div className=' w-full flex flex-col gap-y-3'>
 					<ChooseVariant setSelectVariant={setSelectedVariant} data={data} />
-					<ChooseSize
-						selectedVariant={selectedVariant}
-						setSelectSize={setSelectedSize}
-						data={data}
-					/>
 				</div>
 
-				<div>
-					<ProductIngredients
-						data={
-							data.productVariant
-								.find(
-									variant => variant.productAttribute.id === selectedVariant
-								)
-								?.sizes.find(size => size.sizeId === selectedSize)?.ingredients
+				<div className=''>
+					<SubProductList
+						variant={
+							data.productVariant.find(
+								val => val.productAttribute.productVariantId === selectedVariant
+							)?.subProduct
 						}
 					/>
 				</div>
+
 				<div className='flex justify-center items-end h-full'>
 					<ProductButtonPrice
 						data={data}
@@ -98,3 +75,5 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 		</Container>
 	)
 }
+
+export default ProductIdCombo

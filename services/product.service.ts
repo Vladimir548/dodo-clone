@@ -1,3 +1,4 @@
+import { productTypesWithSubProducts } from '@/data/productTypesWithSubProducts'
 import { TypeDough } from '@/interface/enums'
 import { IProduct } from '@/interface/interface-product'
 
@@ -16,9 +17,15 @@ export const ProductService = {
 		selectedSize: number | undefined,
 		selectedVariant?: number
 	) {
-		return data?.productVariant
-			.find(variant => variant.productAttribute.id === selectedVariant)
-			?.sizes.find(size => size.sizeId === selectedSize)?.price
+		if (productTypesWithSubProducts.includes(data?.type)) {
+			return data?.productVariant.find(
+				variant => variant.productAttribute.id === selectedVariant
+			)?.priceKit
+		} else {
+			return data?.productVariant
+				.find(variant => variant.productAttribute.id === selectedVariant)
+				?.sizes.find(size => size.sizeId === selectedSize)?.price
+		}
 	},
 	setDefaultSize(
 		data: IProduct | undefined,
@@ -34,10 +41,17 @@ export const ProductService = {
 	},
 	setDefaultVariantProduct(data: IProduct | undefined) {
 		if (data) {
-			const findAvailableVariant = data.productVariant.find(
-				variant => variant.sizes.length > 0
-			)?.productAttribute.id
-			return findAvailableVariant
+			if (productTypesWithSubProducts.includes(data.type)) {
+				const findAvailableVariant = data.productVariant.find(
+					variant => variant.subProduct.length > 0
+				)?.productAttribute.productVariantId
+				return findAvailableVariant
+			} else {
+				const findAvailableVariant = data.productVariant.find(
+					variant => variant.sizes.length > 0
+				)?.productAttribute.id
+				return findAvailableVariant
+			}
 		}
 	},
 	getProportion(

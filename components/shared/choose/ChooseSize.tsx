@@ -8,7 +8,7 @@ interface IChooseSize {
 	data: IProduct
 	setSelectSize: (variant: number) => void
 	defaultSizeProps?: number
-	selectedVariant: number
+	selectedVariant: number | undefined
 }
 function ChooseSize({
 	data,

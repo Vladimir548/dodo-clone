@@ -1,6 +1,7 @@
 'use client'
 
 import CarouselVariant from '@/components/CarouselVariant'
+import { productTypesWithSubProducts } from '@/data/productTypesWithSubProducts'
 import { IProduct } from '@/interface/interface-product'
 import { ProductService } from '@/services/product.service'
 import { useEffect, useState } from 'react'
@@ -32,13 +33,16 @@ function ChooseVariant({
 
 	return (
 		<>
+			{}
 			<CarouselVariant
 				selectedVariant={selectedVariant}
 				setSelectedVariant={setSelectedVariant}
 				data={data?.productVariant.map(variant => ({
 					name: variant.productAttribute.name,
 					value: variant.productAttribute.id,
-					disabled: variant.sizes.length === 0,
+					disabled:
+						variant.sizes.length === 0 &&
+						!productTypesWithSubProducts.includes(data?.type),
 				}))}
 			/>
 		</>
