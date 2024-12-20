@@ -7,6 +7,7 @@ import { QueryProduct } from '@/app/api/query-product'
 import { InputCustom } from '@/components/shared/InputCustom'
 import UploadImage from '@/components/shared/upload-image/UploadImage'
 import { TextareaCustom } from '@/components/TextareaCustom'
+import { productTypesWithSubProducts } from '@/data/productTypesWithSubProducts'
 import { IProduct } from '@/interface/interface-product'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -29,7 +30,10 @@ export default function CreateProduct() {
 			toast.error('Ошибка при добавлении данных')
 		},
 	})
+	const typeProduct = watch('type')
+
 	const categoryId = watch('categoryId')
+
 	const onSubmit: SubmitHandler<IProduct> = data => {
 		mutate(data)
 	}
@@ -48,11 +52,14 @@ export default function CreateProduct() {
 			<SelectType control={control} field={'type'} />
 			<SelectCategory control={control} field={'categoryId'} />
 			<TextareaCustom label={'Описание'} />
-			<SelectIngredient
-				type={categoryId}
-				control={control}
-				field={`ingredientIds`}
-			/>
+			{!productTypesWithSubProducts.includes(typeProduct) && (
+				<SelectIngredient
+					type={categoryId}
+					control={control}
+					field={`ingredientIds`}
+				/>
+			)}
+
 			<UploadImage control={control} field={'file'} />
 		</FormLayout>
 	)
