@@ -8,7 +8,9 @@ export const QueryProduct = {
 		formData.append('file', dto.file)
 		formData.append('name', dto.name)
 		formData.append('categoryId', dto.categoryId.toString())
-		formData.append('ingredientIds', JSON.stringify(dto.ingredientIds))
+		if (dto.ingredientIds) {
+			formData.append('ingredientIds', JSON.stringify(dto.ingredientIds))
+		}
 
 		const { data } = await axiosData.post<IProduct>('/product/create', dto)
 		return data as IProduct
@@ -17,7 +19,7 @@ export const QueryProduct = {
 		const { data } = await axiosClassic.get<IProduct[]>('/product/all')
 		return data as IProduct[]
 	},
-	async byCategory(id: number | string, params: IFilterParams) {
+	async byCategory(id: number | string, params?: IFilterParams) {
 		const { data } = await axiosClassic.get<IProduct[]>(
 			`/product/category/${id}`,
 			{
@@ -28,8 +30,20 @@ export const QueryProduct = {
 		)
 		return data as IProduct[]
 	},
+	async getSubProduct() {
+		const { data } = await axiosClassic.get<IProduct[]>(`/product/sub-product`)
+		return data as IProduct[]
+	},
 	async id(id: number | string) {
 		const { data } = await axiosClassic.get<IProduct>(`/product/${id}`)
+		return data as IProduct
+	},
+	async getProductIds(ids: number[]) {
+		const { data } = await axiosClassic.get<IProduct>(`/product/by-ids`, {
+			params: {
+				ids: ids,
+			},
+		})
 		return data as IProduct
 	},
 	async query(query: string) {
