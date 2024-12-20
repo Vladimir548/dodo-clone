@@ -20,5 +20,6 @@ export interface IProduct {
 	ingredients: IIngredient[]
 	ingredientIds: number[]
 	file: File
+	parentId: number
 	productVariant: IProductVariant[]
 }

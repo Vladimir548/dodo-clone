@@ -24,7 +24,7 @@ export default function Categories({ className }: Props) {
 
 	useEffect(() => {
 		if (data) {
-			setActiveCategory(data[0].slug)
+			setActiveCategory(data[0]?.slug)
 		}
 	}, [data])
 

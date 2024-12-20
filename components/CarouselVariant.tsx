@@ -73,8 +73,6 @@ function CarouselVariant({
 							</CarouselItem>
 						))}
 					</CarouselContent>
-					{/* <CarouselPrevious className="disabled:hidden " />
-          <CarouselNext className="disabled:hidden " /> */}
 				</Carousel>
 			)}
 		</>

@@ -8,6 +8,7 @@ import { useCategoryStore } from '@/store/category'
 import { useFiltersStore } from '@/store/filters'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
+import PizzaHalves from '../halves/PizzaHalves'
 
 export default function ProductGroup({ id }: { id: number }) {
 	const activeSlug = useCategoryStore(state => state.activeCategory)
@@ -29,11 +30,13 @@ export default function ProductGroup({ id }: { id: number }) {
 		priceTo,
 		ingredients,
 	}
-	const { data, isPending, isRefetching } = useQuery({
+	const { data, isPending } = useQuery({
 		queryKey: ['get-by-category', id, filter],
 		queryFn: () => QueryProduct.byCategory(id, filter),
 	})
-	if (isPending || isRefetching)
+
+	console.log(data)
+	if (isPending)
 		return (
 			<div className={'grid grid-cols-3 gap-4 '}>
 				<Skeleton count={9} className={'w-full dark:bg-primary h-[450px]'} />
@@ -41,6 +44,7 @@ export default function ProductGroup({ id }: { id: number }) {
 		)
 	return (
 		<div className={'w-full'}>
+			<PizzaHalves />
 			{data && data?.length > 0 ? (
 				<div className={'grid grid-cols-3 gap-4 '}>
 					{data?.map(product => (

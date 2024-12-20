@@ -4,7 +4,6 @@ import { QueryCartItem } from '@/app/api/query-cart-item'
 import { Button } from '@/components/ui/button'
 import useCurrentUser from '@/hooks/useCurrentUser'
 import usePriceIngredients from '@/hooks/usePriceIngredients'
-import { TypeDough } from '@/interface/enums'
 import { IAddItemCart } from '@/interface/interface-add-item-cart'
 import { IProduct } from '@/interface/interface-product'
 import { ProductPriceService } from '@/services/product-price.service'
@@ -18,7 +17,6 @@ import { toast } from 'react-toastify'
 interface IProductPrice {
 	price: number | undefined
 	data: IProduct
-	selectedDough?: TypeDough
 	selectedSize: number | undefined
 	selectedVariant?: number | undefined
 }
@@ -27,7 +25,6 @@ export default function ProductButtonPrice({
 	price,
 	data,
 	selectedSize,
-	selectedDough,
 	selectedVariant,
 }: IProductPrice) {
 	const queryClient = useQueryClient()
@@ -47,17 +44,15 @@ export default function ProductButtonPrice({
 	const clearIngredients = useIngredientsStore(state => state.clearIngredients)
 	useEffect(() => {
 		clearIngredients()
-	}, [])
+	}, [selectedSize])
 
 	const productVariantId = ProductPriceService.selectedVariant(
 		data,
-		selectedDough,
 		selectedVariant
 	)
 
 	const sizeId = ProductPriceService.selectedSize(
 		data,
-		selectedDough,
 		selectedSize,
 		selectedVariant
 	)
@@ -69,11 +64,17 @@ export default function ProductButtonPrice({
 
 	const addToCart = () => {
 		const objItem: IAddItemCart = {
-			ingredientIds: ingredients,
-			productId: data.id,
+			subCartItem: [
+				{
+					ingredientIds: ingredients,
+					productId: data.id,
+					productVariantId,
+					sizeId,
+				},
+			],
+			quantity: 1,
 			cartId,
-			productVariantId,
-			sizeId,
+			typeProduct: data.type,
 		}
 		mutate(objItem)
 	}

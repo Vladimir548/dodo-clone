@@ -17,6 +17,7 @@ export interface IProductVariant {
 	doughName?: TypeDough
 	file: File
 	productAttribute: IProductAttribute
+	productsSub: IProductsSub[]
 }
 export interface ISize {
 	id: number
@@ -26,4 +27,12 @@ export interface ISize {
 	ingredients?: IIngredient[]
 	ingredientIds?: number[]
 	proportion: IProportion
+}
+
+interface IProductsSub {
+	productId: number
+	variantId?: number | undefined
+	sizeId: number | undefined
+	quantity: number
+	isReplace: boolean
 }
