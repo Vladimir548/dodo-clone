@@ -21,6 +21,10 @@ const config: Config = {
 			boxShadow: {
 				default: ' 0px 0px 5px 2px rgba(0, 0, 0, 0.10)',
 				'inner-default': 'inset 0px 0px 5px 2px rgba(0, 0, 0, 0.10)',
+				'sm-card': '0px 0px 2px #0605323d',
+				'sm-card-dark': '0px 0px 2px #8e8be487',
+				'sm-card-inner': 'inset  0px 0px 4px #0605323d',
+				'sm-card-dark-inner': 'inset  0px 0px 4px #8e8be487',
 			},
 			colors: {
 				background: 'hsl(var(--background))',
