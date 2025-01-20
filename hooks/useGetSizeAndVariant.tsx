@@ -2,25 +2,27 @@
 
 import { IProduct } from '@/interface/interface-product'
 import { ProductService } from '@/services/product.service'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-function useGetSizeAndVariant({ data }: { data: IProduct }) {
+function useGetSizeAndVariant({ data }: { data?: IProduct | undefined }) {
 	const [selectedSize, setSelectedSize] = useState<number>()
 	const [selectedVariant, setSelectedVariant] = useState<number>()
 	const defaultVariant = ProductService.setDefaultVariantProduct(data)
 	const defaultSize = ProductService.setDefaultSize(data, selectedVariant)
 
-	useEffect(() => {
-		setSelectedVariant(defaultVariant)
-	}, [data, defaultVariant])
+	// useEffect(() => {
+	// 	if (defaultVariant) {
+	// 		setSelectedVariant(defaultVariant)
+	// 	}
+	// }, [data, defaultVariant])
 
-	useEffect(() => {
-		setSelectedSize(selectedSize)
-	}, [selectedVariant, selectedSize])
+	// useEffect(() => {
+	// 	setSelectedSize(selectedSize)
+	// }, [selectedVariant, selectedSize])
 
-	useEffect(() => {
-		setSelectedSize(defaultSize)
-	}, [data, defaultSize])
+	// useEffect(() => {
+	// 	setSelectedSize(defaultSize)
+	// }, [data, defaultSize])
 	return { selectedSize, setSelectedSize, selectedVariant, setSelectedVariant }
 }
 
