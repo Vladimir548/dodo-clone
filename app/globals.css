@@ -108,3 +108,6 @@ input:-webkit-autofill:active {
 .right-half {
 	clip-path: inset(0 0 0 50%);
 }
+.text-secondary {
+	@apply text-secondary-foreground dark:text-secondary-white;
+}
