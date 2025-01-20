@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 
-interface IProduct {
+export interface IProductStore {
 	productId: number
-	variantId?: number | undefined
-	sizeId: number | undefined
+	variantId: number
+	subSizeId: number
 	price: number
 	name: string
 	size: string
@@ -14,14 +14,14 @@ interface IProduct {
 }
 
 interface IChooseDough {
-	products: IProduct[]
+	products: IProductStore[]
 	totalPrice: number
-	addProduct: (data: IProduct) => void
+	addProduct: (data: IProductStore) => void
 	removeProduct: (id: number, variantId: number, sizeId: number) => void
 	clearProduct: () => void
 }
 
-const calcSumProduct = (products: IProduct[]) => {
+const calcSumProduct = (products: IProductStore[]) => {
 	return products.reduce((acc, val) => {
 		return acc + val.price * val.quantity
 	}, 0)
@@ -30,26 +30,26 @@ const calcSumProduct = (products: IProduct[]) => {
 export const useChooseProduct = create<IChooseDough>()(set => ({
 	products: [],
 	totalPrice: 0,
-	addProduct: (data: IProduct) =>
+	addProduct: (data: IProductStore) =>
 		set(state => {
-			console.log(data)
+			console.log('addProduct', data)
 			const someProduct = state.products.some(
 				val =>
 					val.productId === data?.productId &&
-					val.sizeId === data.sizeId &&
+					val.subSizeId === data.subSizeId &&
 					val.variantId === data.variantId
 			)
 
 			const findProduct = state.products.find(
 				val =>
 					val.productId === data?.productId &&
-					val.sizeId === data.sizeId &&
+					val.subSizeId === data.subSizeId &&
 					val.variantId === data.variantId
 			)
 			const findIndexProduct = state.products.findIndex(
 				val =>
 					val.productId === data?.productId &&
-					val.sizeId === data.sizeId &&
+					val.subSizeId === data.subSizeId &&
 					val.variantId === data.variantId
 			)
 
@@ -68,7 +68,7 @@ export const useChooseProduct = create<IChooseDough>()(set => ({
 							data,
 					  ]
 					: [...state.products, data]
-			console.log('updateProduct', updateProduct)
+			// console.log('updateProduct', updateProduct)
 			return {
 				...state,
 				products: updateProduct,
@@ -82,7 +82,7 @@ export const useChooseProduct = create<IChooseDough>()(set => ({
 				val =>
 					val.productId !== id ||
 					val.variantId !== variantId ||
-					val.sizeId !== sizeId
+					val.subSizeId !== sizeId
 			)
 			return {
 				...state,

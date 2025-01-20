@@ -1,30 +1,62 @@
+import { productTypesConstructor } from '@/data/productTypesConstructor'
 import { productTypesWithSubProducts } from '@/data/productTypesWithSubProducts'
-import { TypeDough } from '@/interface/enums'
+import { TypeProduct } from '@/interface/enums'
 import { IProduct } from '@/interface/interface-product'
 
+export interface ISubProductForPrice {
+	id: number
+	index: number
+	price: number
+}
+
 export const ProductService = {
-	isSizeTypeDough(
-		data: IProduct | undefined,
-		selectedDough: TypeDough,
-		sizeId: number
-	) {
-		return !data?.productVariant
-			?.find(find => find?.doughName === selectedDough)
-			?.sizes.some(type => type.sizeId === sizeId)
-	},
 	calcSumPrice(
 		data: IProduct | undefined,
 		selectedSize: number | undefined,
-		selectedVariant?: number
+		selectedVariant?: number,
+		customProducts?: ISubProductForPrice[]
 	) {
-		if (productTypesWithSubProducts.includes(data?.type)) {
-			return data?.productVariant.find(
-				variant => variant.productAttribute.id === selectedVariant
-			)?.priceKit
+		if (customProducts && customProducts?.length > 0) {
+			let totalPrice = 0
+			const findProduct = data?.productVariant.find(variant =>
+				variant.productAttribute.variantTypesId
+					? variant.productAttribute.variantTypesId === selectedVariant
+					: variant.productAttribute.productVariantId === selectedVariant
+			)
+
+			if (data?.type === TypeProduct.PIZZA_HALF) {
+				totalPrice = customProducts.reduce((acc, val) => acc + val.price, 0)
+			}
+
+			findProduct?.subProduct?.map((variant, index) => {
+				if (customProducts.some(product => product.index === index)) {
+					const customProduct = customProducts.find(
+						product => product.index === index
+					)?.price
+					console.log('totalPrice', totalPrice)
+					console.log('customProduct', customProduct)
+					return (totalPrice += customProduct ?? 0)
+				} else {
+					console.log('variant size', variant.size.price)
+					return (totalPrice += variant.size.price)
+				}
+			})
+			return totalPrice
 		} else {
-			return data?.productVariant
-				.find(variant => variant.productAttribute.id === selectedVariant)
-				?.sizes.find(size => size.sizeId === selectedSize)?.price
+			if (productTypesWithSubProducts.includes(data?.type)) {
+				return data?.productVariant.find(
+					variant =>
+						variant.productAttribute.productVariantId === selectedVariant
+				)?.priceKit
+			} else {
+				return data?.productVariant
+					.find(val =>
+						val.productAttribute.variantTypesId
+							? val.productAttribute.variantTypesId === selectedVariant
+							: val.productAttribute.productVariantId === selectedVariant
+					)
+					?.sizes.find(size => size.id === selectedSize)?.price
+			}
 		}
 	},
 	setDefaultSize(
@@ -33,24 +65,34 @@ export const ProductService = {
 	) {
 		if (data) {
 			const getAvailableSize = data.productVariant
-				.find(variant => variant.productAttribute.id === selectedVariant)
-				?.sizes.map(size => size.sizeId)
+				.find(val =>
+					val.productAttribute.variantTypesId
+						? val.productAttribute.variantTypesId === selectedVariant
+						: val.productAttribute.productVariantId === selectedVariant
+				)
+				?.sizes.map(size => size?.proportion?.id)
 
 			if (getAvailableSize) return getAvailableSize.shift()
 		}
 	},
 	setDefaultVariantProduct(data: IProduct | undefined) {
 		if (data) {
-			if (productTypesWithSubProducts.includes(data.type)) {
-				const findAvailableVariant = data.productVariant.find(
-					variant => variant.subProduct.length > 0
-				)?.productAttribute.productVariantId
-				return findAvailableVariant
+			const isTypedId = data.productVariant.some(
+				variant => variant.productAttribute.variantTypesId !== null
+			)
+			if (isTypedId) {
+				return data.productVariant.find(variant => variant.sizes.length > 0)
+					?.productAttribute.variantTypesId
 			} else {
-				const findAvailableVariant = data.productVariant.find(
-					variant => variant.sizes.length > 0
-				)?.productAttribute.id
-				return findAvailableVariant
+				if (productTypesWithSubProducts.includes(data.type)) {
+					return data.productVariant.find(
+						variant =>
+							variant.subProduct?.length > 0 ||
+							productTypesConstructor.includes(data.type)
+					)?.productAttribute.productVariantId
+				}
+				return data.productVariant.find(variant => variant.sizes.length > 0)
+					?.productAttribute.productVariantId
 			}
 		}
 	},
@@ -61,8 +103,13 @@ export const ProductService = {
 	) {
 		if (data) {
 			return data.productVariant
-				?.find(variant => variant.productAttribute.id === selectedVariant)
-				?.sizes.find(size => size.sizeId === selectedSize)?.proportion.value
+				.find(val =>
+					val.productAttribute.variantTypesId
+						? val.productAttribute.variantTypesId === selectedVariant
+						: val.productAttribute.productVariantId === selectedVariant
+				)
+				?.sizes.find(size => size.proportion.id === selectedSize)?.proportion
+				.value
 		}
 	},
 	getWeight(
@@ -72,15 +119,23 @@ export const ProductService = {
 	) {
 		if (data) {
 			return data.productVariant
-				.find(variant => variant.productAttribute.id === selectedVariant)
-				?.sizes.find(size => size.sizeId === selectedSize)?.weight
+				.find(val =>
+					val.productAttribute.variantTypesId
+						? val.productAttribute.variantTypesId === selectedVariant
+						: val.productAttribute.productVariantId === selectedVariant
+				)
+				?.sizes.find(size => size.proportion.id === selectedSize)?.weight
 		}
 	},
 	getImage(data: IProduct | undefined, selectedVariant: number | undefined) {
 		if (data) {
-			return data.productVariant.find(
-				val => val.productAttribute.productVariantId === selectedVariant
-			)?.image
+			return (
+				data.productVariant.find(val =>
+					val.productAttribute.variantTypesId
+						? val.productAttribute.variantTypesId === selectedVariant
+						: val.productAttribute.productVariantId === selectedVariant
+				)?.image ?? ''
+			)
 		}
 	},
 	getPrice(
@@ -89,12 +144,19 @@ export const ProductService = {
 		selectedSize: number | undefined
 	) {
 		if (data) {
-			return data.productVariant
-				.find(
-					variant =>
-						variant.productAttribute.productVariantId === selectedVariant
-				)
-				?.sizes.find(size => size.sizeId === selectedSize)?.price
+			if (productTypesWithSubProducts.includes(data.type)) {
+				return data.productVariant.find(
+					variant => variant.id === selectedVariant
+				)?.priceKit
+			} else {
+				return data.productVariant
+					.find(val =>
+						val.productAttribute.variantTypesId
+							? val.productAttribute.variantTypesId === selectedVariant
+							: val.productAttribute.productVariantId === selectedVariant
+					)
+					?.sizes.find(size => size.proportion.id === selectedSize)?.price
+			}
 		}
 	},
 	getSize(
@@ -104,18 +166,74 @@ export const ProductService = {
 	) {
 		if (data) {
 			return data.productVariant
-				.find(
-					variant =>
-						variant.productAttribute.productVariantId === selectedVariant
+				.find(val =>
+					val.productAttribute.variantTypesId
+						? val.productAttribute.variantTypesId === selectedVariant
+						: val.productAttribute.productVariantId === selectedVariant
 				)
-				?.sizes.find(size => size.sizeId === selectedSize)?.proportion.value
+				?.sizes.find(size => size.proportion.id === selectedSize)?.proportion
+				.value
+		}
+	},
+	getSizeId(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined,
+		selectedSize: number | undefined
+	) {
+		if (data) {
+			return data.productVariant
+				.find(val =>
+					val.productAttribute.variantTypesId
+						? val.productAttribute.variantTypesId === selectedVariant
+						: val.productAttribute.productVariantId === selectedVariant
+				)
+				?.sizes.find(size => size.proportion.id === selectedSize)?.id
+		}
+	},
+	getProportionId(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined,
+		selectedSize: number | undefined
+	) {
+		if (data) {
+			return data.productVariant
+				.find(val =>
+					val.productAttribute.variantTypesId
+						? val.productAttribute.variantTypesId === selectedVariant
+						: val.productAttribute.productVariantId === selectedVariant
+				)
+				?.sizes.find(size => size.proportion.id === selectedSize)?.proportionId
 		}
 	},
 	getVariant(data: IProduct | undefined, selectedVariant: number | undefined) {
 		if (data) {
-			return data.productVariant.find(
-				variant => variant.productAttribute.productVariantId === selectedVariant
-			)?.productAttribute.name
+			const getVariantProduct = data.productVariant.find(val =>
+				val.productAttribute.variantTypesId
+					? val.productAttribute.variantTypesId === selectedVariant
+					: val.productAttribute.productVariantId === selectedVariant
+			)
+			if (getVariantProduct?.productAttribute.variantTypesId) {
+				return getVariantProduct.productAttribute.variantTypes.value
+			} else {
+				return getVariantProduct?.productAttribute.name
+			}
+		}
+	},
+	getVariantId(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined
+	) {
+		if (data) {
+			const getVariantProduct = data.productVariant.find(val =>
+				val.productAttribute.variantTypesId
+					? val.productAttribute.variantTypesId === selectedVariant
+					: val.productAttribute.productVariantId === selectedVariant
+			)
+			if (getVariantProduct?.productAttribute.variantTypesId) {
+				return getVariantProduct.productAttribute.productVariantId
+			} else {
+				return getVariantProduct?.productAttribute.productVariantId
+			}
 		}
 	},
 	getIngredients(
@@ -125,8 +243,37 @@ export const ProductService = {
 	) {
 		if (data) {
 			return data.productVariant
-				.find(variant => variant.productAttribute.id === selectedVariant)
-				?.sizes.find(size => size.sizeId === selectedSize)?.ingredients
+				.find(val =>
+					val.productAttribute.variantTypesId
+						? val.productAttribute.variantTypesId === selectedVariant
+						: val.productAttribute.productVariantId === selectedVariant
+				)
+				?.sizes.find(size => size.id === selectedSize)?.ingredients
+		}
+	},
+	getIngredientsForProduct(data: IProduct | undefined) {
+		if (data) {
+			return data.ingredients.map(ingredient => ingredient.name).join(', ')
+		}
+	},
+	getMinPrice(data: IProduct | undefined) {
+		if (data) {
+			if (productTypesWithSubProducts.includes(data.type)) {
+				return Math.min(
+					Number(
+						...data.productVariant
+							.filter(val => val.priceKit !== null)
+							.map(variant => variant.priceKit)
+							.flat()
+					)
+				)
+			} else {
+				return Math.min(
+					...data.productVariant
+						.map(val => val.sizes?.map(val => val.price))
+						.flat()
+				)
+			}
 		}
 	},
 }
