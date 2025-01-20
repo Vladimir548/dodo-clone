@@ -1,17 +1,11 @@
-import { DATADOUGHTYPE } from '@/data/dough-type'
-import { TypeDough } from '@/interface/enums'
 import { create } from 'zustand'
 
 interface PriceProps {
 	priceFrom: number | null
 	priceTo: number | null
 }
-interface IDough {
-	id: number
-	value: TypeDough
-}
 
-interface IFilters {
+export interface IFiltersStore {
 	currentCategory: string
 	setCurrentCategory: (category: string) => void
 	addFilterByCategory?: (key: string, obj: string) => void
@@ -20,13 +14,13 @@ interface IFilters {
 	ingredients: Record<string, number[]> | null
 	toggleIngredients: (ingredientId: number) => void
 	clearIngredients: () => void
-	dough: IDough[]
+	dough: number[]
 	toggleDough: (id: number) => void
 	prices: Record<string, PriceProps> | null
 	setPrices: (name: keyof PriceProps, price: number | null) => void
 }
 
-export const useFiltersStore = create<IFilters>()(set => ({
+export const useFiltersStore = create<IFiltersStore>()(set => ({
 	currentCategory: '',
 	setCurrentCategory: (category: string) => set({ currentCategory: category }),
 	sizes: null,
@@ -75,18 +69,11 @@ export const useFiltersStore = create<IFilters>()(set => ({
 	dough: [],
 	toggleDough: (doughType: number) =>
 		set(state => {
-			const checkDough = state.dough?.some(val => val.id === doughType)
+			const checkDough = state.dough?.includes(doughType)
 			const updateDough = checkDough
-				? state.dough.filter(val => val.id !== doughType)
-				: [
-						...state.dough,
-						{
-							id: doughType,
-							value:
-								DATADOUGHTYPE.find(val => val.id === doughType)?.value ||
-								TypeDough.TRADITIONAL,
-						},
-				  ]
+				? state.dough.filter(val => val !== doughType)
+				: [...state.dough, doughType]
+
 			return { dough: updateDough }
 		}),
 	prices: null,
