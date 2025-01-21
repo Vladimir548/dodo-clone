@@ -1,5 +1,8 @@
 import { IProduct } from '@/interface/interface-product'
-import { IProductVariant } from '@/interface/interface-product-variant'
+import {
+	IProductsSub,
+	IProductVariant,
+} from '@/interface/interface-product-variant'
 import { IProportion } from '@/interface/IProportion'
 import { TypeProduct } from './enums'
 
@@ -8,23 +11,18 @@ export type ICartItemResponse = ICartItem[]
 export interface ICartItem {
 	id: number
 	cartId: number
+	cartSubProduct: IProductsSub[]
 	typeProduct: TypeProduct
-	subCartItem: ISubCartItem[]
-	createdAt: string
-	updatedAt: string
-}
-export interface ISubCartItem {
-	id: number
 	productVariantId: number
 	productId: number
 	sizeId: number
 	quantity: number
-	createdAt: string
-	updatedAt: string
 	ingredients: Ingredient[]
 	productVariant: IProductVariant
 	size: ISize
 	product: IProduct
+	createdAt: string
+	updatedAt: string
 }
 
 export interface Ingredient {

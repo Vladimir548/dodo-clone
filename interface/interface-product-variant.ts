@@ -1,4 +1,3 @@
-import { TypeDough } from '@/interface/enums'
 import { ICartItem } from '@/interface/interface-cart-item'
 import { IIngredient } from '@/interface/interface-ingredient'
 import { IProduct } from '@/interface/interface-product'
@@ -14,17 +13,16 @@ export interface IProductVariant {
 	cartItems: ICartItem[]
 	sizes: ISize[]
 	product: IProduct
-	doughName?: TypeDough
 	file: File
 	priceKit?: number
 	productAttribute: IProductAttribute
-	productsSub: IProductsSub[]
+	subProduct: IProductsSub[]
 }
 export interface ISize {
 	id: number
 	price: number
 	weight: string
-	sizeId: number
+	proportionId: number
 	ingredients?: IIngredient[]
 	ingredientIds?: number[]
 	proportion: IProportion
@@ -36,7 +34,8 @@ export interface IProductsSub {
 	variant: IProductVariant
 	size: ISize
 	product: IProduct
-	sizeId: number | undefined
+	subSizeId: number | undefined
 	quantity: number
 	isReplace: boolean
+	index?: number
 }
