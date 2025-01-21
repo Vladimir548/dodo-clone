@@ -27,20 +27,25 @@ function ChooseSize({
 	}, [selectedSize, setSelectSize])
 
 	useEffect(() => {
-		if (defaultSizeProps) return setSelectedSize(defaultSizeProps)
+		if (defaultSizeProps) {
+			setSelectedSize(defaultSizeProps)
+		}
 		setSelectedSize(defaultSize)
 	}, [data, selectedVariant, setSelectedSize, defaultSize, defaultSizeProps])
-
 	return (
 		<>
 			<CarouselVariant
 				selectedVariant={selectedSize}
 				setSelectedVariant={setSelectedSize}
-				data={data?.productVariant
-					.find(variant => variant.productAttribute.id === selectedVariant)
+				data={data.productVariant
+					.find(val =>
+						val.productAttribute.variantTypesId
+							? val.productAttribute.variantTypes.id === selectedVariant
+							: val.productAttribute.productVariantId === selectedVariant
+					)
 					?.sizes?.map(variant => ({
 						name: variant.proportion.value,
-						value: variant.sizeId,
+						value: variant.proportion.id,
 					}))}
 			/>
 		</>
