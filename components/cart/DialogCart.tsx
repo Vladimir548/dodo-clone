@@ -24,14 +24,13 @@ import Link from 'next/link'
 
 export default function DialogCart() {
 	const userId = useCurrentUser()?.userId
-	const { data, isPending } = useQuery({
+	const { data, isPending, isFetching } = useQuery({
 		queryKey: ['cart-id', userId],
 		queryFn: () => QueryCart.getById(userId),
 		enabled: !!userId,
 	})
 	const priceDelivery = useDeliveryPrice(data?.amountGoods)
 	const definitionGoods = useDefinitionGoods(data?._count.items)
-	console.log(data)
 	if (!data)
 		return (
 			<Button
@@ -95,7 +94,7 @@ export default function DialogCart() {
 								В корзине {data?._count?.items} {definitionGoods}{' '}
 							</DrawerTitle>
 						</DrawerHeader>
-						<div className='p-3 pb-0 overflow-y-auto scrollbar h-full mr-1'>
+						<div className='p-1 pb-0 overflow-y-auto scrollbar h-full mr-1'>
 							<CartItemList isPending={isPending} items={data?.items} />
 						</div>
 						<DrawerFooter className={'px-5 '}>

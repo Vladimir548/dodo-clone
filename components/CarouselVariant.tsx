@@ -10,8 +10,8 @@ import { Button } from './ui/button'
 interface IProps {
 	data:
 		| {
-				value: string | number
-				name: string | undefined
+				value: string | number | null
+				name: string | undefined | null
 				disabled?: boolean
 		  }[]
 		| undefined
@@ -27,8 +27,7 @@ function CarouselVariant({
 	const [isShow, setIsShow] = useState(true)
 
 	useEffect(() => {
-		if (!data) return
-
+		if (!data) return setIsShow(false)
 		const isName = data.some(val => val.name !== null)
 		if (isName) {
 			setIsShow(true)
@@ -36,7 +35,6 @@ function CarouselVariant({
 			setIsShow(false)
 		}
 	}, [data])
-
 	return (
 		<>
 			{isShow && (

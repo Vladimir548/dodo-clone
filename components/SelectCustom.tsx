@@ -13,7 +13,7 @@ interface ISelectCustom<T extends FieldValues> {
 	label: string
 	control: Control<T>
 	field: Path<T>
-	renderItems: { value: string; name: string }[] | undefined
+	renderItems: { value: string | number; name: string }[] | undefined
 }
 export default function SelectCustom<T extends FieldValues>({
 	label,
@@ -33,7 +33,7 @@ export default function SelectCustom<T extends FieldValues>({
 						</SelectTrigger>
 						<SelectContent>
 							{renderItems?.map(item => (
-								<SelectItem key={item.value} value={item.value}>
+								<SelectItem key={item.value} value={String(item.value)}>
 									{item.name}
 								</SelectItem>
 							))}

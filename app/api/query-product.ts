@@ -1,6 +1,8 @@
 import { axiosClassic, axiosData } from '@/app/api/axios/axios'
+import { TypeProduct } from '@/interface/enums'
 import { IFilterParams } from '@/interface/interface-filter-params'
 import { IProduct } from '@/interface/interface-product'
+import { IChangeSubProduct } from '@/store/change-kit'
 
 export const QueryProduct = {
 	async create(dto: IProduct) {
@@ -27,6 +29,13 @@ export const QueryProduct = {
 					params,
 				},
 			}
+		)
+		return data as IProduct[]
+	},
+	async byType(type: TypeProduct | undefined | null) {
+		const { data } = await axiosClassic.get<IProduct[]>(
+			`/product/type/${type}`,
+			{}
 		)
 		return data as IProduct[]
 	},
@@ -64,5 +73,25 @@ export const QueryProduct = {
 			},
 		})
 		return data as number
+	},
+	async getProductByVariantAndSize(productData: IChangeSubProduct[]) {
+		const { data } = await axiosClassic.get('/product/by-variant-and-size', {
+			params: {
+				productData: productData,
+			},
+		})
+		return data as IProduct[]
+	},
+	async getListBySizeAndVariant(params: {
+		type: TypeProduct
+		size: number
+		variant: number
+	}) {
+		const { data } = await axiosClassic.get('/product/list-by-size-variant', {
+			params: {
+				params,
+			},
+		})
+		return data as IProduct[]
 	},
 }
