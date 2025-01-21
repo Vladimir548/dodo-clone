@@ -3,13 +3,20 @@
 import DialogCustom from '@/components/shared/DialogCustom'
 import { Title } from '@/components/shared/Title'
 import { URL_API } from '@/constants'
-import { useChooseProduct } from '@/store/choose-product'
+import { IProductStore, useChooseProduct } from '@/store/choose-product'
 import { Trash } from 'lucide-react'
 import Image from 'next/image'
 import ChooseCardModal from './ChooseCardModal'
 
 function ChooseSelected() {
 	const { products, totalPrice, removeProduct } = useChooseProduct()
+	const handleRemoveProduct = (
+		product: IProductStore,
+		e: React.MouseEvent<HTMLSpanElement>
+	) => {
+		removeProduct(product.productId, product?.variantId, product?.subSizeId)
+		e.stopPropagation()
+	}
 
 	return (
 		<div className='flex  justify-between'>
@@ -18,7 +25,7 @@ function ChooseSelected() {
 				<div className='flex gap-x-3 p-1   '>
 					{products.map(product => (
 						<DialogCustom
-							key={product.productId + product?.sizeId + product?.variantId}
+							key={product.productId + product?.subSizeId + product?.variantId}
 							trigger={
 								<div
 									className={
@@ -26,14 +33,8 @@ function ChooseSelected() {
 									}
 								>
 									<span
-										onClick={() =>
-											removeProduct(
-												product.productId,
-												product?.variantId,
-												product?.sizeId
-											)
-										}
-										className='absolute top-1 -right-10 duration-300 ease-linear cursor-pointer group-hover:right-1 fill-red-500 '
+										onClick={e => handleRemoveProduct(product, e)}
+										className='absolute top-1 -right-10 duration-300 ease-linear cursor-pointer group-hover:right-1 fill-red-500 z-10 '
 									>
 										<Trash className='text-red-500 hover:fill-red-500' />
 									</span>
@@ -62,8 +63,8 @@ function ChooseSelected() {
 							content={
 								<ChooseCardModal
 									productId={product.productId}
-									defaultSize={product.sizeId}
-									defaultVariant={product.variantId}
+									defaultSize={product.proportionId}
+									defaultVariant={product.variantTypeId}
 									defaultCount={product.quantity}
 									defaultIsReplace={product.isReplace}
 								/>

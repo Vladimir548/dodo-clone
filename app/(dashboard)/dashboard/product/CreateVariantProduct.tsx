@@ -6,11 +6,12 @@ import SelectProduct from '@/app/(dashboard)/dashboard/_ui/select/SelectProduct'
 import FormLayout from '@/app/(dashboard)/FormLayout'
 import { QueryVariantProduct } from '@/app/api/query-variant-product'
 import InputCounter from '@/components/InputCounter'
-import SelectCustom from '@/components/SelectCustom'
 import UploadImage from '@/components/shared/upload-image/UploadImage'
-import { DATADOUGHTYPE } from '@/data/dough-type'
 import useTypeProduct from '@/hooks/useTypeProduct'
-import { IProductVariant } from '@/interface/interface-product-variant'
+import {
+	IProductsSub,
+	IProductVariant,
+} from '@/interface/interface-product-variant'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
@@ -20,6 +21,7 @@ import { TypeProduct } from '@/interface/enums'
 import { useChooseProduct } from '@/store/choose-product'
 import { useEffect } from 'react'
 import ChooseProduct from '../_ui/choose-product/ChooseProduct'
+import SelectPizzaVariant from '../_ui/select/SelectPizzaVariant'
 import SelectSize from '../_ui/select/SelectSize'
 
 export default function CreateVariantProduct() {
@@ -29,6 +31,9 @@ export default function CreateVariantProduct() {
 		useForm<IProductVariant>({
 			defaultValues: {
 				sizes: [],
+				productAttribute: {
+					variantTypes: { id: null },
+				},
 			},
 		})
 
@@ -38,19 +43,31 @@ export default function CreateVariantProduct() {
 		onSuccess: () => {
 			toast.success('Данные добавлены')
 		},
-		onError: () => {
+		onError: error => {
+			console.log('error', error)
 			toast.error('Ошибка при добавлении данных')
 		},
 	})
 	const onSubmit: SubmitHandler<IProductVariant> = data => {
 		mutate(data)
 	}
-	useEffect(() => {
-		setValue('productsSub', products)
-	}, [products])
-	const watchProductId = watch('productId')
 
+	const subProduct = products.map(product => ({
+		productId: product.productId,
+		variantId: product.variantId,
+		subSizeId: product.subSizeId,
+		isReplace: product.isReplace,
+		quantity: product.quantity,
+	}))
+
+	const watchProductId = watch('productId')
 	const { category, type } = useTypeProduct(watchProductId)
+
+	useEffect(() => {
+		if (productTypesWithSubProducts.includes(type)) {
+			setValue('subProduct', subProduct as IProductsSub[])
+		}
+	}, [products, setValue])
 
 	return (
 		<FormLayout
@@ -62,14 +79,9 @@ export default function CreateVariantProduct() {
 			<SelectProduct control={control} field={'productId'} />
 
 			{type === TypeProduct.PIZZA ? (
-				<SelectCustom
+				<SelectPizzaVariant
 					control={control}
-					field={'productAttribute.name'}
-					label={'Тип теста'}
-					renderItems={DATADOUGHTYPE.map(val => ({
-						value: val.name,
-						name: val.name,
-					}))}
+					field='productAttribute.variantTypes.id'
 				/>
 			) : (
 				<InputCustom

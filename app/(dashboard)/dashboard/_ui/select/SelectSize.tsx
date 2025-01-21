@@ -36,15 +36,15 @@ export default function SelectSize({ control, categoryId, watch }: ISizeProps) {
 		setSelectedSizes(value)
 		const currentValues: ISize[] = watch('sizes')
 		currentValues.forEach((field, index) => {
-			if (!value.includes(field.sizeId)) {
+			if (!value.includes(field.proportionId)) {
 				remove(index)
 			}
 		})
 
 		value.forEach(size => {
-			if (!currentValues.some(field => field.sizeId === size)) {
+			if (!currentValues.some(field => field.proportionId === size)) {
 				append({
-					sizeId: size,
+					proportionId: size,
 					price: 0,
 					weight: 0,
 				} as unknown as ISize)
@@ -77,7 +77,7 @@ export default function SelectSize({ control, categoryId, watch }: ISizeProps) {
 			<div className={'flex items-center gap-x-2'}>
 				{fields.map((field, index: number) => {
 					const sizeLabel = data?.find(
-						val => Number(val.id) === (field as ISize).sizeId
+						val => Number(val.id) === (field as ISize).proportionId
 					)?.value
 					return (
 						<div key={field.id}>

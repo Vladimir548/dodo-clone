@@ -6,6 +6,7 @@ import ChooseVariant from '@/components/shared/choose/ChooseVariant'
 import { Title } from '@/components/shared/Title'
 import TooltipInfo from '@/components/tooltips/TooltipInfo'
 import { Switch } from '@/components/ui/switch'
+import useGetSizeAndVariant from '@/hooks/useGetSizeAndVariant'
 import useGetSizeByCategory from '@/hooks/useGetSizeByCategory'
 import { TypeProduct } from '@/interface/enums'
 import { ProductService } from '@/services/product.service'
@@ -33,15 +34,21 @@ function ChooseCardModal({
 		enabled: !!productId,
 	})
 	const { data } = useGetSizeByCategory(product?.categoryId)
-	const [size, setSize] = useState<number>()
-	const [variant, setVariant] = useState<number>()
+	const { selectedSize, setSelectedSize, selectedVariant, setSelectedVariant } =
+		useGetSizeAndVariant()
+
 	const [count, setCount] = useState<number>(1)
 	const [isReplace, setIsReplace] = useState<boolean>(
 		defaultIsReplace === false ? false : true
 	)
-	const weight = ProductService.getWeight(product, variant, size)
-	const image = ProductService.getImage(product, variant)
-	const getVariant = ProductService.getVariant(product, variant)
+	const weight = ProductService.getWeight(
+		product,
+		selectedVariant,
+		selectedSize
+	)
+	const image = ProductService.getImage(product, selectedVariant)
+	const getVariant = ProductService.getVariant(product, selectedVariant)
+
 	useEffect(() => {
 		if (defaultCount) {
 			setCount(defaultCount)
@@ -49,7 +56,15 @@ function ChooseCardModal({
 		if (defaultIsReplace) {
 			setIsReplace(defaultIsReplace)
 		}
+		if (defaultSize) {
+			setSelectedSize(defaultSize)
+		}
+		if (defaultVariant) {
+			setSelectedVariant(defaultVariant)
+		}
 	}, [defaultSize, defaultVariant, defaultCount, defaultIsReplace])
+	console.log(defaultSize)
+	console.log(defaultVariant)
 
 	if (!product) return
 	return (
@@ -67,7 +82,7 @@ function ChooseCardModal({
 					text={product?.name ?? ''}
 				/>
 				<div className='flex items-center gap-x-2 pb-1'>
-					<span>{data?.find(val => val.id === size)?.value}</span>
+					<span>{data?.find(val => val.id === selectedSize)?.value}</span>
 					{product.type === TypeProduct.PIZZA && (
 						<span>{getVariant?.toLowerCase()} тесто</span>
 					)}
@@ -79,13 +94,13 @@ function ChooseCardModal({
 				<div className='pt-3'>
 					<ChooseVariant
 						defaultVariantProps={defaultVariant}
-						setSelectVariant={setVariant}
+						setSelectVariant={setSelectedVariant}
 						data={product}
 					/>
 					<ChooseSize
 						defaultSizeProps={defaultSize}
-						setSelectSize={setSize}
-						selectedVariant={variant}
+						setSelectSize={setSelectedSize}
+						selectedVariant={selectedVariant}
 						data={product}
 					/>
 				</div>
@@ -108,8 +123,8 @@ function ChooseCardModal({
 				<div className='w-full pt-3'>
 					<ChooseButton
 						data={product}
-						selectedSize={size}
-						selectedVariant={variant}
+						selectedSize={selectedSize}
+						selectedVariant={selectedVariant}
 						count={count}
 						isReplace={isReplace}
 					/>

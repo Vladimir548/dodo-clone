@@ -2,7 +2,7 @@
 import ProductIdAll from '@/app/(root)/product/[id]/ProductIdAll'
 import ProductIdPizza from '@/app/(root)/product/[id]/ProductIdPizza'
 import { QueryProduct } from '@/app/api/query-product'
-import { productTypesWithSubProducts } from '@/data/productTypesWithSubProducts'
+import HalvesModal from '@/components/shared/halves/HalvesModal'
 import { TypeProduct } from '@/interface/enums'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
@@ -18,6 +18,7 @@ export default function ProductId({ modalClass }: IProductId) {
 		queryKey: ['get-product-id', id],
 		queryFn: () => QueryProduct.id(id),
 	})
+
 	return (
 		<div>
 			{TypeProduct.PIZZA === data?.type && (
@@ -27,13 +28,15 @@ export default function ProductId({ modalClass }: IProductId) {
 					modalClass={modalClass}
 				/>
 			)}
-			{productTypesWithSubProducts.includes(data?.type) && (
+			{TypeProduct.PIZZA_HALF === data?.type && <HalvesModal data={data} />}
+			{TypeProduct.COMBO === data?.type && (
 				<ProductIdCombo
 					data={data}
 					isPending={isPending}
 					modalClass={modalClass}
 				/>
 			)}
+
 			{TypeProduct.DRINKS === data?.type && (
 				<ProductIdAll data={data} modalClass={modalClass} />
 			)}

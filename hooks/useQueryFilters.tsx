@@ -19,7 +19,7 @@ export const useQueryFilters = () => {
 				priceFrom: prices?.[activeCategory]?.priceFrom,
 				ingredients: ingredients?.[activeCategory],
 				sizes: sizes?.[activeCategory],
-				dough: dough.map(val => val.value),
+				dough: dough,
 			}
 
 			const query = queryString.stringify(params, {
