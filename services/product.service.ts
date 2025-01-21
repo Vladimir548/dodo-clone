@@ -33,11 +33,8 @@ export const ProductService = {
 					const customProduct = customProducts.find(
 						product => product.index === index
 					)?.price
-					console.log('totalPrice', totalPrice)
-					console.log('customProduct', customProduct)
 					return (totalPrice += customProduct ?? 0)
 				} else {
-					console.log('variant size', variant.size.price)
 					return (totalPrice += variant.size.price)
 				}
 			})
@@ -234,6 +231,20 @@ export const ProductService = {
 			} else {
 				return getVariantProduct?.productAttribute.productVariantId
 			}
+		}
+	},
+	getVariantTypeId(
+		data: IProduct | undefined,
+		selectedVariant: number | undefined
+	) {
+		console.log('data 121', data)
+		console.log('selectedVariant 121', selectedVariant)
+		if (data) {
+			const getVariantProduct = data.productVariant.find(
+				val => val.productAttribute.productVariantId === selectedVariant
+			)
+
+			return getVariantProduct?.productAttribute.productVariantId
 		}
 	},
 	getIngredients(

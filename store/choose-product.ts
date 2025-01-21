@@ -11,6 +11,8 @@ export interface IProductStore {
 	img: string
 	quantity: number
 	isReplace: boolean
+	variantTypeId: number
+	proportionId: number
 }
 
 interface IChooseDough {
@@ -32,7 +34,6 @@ export const useChooseProduct = create<IChooseDough>()(set => ({
 	totalPrice: 0,
 	addProduct: (data: IProductStore) =>
 		set(state => {
-			console.log('addProduct', data)
 			const someProduct = state.products.some(
 				val =>
 					val.productId === data?.productId &&
@@ -52,6 +53,7 @@ export const useChooseProduct = create<IChooseDough>()(set => ({
 					val.subSizeId === data.subSizeId &&
 					val.variantId === data.variantId
 			)
+			console.log('data', data)
 
 			const updateProduct =
 				JSON.stringify(findProduct) === JSON.stringify(data)
@@ -68,7 +70,7 @@ export const useChooseProduct = create<IChooseDough>()(set => ({
 							data,
 					  ]
 					: [...state.products, data]
-			// console.log('updateProduct', updateProduct)
+
 			return {
 				...state,
 				products: updateProduct,
