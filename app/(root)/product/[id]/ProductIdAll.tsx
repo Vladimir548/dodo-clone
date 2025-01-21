@@ -27,7 +27,13 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 		selectedSize
 	)
 	const weight = ProductService.getWeight(data, selectedVariant, selectedSize)
-
+	const getIngredients = ProductService.getIngredients(
+		data,
+		selectedVariant,
+		selectedSize
+	)
+	const getPrice = ProductService.getPrice(data, selectedVariant, selectedSize)
+	const getImage = ProductService.getImage(data, selectedVariant)
 	return (
 		<Container
 			className={`text-white h-full w-full grid grid-cols-2  justify-between gap-x-4 pt-8 ${
@@ -37,11 +43,7 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 			<div className={' relative  flex justify-center items-center '}>
 				<Image
 					alt={data?.name ?? 'image'}
-					src={`${URL_API}/${
-						data?.productVariant.find(
-							variant => variant.productAttribute.id === selectedVariant
-						)?.image
-					}`}
+					src={`${URL_API}/${getImage}`}
 					width={400}
 					height={400}
 				/>
@@ -72,25 +74,13 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 				</div>
 
 				<div>
-					<ProductIngredients
-						data={
-							data.productVariant
-								.find(
-									variant => variant.productAttribute.id === selectedVariant
-								)
-								?.sizes.find(size => size.sizeId === selectedSize)?.ingredients
-						}
-					/>
+					<ProductIngredients data={getIngredients} />
 				</div>
 				<div className='flex justify-center items-end h-full'>
 					<ProductButtonPrice
 						data={data}
 						selectedSize={selectedSize}
-						price={ProductService.calcSumPrice(
-							data,
-							selectedSize,
-							selectedVariant
-						)}
+						price={getPrice}
 						selectedVariant={selectedVariant}
 					/>
 				</div>

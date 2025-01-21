@@ -34,7 +34,7 @@ export default function ProductIdPizza({
 		selectedVariant,
 		selectedSize
 	)
-
+	const getPrice = ProductService.getPrice(data, selectedVariant, selectedSize)
 	const getImage = ProductService.getImage(data, selectedVariant)
 	const getWeight = ProductService.getWeight(
 		data,
@@ -104,11 +104,7 @@ export default function ProductIdPizza({
 					data={data}
 					selectedSize={selectedSize}
 					selectedVariant={selectedVariant}
-					price={ProductService.calcSumPrice(
-						data,
-						selectedSize,
-						selectedVariant
-					)}
+					price={getPrice}
 				/>
 			</div>
 		</Container>
