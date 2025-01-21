@@ -1,47 +1,27 @@
 import { URL_API } from '@/constants'
-import { IIngredient } from '@/interface/interface-ingredient'
+import { IProduct } from '@/interface/interface-product'
+import { ProductService } from '@/services/product.service'
+import { useHalvesStore } from '@/store/halves'
 import Image from 'next/image'
-import { useState } from 'react'
+import ProductButtonPrice from '../product/ProductButtonPrice'
 import HalfListPizza from './HalfListPizza'
 import HalfRightSide from './HalfRightSide'
 import HalvesControl from './HalvesControl'
 
-interface IDataHalf {
-	img: string
-	name: string
-	ingredients: IIngredient[]
-}
-
-export interface ISideHalf {
-	leftHalf: IDataHalf
-	rightHalf: IDataHalf
-}
-
-function HalvesModal() {
-	const [half, setHalf] = useState<ISideHalf>({
-		leftHalf: {
-			img: '',
-			name: '',
-			ingredients: [],
-		},
-		rightHalf: {
-			img: '',
-			name: '',
-			ingredients: [],
-		},
-	})
-	const [size, setSize] = useState<number>(1)
-	const [typeDough, setTypeDough] = useState<number>(1)
+function HalvesModal({ data }: { data: IProduct }) {
+	const leftHalf = useHalvesStore(state => state.leftHalf)
+	const rightHalf = useHalvesStore(state => state.rightHalf)
+	const getDefaultVariant = ProductService.setDefaultVariantProduct(data)
+	const selectedVariant = useHalvesStore(state => state.selectedVariant)
+	const selectedSize = useHalvesStore(state => state.selectedSize)
+	const arraySubProduct = useHalvesStore(state => state.arraySubProduct)
+	const arrayPriceProduct = useHalvesStore(state => state.arrayPriceProduct)
+	console.log('arrayPriceProduct', arrayPriceProduct)
 
 	return (
 		<div className='flex gap-x-3'>
 			<div className='h-full  border-r border-r-primary w-[700px]'>
-				<HalfListPizza
-					half={half}
-					setHalf={setHalf}
-					size={size}
-					dough={typeDough}
-				/>
+				<HalfListPizza />
 			</div>
 			<div className='flex flex-col justify-center items-center'>
 				<div className='relative w-[300px] h-[290px] overflow-hidden mb-3 '>
@@ -51,22 +31,22 @@ function HalvesModal() {
 						height={300}
 						alt={''}
 					/>
-					{half.leftHalf.img && (
+					{leftHalf?.img && (
 						<Image
 							className='absolute -left-0 top-0  left-half'
-							src={`${URL_API}/${half.leftHalf.img}`}
+							src={`${URL_API}/${leftHalf.img}`}
 							width={300}
 							height={300}
 							alt={''}
 						/>
 					)}
-					{half.leftHalf.img && half.rightHalf.img && (
+					{leftHalf?.id && rightHalf?.id && (
 						<span className='absolute left-1/2 top-0 -translate-x-1/2 w-0.5 h-full bg-white'></span>
 					)}
-					{half.rightHalf.img && (
+					{rightHalf?.img && (
 						<Image
 							className='absolute left-0 top-0  right-half'
-							src={`${URL_API}/${half.rightHalf.img}`}
+							src={`${URL_API}/${rightHalf?.img}`}
 							width={300}
 							height={300}
 							alt={''}
@@ -74,22 +54,17 @@ function HalvesModal() {
 					)}
 				</div>
 				<div>
-					<HalfRightSide half={half} />
+					<HalfRightSide />
 					<div className='max-w-[370px] pt-2'>
-						<HalvesControl
-							category={1}
-							selectedDough={typeDough}
-							setSelectedDough={setTypeDough}
-							selectedSize={size}
-							setSelectedSize={setSize}
-						/>
+						<HalvesControl category={1} />
 					</div>
-					{/* <ProductButtonPrice
-					data={data}
-					selectedSize={selectSize}
-					selectedDough={typeDough}
-					price={ProductService.calcSumPrice(data, selectSize, typeDough)}
-				/> */}
+					<ProductButtonPrice
+						data={data}
+						selectedSize={selectedSize}
+						selectedVariant={getDefaultVariant}
+						subProduct={arraySubProduct}
+						priceSubProduct={arrayPriceProduct}
+					/>
 				</div>
 			</div>
 		</div>

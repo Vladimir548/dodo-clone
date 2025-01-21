@@ -1,96 +1,79 @@
 import { QueryProduct } from '@/app/api/query-product'
 import { URL_API } from '@/constants'
-import { DATADOUGHTYPE } from '@/data/dough-type'
-import { IIngredient } from '@/interface/interface-ingredient'
+import { TypeProduct } from '@/interface/enums'
+import { ProductService } from '@/services/product.service'
+import { useHalvesStore } from '@/store/halves'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
-import { ISideHalf } from './HalvesModal'
 
-interface IHalfPizza {
-	half: ISideHalf
-	setHalf: (update: (prev: ISideHalf) => ISideHalf) => void
-	size: number
-	dough: number
-}
-
-function HalfListPizza({ half, setHalf, dough, size }: IHalfPizza) {
+function HalfListPizza() {
 	const { data } = useQuery({
 		queryKey: ['pizza'],
-		queryFn: () => QueryProduct.byCategory(1),
+		queryFn: () => QueryProduct.byType(TypeProduct.PIZZA),
 	})
-	const addHalf = (img: string, name: string, ingredients: IIngredient[]) => {
-		if (img === half.leftHalf.img) {
-			return setHalf(prev => ({
-				...prev,
-				leftHalf: {
-					img: '',
-					name: '',
-					ingredients: [],
-				},
-			}))
-		}
-		if (img === half.rightHalf.img) {
-			return setHalf(prev => ({
-				...prev,
-				rightHalf: {
-					img: '',
-					name: '',
-					ingredients: [],
-				},
-			}))
-		}
-		if (!half.leftHalf.img) {
-			return setHalf(prev => ({
-				...prev,
-				leftHalf: {
-					img: img,
-					name: name,
-					ingredients: ingredients,
-				},
-			}))
-		} else {
-			return setHalf(prev => ({
-				...prev,
-				rightHalf: {
-					img: img,
-					name: name,
-					ingredients: ingredients,
-				},
-			}))
-		}
-	}
-	const typeDough = DATADOUGHTYPE.find(type => type.id === dough)?.value
 
-	// useEffect(()=>{
-
-	// },[typeDough])
-
+	const addHalf = useHalvesStore(state => state.addHalf)
+	const leftHalf = useHalvesStore(state => state.leftHalf)
+	const rightHalf = useHalvesStore(state => state.rightHalf)
+	const selectedVariant = useHalvesStore(state => state.selectedVariant)
+	const selectedSize = useHalvesStore(state => state.selectedSize)
 	if (!data) return ''
 	return (
 		<div className='flex flex-wrap items-center gap-3 max-w-[800px] '>
 			{data
 				?.filter(val =>
-					val.productVariant.map(variant =>
-						variant.sizes.filter(size => size.proportion.value === '35 см')
+					val.productVariant.some(
+						product =>
+							product.productAttribute.variantTypesId === selectedVariant &&
+							product.sizes.some(size => size.proportionId === selectedSize)
 					)
 				)
 				.map(pizza => (
 					<div
-						className={`w-[170px] overflow-hidden  relative border rounded-md p-1 ${
-							half.leftHalf.img === pizza.image ||
-							half.rightHalf.img === pizza.image
+						className={`w-[170px] overflow-hidden cursor-pointer relative border rounded-md p-1 ${
+							leftHalf?.id === pizza.id || rightHalf?.id === pizza.id
 								? 'border-primary'
 								: 'border-transparent'
 						}`}
 						key={pizza.id}
-						onClick={() => addHalf(pizza.image, pizza.name, pizza.ingredients)}
+						onClick={() =>
+							addHalf({
+								id: pizza.id,
+								name: pizza.name,
+								img: pizza.image,
+								variantId: pizza.productVariant.find(
+									variant =>
+										variant.productAttribute.variantTypesId === selectedVariant
+								)?.id,
+								sizeId: pizza.productVariant
+									.find(
+										variant =>
+											variant.productAttribute.variantTypesId ===
+											selectedVariant
+									)
+									?.sizes.find(size => size.proportionId === selectedSize)?.id,
+								ingredients: pizza.ingredients
+									? pizza.ingredients
+											.map(ingredient => ingredient.name)
+											.join(', ')
+									: '',
+								price: pizza.productVariant
+									.find(
+										variant =>
+											variant.productAttribute.variantTypesId ===
+											selectedVariant
+									)
+									?.sizes.find(size => size.proportionId === selectedSize)
+									?.price,
+							})
+						}
 					>
 						<div className='relative'>
 							<span
 								className={`absolute top-0 w-1/2 h-full   ${
-									half.leftHalf.img === pizza.image
+									leftHalf?.id === pizza.id
 										? ' right-0 rounded-r-3xl bg-white/70  dark:bg-[#121212e0]'
-										: half.rightHalf.img === pizza.image
+										: rightHalf?.id === pizza.id
 										? ' left-0 rounded-l-3xl bg-white/70  dark:bg-[#121212e0] '
 										: ''
 								}`}
@@ -98,7 +81,9 @@ function HalfListPizza({ half, setHalf, dough, size }: IHalfPizza) {
 							<Image
 								src={`${URL_API}/${
 									pizza.productVariant.find(
-										variant => variant.doughName === typeDough
+										variant =>
+											variant.productAttribute.variantTypesId ===
+											selectedVariant
 									)?.image
 								}`}
 								width={170}
@@ -110,12 +95,7 @@ function HalfListPizza({ half, setHalf, dough, size }: IHalfPizza) {
 						<p className='text-center'>
 							{Math.ceil(
 								Number(
-									pizza.productVariant
-										.map(
-											variant =>
-												variant.sizes.find(sz => sz.sizeId === size)?.price
-										)
-										.find(val => val !== undefined)
+									ProductService.getPrice(pizza, selectedVariant, selectedSize)
 								) / 2
 							)}{' '}
 							₽

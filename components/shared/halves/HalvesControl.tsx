@@ -1,29 +1,54 @@
 'use client'
 
 import { QueryProportion } from '@/app/api/query-proportion'
+import { QueryVariant } from '@/app/api/query-variant'
 import CarouselVariant from '@/components/CarouselVariant'
-import { DATADOUGHTYPE } from '@/data/dough-type'
+import useGetSizeAndVariant from '@/hooks/useGetSizeAndVariant'
+import { TypeProduct } from '@/interface/enums'
+import { useHalvesStore } from '@/store/halves'
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
 interface IHalvesControl {
 	category: number
-	selectedDough: number | undefined
-	setSelectedDough: (value: number) => void
-	selectedSize: number | undefined
-	setSelectedSize: (value: number) => void
 }
 
-function HalvesControl({
-	category,
-	selectedDough,
-	setSelectedDough,
-	selectedSize,
-	setSelectedSize,
-}: IHalvesControl) {
+function HalvesControl({ category }: IHalvesControl) {
 	const { data } = useQuery({
 		queryKey: ['proportion'],
 		queryFn: () => QueryProportion.byCategory(category),
 	})
+	const { data: variant } = useQuery({
+		queryKey: ['get-variant-product'],
+		queryFn: () => QueryVariant.byType(TypeProduct.PIZZA),
+	})
+
+	const setVariant = useHalvesStore(state => state.setSelectedVariant)
+	const setSize = useHalvesStore(state => state.setSelectedSize)
+	const { selectedSize, selectedVariant, setSelectedSize, setSelectedVariant } =
+		useGetSizeAndVariant({})
+
+	useEffect(() => {
+		if (data) {
+			setSelectedSize(data[0]?.id)
+			setSize(data[0].id)
+		}
+		if (variant) {
+			setSelectedVariant(variant[0].id)
+			setVariant(variant[0].id)
+		}
+	}, [data, variant])
+	useEffect(() => {
+		if (selectedVariant) {
+			setVariant(selectedVariant)
+		}
+	}, [selectedVariant])
+	useEffect(() => {
+		if (selectedSize) {
+			setSize(selectedSize)
+		}
+	}, [selectedSize])
+
 	return (
 		<div className='flex flex-col gap-y-2'>
 			<CarouselVariant
@@ -35,12 +60,12 @@ function HalvesControl({
 				setSelectedVariant={setSelectedSize}
 			/>
 			<CarouselVariant
-				data={DATADOUGHTYPE?.map(val => ({
-					name: val.name,
+				data={variant?.map(val => ({
+					name: val.value,
 					value: val.id,
 				}))}
-				selectedVariant={selectedDough}
-				setSelectedVariant={setSelectedDough}
+				selectedVariant={selectedVariant}
+				setSelectedVariant={setSelectedVariant}
 			/>
 		</div>
 	)
