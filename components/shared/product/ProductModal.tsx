@@ -19,13 +19,13 @@ export default function ProductModal() {
 		<Dialog open={pathname.includes('product')} onOpenChange={() => back()}>
 			<DialogContent
 				className={cn(
-					'w-[1160px] h-[600px] rounded-md bg-white dark:bg-transparent backdrop-blur-lg before-effect'
+					'w-[1160px] h-[90%] rounded-md bg-white dark:bg-dark-background backdrop-blur-lg '
 				)}
 			>
 				<VisuallyHidden>
 					<DialogHeader>
-						<DialogTitle></DialogTitle>
-						<DialogDescription></DialogDescription>
+						<DialogTitle> </DialogTitle>
+						<DialogDescription> </DialogDescription>
 					</DialogHeader>
 				</VisuallyHidden>
 				<ProductId modalClass={true} />

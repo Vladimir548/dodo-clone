@@ -8,7 +8,6 @@ import { useCategoryStore } from '@/store/category'
 import { useFiltersStore } from '@/store/filters'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
-import PizzaHalves from '../halves/PizzaHalves'
 
 export default function ProductGroup({ id }: { id: number }) {
 	const activeSlug = useCategoryStore(state => state.activeCategory)
@@ -25,7 +24,7 @@ export default function ProductGroup({ id }: { id: number }) {
 
 	const filter: IFilterParams = {
 		sizes,
-		dough: dough.map(val => val.value),
+		variant: dough,
 		priceFrom,
 		priceTo,
 		ingredients,
@@ -43,7 +42,6 @@ export default function ProductGroup({ id }: { id: number }) {
 		)
 	return (
 		<div className={'w-full'}>
-			<PizzaHalves />
 			{data && data?.length > 0 ? (
 				<div className={'grid grid-cols-3 gap-4 '}>
 					{data?.map(product => (

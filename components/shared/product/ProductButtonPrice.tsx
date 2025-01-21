@@ -4,9 +4,12 @@ import { QueryCartItem } from '@/app/api/query-cart-item'
 import { Button } from '@/components/ui/button'
 import useCurrentUser from '@/hooks/useCurrentUser'
 import usePriceIngredients from '@/hooks/usePriceIngredients'
-import { IAddItemCart } from '@/interface/interface-add-item-cart'
+import {
+	IAddItemCart,
+	ICartSubProduct,
+} from '@/interface/interface-add-item-cart'
 import { IProduct } from '@/interface/interface-product'
-import { ProductPriceService } from '@/services/product-price.service'
+import { ISubProductForPrice, ProductService } from '@/services/product.service'
 import { useIngredientsStore } from '@/store/ingredients'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ShoppingCart } from 'lucide-react'
@@ -15,17 +18,19 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 interface IProductPrice {
-	price: number | undefined
 	data: IProduct
 	selectedSize: number | undefined
 	selectedVariant?: number | undefined
+	subProduct?: ICartSubProduct[]
+	priceSubProduct?: ISubProductForPrice[]
 }
 
 export default function ProductButtonPrice({
-	price,
 	data,
 	selectedSize,
 	selectedVariant,
+	subProduct,
+	priceSubProduct,
 }: IProductPrice) {
 	const queryClient = useQueryClient()
 	const { mutate } = useMutation({
@@ -46,32 +51,26 @@ export default function ProductButtonPrice({
 		clearIngredients()
 	}, [selectedSize])
 
-	const productVariantId = ProductPriceService.selectedVariant(
-		data,
-		selectedVariant
-	)
-
-	const sizeId = ProductPriceService.selectedSize(
-		data,
-		selectedSize,
-		selectedVariant
-	)
+	const productVariantId = ProductService.getVariantId(data, selectedVariant)
+	const sizeId = ProductService.getSizeId(data, selectedVariant, selectedSize)
 
 	const { sumPrice, ingredients } = usePriceIngredients()
-	const totalPrice = ProductPriceService.calcTotalSum(price, sumPrice)
+	const totalPrice = ProductService.calcSumPrice(
+		data,
+		sizeId,
+		productVariantId,
+		priceSubProduct
+	)
+	console.log('total price', totalPrice)
 	const cartId = useCurrentUser()?.cartId
 	const userId = useCurrentUser()?.userId
-
 	const addToCart = () => {
 		const objItem: IAddItemCart = {
-			subCartItem: [
-				{
-					ingredientIds: ingredients,
-					productId: data.id,
-					productVariantId,
-					sizeId,
-				},
-			],
+			ingredientIds: ingredients,
+			productId: data.id,
+			productVariantId,
+			customSubProduct: subProduct,
+			sizeId,
 			quantity: 1,
 			cartId,
 			typeProduct: data.type,
