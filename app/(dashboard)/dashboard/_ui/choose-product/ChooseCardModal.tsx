@@ -16,8 +16,8 @@ import ChooseButton from './ChooseButton'
 
 interface IProps {
 	productId: number
-	defaultSize?: number
-	defaultVariant?: number
+	defaultSize?: number | undefined | null
+	defaultVariant?: number | undefined | null
 	defaultCount?: number
 	defaultIsReplace?: boolean
 }
@@ -63,8 +63,6 @@ function ChooseCardModal({
 			setSelectedVariant(defaultVariant)
 		}
 	}, [defaultSize, defaultVariant, defaultCount, defaultIsReplace])
-	console.log(defaultSize)
-	console.log(defaultVariant)
 
 	if (!product) return
 	return (

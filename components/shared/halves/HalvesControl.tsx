@@ -26,14 +26,14 @@ function HalvesControl({ category }: IHalvesControl) {
 	const setVariant = useHalvesStore(state => state.setSelectedVariant)
 	const setSize = useHalvesStore(state => state.setSelectedSize)
 	const { selectedSize, selectedVariant, setSelectedSize, setSelectedVariant } =
-		useGetSizeAndVariant({})
+		useGetSizeAndVariant()
 
 	useEffect(() => {
 		if (data) {
 			setSelectedSize(data[0]?.id)
 			setSize(data[0].id)
 		}
-		if (variant) {
+		if (variant && variant[0].id) {
 			setSelectedVariant(variant[0].id)
 			setVariant(variant[0].id)
 		}

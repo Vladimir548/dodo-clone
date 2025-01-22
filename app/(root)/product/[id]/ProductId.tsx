@@ -30,11 +30,7 @@ export default function ProductId({ modalClass }: IProductId) {
 			)}
 			{TypeProduct.PIZZA_HALF === data?.type && <HalvesModal data={data} />}
 			{TypeProduct.COMBO === data?.type && (
-				<ProductIdCombo
-					data={data}
-					isPending={isPending}
-					modalClass={modalClass}
-				/>
+				<ProductIdCombo data={data} modalClass={modalClass} />
 			)}
 
 			{TypeProduct.DRINKS === data?.type && (

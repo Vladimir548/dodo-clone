@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 interface IChooseSize {
 	data: IProduct
 	setSelectSize: (variant: number) => void
-	defaultSizeProps?: number
+	defaultSizeProps?: number | null | undefined
 	selectedVariant: number | undefined
 }
 function ChooseSize({
@@ -19,7 +19,6 @@ function ChooseSize({
 	const [selectedSize, setSelectedSize] = useState<number>()
 
 	const defaultSize = ProductService.setDefaultSize(data, selectedVariant)
-
 	useEffect(() => {
 		if (selectedSize) {
 			setSelectSize(selectedSize)
@@ -29,9 +28,11 @@ function ChooseSize({
 	useEffect(() => {
 		if (defaultSizeProps) {
 			setSelectedSize(defaultSizeProps)
+		} else {
+			setSelectedSize(defaultSize)
 		}
-		setSelectedSize(defaultSize)
 	}, [data, selectedVariant, setSelectedSize, defaultSize, defaultSizeProps])
+
 	return (
 		<>
 			<CarouselVariant
@@ -43,7 +44,8 @@ function ChooseSize({
 							? val.productAttribute.variantTypes.id === selectedVariant
 							: val.productAttribute.productVariantId === selectedVariant
 					)
-					?.sizes?.map(variant => ({
+					?.sizes?.sort((a, b) => a.proportionId - b.proportionId)
+					.map(variant => ({
 						name: variant.proportion.value,
 						value: variant.proportion.id,
 					}))}

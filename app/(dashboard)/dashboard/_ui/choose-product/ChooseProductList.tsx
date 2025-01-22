@@ -2,7 +2,7 @@ import { IProduct } from '@/interface/interface-product'
 import ChooseProductCard from './ChooseProductCard'
 
 interface IList {
-	data: IProduct[]
+	data: IProduct[] | undefined
 }
 
 function ChooseProductList({ data }: IList) {

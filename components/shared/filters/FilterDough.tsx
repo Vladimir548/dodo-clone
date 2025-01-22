@@ -18,7 +18,7 @@ export default function FilterDough() {
 
 	const item = data?.map(dough => ({
 		value: String(dough.id),
-		text: dough.value,
+		text: dough.value ?? '',
 	}))
 	return (
 		<div className={'py-4 border-b'}>
@@ -27,8 +27,8 @@ export default function FilterDough() {
 				onClickCheckbox={toggleDough}
 				name={'dough'}
 				title={'Тесто'}
-				defaultItems={item}
-				items={item?.length ? item : []}
+				defaultItems={item ?? []}
+				items={item ?? []}
 			/>
 		</div>
 	)

@@ -7,7 +7,6 @@ import { TypeProduct } from '@/interface/enums'
 import { IProductsSub } from '@/interface/interface-product-variant'
 import { IChangeSubProduct, useChangeKit } from '@/store/change-kit'
 
-import useOutsideClick from '@/hooks/useOutsideClick'
 import { RussianRuble } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
@@ -21,7 +20,7 @@ function SubProductList({ variant }: { variant: IProductsSub[] | undefined }) {
 		findIndexChangedProduct,
 		selectedProduct,
 	} = useChangeKit()
-	const { ref } = useOutsideClick()
+
 	const handleChangeProduct = (
 		e: React.MouseEvent<HTMLDivElement>,
 		product: IChangeSubProduct,
@@ -40,7 +39,6 @@ function SubProductList({ variant }: { variant: IProductsSub[] | undefined }) {
 		<div className='flex flex-col gap-y-2'>
 			{subProducts?.map((product, index) => (
 				<div
-					ref={ref}
 					onClick={(e: React.MouseEvent<HTMLDivElement>) =>
 						handleChangeProduct(e, product, index)
 					}

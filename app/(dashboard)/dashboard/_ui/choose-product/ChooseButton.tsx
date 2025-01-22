@@ -4,8 +4,8 @@ import { ProductService } from '@/services/product.service'
 import { useChooseProduct } from '@/store/choose-product'
 interface IProps {
 	data: IProduct
-	selectedSize: number
-	selectedVariant: number
+	selectedSize: number | undefined
+	selectedVariant: number | undefined
 	count: number
 	isReplace: boolean
 }
@@ -20,22 +20,13 @@ function ChooseButton({
 	const getImage = ProductService.getImage(data, selectedVariant)
 	const getPrice = ProductService.getPrice(data, selectedVariant, selectedSize)
 	const getSize = ProductService.getSize(data, selectedVariant, selectedSize)
-	const getSizeId = ProductService.getSizeId(
-		data,
-		selectedVariant,
-		selectedSize
-	)
+
 	const getProportionId = ProductService.getProportionId(
 		data,
 		selectedVariant,
 		selectedSize
 	)
 	const getVariant = ProductService.getVariant(data, selectedVariant)
-	const getVariantId = ProductService.getVariantId(data, selectedVariant)
-	const getVariantTypeId = ProductService.getVariantTypeId(
-		data,
-		selectedVariant
-	)
 
 	return (
 		<Button
@@ -46,7 +37,7 @@ function ChooseButton({
 					subSizeId: selectedSize,
 					variantId: selectedVariant,
 					img: getImage,
-					variantTypeId: selectedVariant,
+					variantTypeId: selectedSize,
 					proportionId: getProportionId,
 					name: data.name,
 					price: getPrice,

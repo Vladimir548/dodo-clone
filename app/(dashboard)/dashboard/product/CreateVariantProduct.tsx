@@ -64,7 +64,7 @@ export default function CreateVariantProduct() {
 	const { category, type } = useTypeProduct(watchProductId)
 
 	useEffect(() => {
-		if (productTypesWithSubProducts.includes(type)) {
+		if (type && productTypesWithSubProducts.includes(type)) {
 			setValue('subProduct', subProduct as IProductsSub[])
 		}
 	}, [products, setValue])
@@ -98,11 +98,11 @@ export default function CreateVariantProduct() {
 				label={'Количество шт'}
 			/>
 
-			{!productTypesWithSubProducts.includes(type) && (
+			{type && !productTypesWithSubProducts.includes(type) && (
 				<SelectSize control={control} categoryId={category} watch={watch} />
 			)}
 
-			{productTypesWithSubProducts.includes(type) && <ChooseProduct />}
+			{type && productTypesWithSubProducts.includes(type) && <ChooseProduct />}
 
 			<UploadImage<IProductVariant> control={control} field={'image'} />
 		</FormLayout>

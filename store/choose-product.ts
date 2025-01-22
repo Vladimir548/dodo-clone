@@ -2,24 +2,28 @@ import { create } from 'zustand'
 
 export interface IProductStore {
 	productId: number
-	variantId: number
-	subSizeId: number
+	variantId: number | undefined
+	subSizeId: number | undefined
 	price: number
 	name: string
-	size: string
-	variant: string
+	size: string | null
+	variant: string | null
 	img: string
 	quantity: number
 	isReplace: boolean
-	variantTypeId: number
-	proportionId: number
+	variantTypeId: number | null | undefined
+	proportionId: number | null
 }
 
 interface IChooseDough {
 	products: IProductStore[]
 	totalPrice: number
 	addProduct: (data: IProductStore) => void
-	removeProduct: (id: number, variantId: number, sizeId: number) => void
+	removeProduct: (
+		id: number,
+		variantId: number | undefined,
+		sizeId: number | undefined
+	) => void
 	clearProduct: () => void
 }
 
@@ -53,17 +57,19 @@ export const useChooseProduct = create<IChooseDough>()(set => ({
 					val.subSizeId === data.subSizeId &&
 					val.variantId === data.variantId
 			)
-			console.log('data', data)
 
 			const updateProduct =
 				JSON.stringify(findProduct) === JSON.stringify(data)
-					? state.products.reduce((acc, val, index) => {
-							if (index === findIndexProduct) {
-								val.quantity = (val.quantity || 1) + 1
-							}
-							acc.push(val)
-							return acc
-					  }, [])
+					? state.products.reduce(
+							(acc: IProductStore[], val: IProductStore, index) => {
+								if (index === findIndexProduct) {
+									val.quantity = (val.quantity || 1) + 1
+								}
+								acc.push(val)
+								return acc
+							},
+							[]
+					  )
 					: someProduct
 					? [
 							...state.products.filter(val => val.productId !== data.productId),
@@ -78,7 +84,11 @@ export const useChooseProduct = create<IChooseDough>()(set => ({
 			}
 		}),
 
-	removeProduct: (id: number, variantId: number, sizeId: number) =>
+	removeProduct: (
+		id: number,
+		variantId: number | undefined,
+		sizeId: number | undefined
+	) =>
 		set(state => {
 			const remove = state.products.filter(
 				val =>

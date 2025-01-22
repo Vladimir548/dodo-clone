@@ -7,7 +7,7 @@ interface ICustomItem {
 	name: string
 	proportion: string
 	variant: string
-	weight: number
+	weight: string
 }
 
 function CartProductCombo({ products }: { products: ICartItem }) {
@@ -25,17 +25,19 @@ function CartProductCombo({ products }: { products: ICartItem }) {
 					item => item.index === product.index
 				)
 				return {
-					name: findProduct?.product.name,
-					variant: findProduct?.variant?.productAttribute?.variantTypes?.value,
-					proportion: findProduct?.size?.proportion?.value,
-					weight: findProduct?.size.weight,
+					name: findProduct?.product.name ?? '',
+					variant:
+						findProduct?.variant?.productAttribute?.variantTypes?.value ?? '',
+					proportion: findProduct?.size?.proportion?.value ?? '',
+					weight: findProduct?.size.weight ?? '',
 				}
 			} else {
 				return {
-					name: product?.product.name,
-					variant: product?.variant?.productAttribute?.variantTypes?.value,
-					proportion: product?.size.proportion.value,
-					weight: product?.size.weight,
+					name: product?.product.name ?? '',
+					variant:
+						product?.variant?.productAttribute?.variantTypes?.value ?? '',
+					proportion: product?.size.proportion.value ?? '',
+					weight: product?.size.weight ?? '',
 				}
 			}
 		})

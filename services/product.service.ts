@@ -2,7 +2,7 @@ import { productTypesConstructor } from '@/data/productTypesConstructor'
 import { productTypesWithSubProducts } from '@/data/productTypesWithSubProducts'
 import { TypeProduct } from '@/interface/enums'
 import { IProduct } from '@/interface/interface-product'
-
+import placeholder from '/public//placeholder.svg'
 export interface ISubProductForPrice {
 	id: number
 	index: number
@@ -12,8 +12,8 @@ export interface ISubProductForPrice {
 export const ProductService = {
 	calcSumPrice(
 		data: IProduct | undefined,
-		selectedSize: number | undefined,
-		selectedVariant?: number,
+		selectedSize: number | undefined | null,
+		selectedVariant?: number | null,
 		customProducts?: ISubProductForPrice[]
 	) {
 		if (customProducts && customProducts?.length > 0) {
@@ -40,7 +40,7 @@ export const ProductService = {
 			})
 			return totalPrice
 		} else {
-			if (productTypesWithSubProducts.includes(data?.type)) {
+			if (data?.type && productTypesWithSubProducts.includes(data?.type)) {
 				return data?.productVariant.find(
 					variant =>
 						variant.productAttribute.productVariantId === selectedVariant
@@ -131,30 +131,35 @@ export const ProductService = {
 					val.productAttribute.variantTypesId
 						? val.productAttribute.variantTypesId === selectedVariant
 						: val.productAttribute.productVariantId === selectedVariant
-				)?.image ?? ''
+				)?.image ?? placeholder
 			)
 		}
 	},
 	getPrice(
 		data: IProduct | undefined,
-		selectedVariant: number | undefined,
-		selectedSize: number | undefined
+		selectedVariant: number | undefined | null,
+		selectedSize: number | undefined | null
 	) {
 		if (data) {
 			if (productTypesWithSubProducts.includes(data.type)) {
-				return data.productVariant.find(
-					variant => variant.id === selectedVariant
-				)?.priceKit
+				return (
+					data.productVariant.find(variant => variant.id === selectedVariant)
+						?.priceKit ?? 0
+				)
 			} else {
-				return data.productVariant
-					.find(val =>
-						val.productAttribute.variantTypesId
-							? val.productAttribute.variantTypesId === selectedVariant
-							: val.productAttribute.productVariantId === selectedVariant
-					)
-					?.sizes.find(size => size.proportion.id === selectedSize)?.price
+				return (
+					data.productVariant
+						.find(val =>
+							val.productAttribute.variantTypesId
+								? val.productAttribute.variantTypesId === selectedVariant
+								: val.productAttribute.productVariantId === selectedVariant
+						)
+						?.sizes.find(size => size.proportion.id === selectedSize)?.price ??
+					0
+				)
 			}
 		}
+		return 0
 	},
 	getSize(
 		data: IProduct | undefined,
@@ -162,30 +167,36 @@ export const ProductService = {
 		selectedSize: number | undefined
 	) {
 		if (data) {
-			return data.productVariant
-				.find(val =>
-					val.productAttribute.variantTypesId
-						? val.productAttribute.variantTypesId === selectedVariant
-						: val.productAttribute.productVariantId === selectedVariant
-				)
-				?.sizes.find(size => size.proportion.id === selectedSize)?.proportion
-				.value
+			return (
+				data.productVariant
+					.find(val =>
+						val.productAttribute.variantTypesId
+							? val.productAttribute.variantTypesId === selectedVariant
+							: val.productAttribute.productVariantId === selectedVariant
+					)
+					?.sizes.find(size => size.proportion.id === selectedSize)?.proportion
+					.value ?? null
+			)
 		}
+		return null
 	},
 	getSizeId(
 		data: IProduct | undefined,
-		selectedVariant: number | undefined,
-		selectedSize: number | undefined
+		selectedVariant: number | undefined | null,
+		selectedSize: number | undefined | null
 	) {
 		if (data) {
-			return data.productVariant
-				.find(val =>
-					val.productAttribute.variantTypesId
-						? val.productAttribute.variantTypesId === selectedVariant
-						: val.productAttribute.productVariantId === selectedVariant
-				)
-				?.sizes.find(size => size.proportion.id === selectedSize)?.id
+			return (
+				data.productVariant
+					.find(val =>
+						val.productAttribute.variantTypesId
+							? val.productAttribute.variantTypesId === selectedVariant
+							: val.productAttribute.productVariantId === selectedVariant
+					)
+					?.sizes.find(size => size.proportion.id === selectedSize)?.id ?? null
+			)
 		}
+		return null
 	},
 	getProportionId(
 		data: IProduct | undefined,
@@ -193,14 +204,18 @@ export const ProductService = {
 		selectedSize: number | undefined
 	) {
 		if (data) {
-			return data.productVariant
-				.find(val =>
-					val.productAttribute.variantTypesId
-						? val.productAttribute.variantTypesId === selectedVariant
-						: val.productAttribute.productVariantId === selectedVariant
-				)
-				?.sizes.find(size => size.proportion.id === selectedSize)?.proportionId
+			return (
+				data.productVariant
+					.find(val =>
+						val.productAttribute.variantTypesId
+							? val.productAttribute.variantTypesId === selectedVariant
+							: val.productAttribute.productVariantId === selectedVariant
+					)
+					?.sizes.find(size => size.proportion.id === selectedSize)
+					?.proportionId ?? null
+			)
 		}
+		return null
 	},
 	getVariant(data: IProduct | undefined, selectedVariant: number | undefined) {
 		if (data) {
@@ -210,15 +225,16 @@ export const ProductService = {
 					: val.productAttribute.productVariantId === selectedVariant
 			)
 			if (getVariantProduct?.productAttribute.variantTypesId) {
-				return getVariantProduct.productAttribute.variantTypes.value
+				return getVariantProduct.productAttribute.variantTypes.value ?? null
 			} else {
-				return getVariantProduct?.productAttribute.name
+				return getVariantProduct?.productAttribute.name ?? null
 			}
 		}
+		return null
 	},
 	getVariantId(
 		data: IProduct | undefined,
-		selectedVariant: number | undefined
+		selectedVariant: number | undefined | null
 	) {
 		if (data) {
 			const getVariantProduct = data.productVariant.find(val =>
@@ -227,25 +243,25 @@ export const ProductService = {
 					: val.productAttribute.productVariantId === selectedVariant
 			)
 			if (getVariantProduct?.productAttribute.variantTypesId) {
-				return getVariantProduct.productAttribute.productVariantId
+				return getVariantProduct.productAttribute.productVariantId ?? null
 			} else {
-				return getVariantProduct?.productAttribute.productVariantId
+				return getVariantProduct?.productAttribute.productVariantId ?? null
 			}
 		}
+		return null
 	},
 	getVariantTypeId(
 		data: IProduct | undefined,
 		selectedVariant: number | undefined
 	) {
-		console.log('data 121', data)
-		console.log('selectedVariant 121', selectedVariant)
 		if (data) {
 			const getVariantProduct = data.productVariant.find(
 				val => val.productAttribute.productVariantId === selectedVariant
 			)
 
-			return getVariantProduct?.productAttribute.productVariantId
+			return getVariantProduct?.productAttribute.variantTypesId ?? null
 		}
+		return null
 	},
 	getIngredients(
 		data: IProduct | undefined,

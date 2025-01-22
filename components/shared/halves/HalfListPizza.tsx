@@ -17,6 +17,7 @@ function HalfListPizza() {
 	const rightHalf = useHalvesStore(state => state.rightHalf)
 	const selectedVariant = useHalvesStore(state => state.selectedVariant)
 	const selectedSize = useHalvesStore(state => state.selectedSize)
+
 	if (!data) return ''
 	return (
 		<div className='flex flex-wrap items-center gap-3 max-w-[800px] '>
@@ -41,30 +42,22 @@ function HalfListPizza() {
 								id: pizza.id,
 								name: pizza.name,
 								img: pizza.image,
-								variantId: pizza.productVariant.find(
-									variant =>
-										variant.productAttribute.variantTypesId === selectedVariant
-								)?.id,
-								sizeId: pizza.productVariant
-									.find(
-										variant =>
-											variant.productAttribute.variantTypesId ===
-											selectedVariant
-									)
-									?.sizes.find(size => size.proportionId === selectedSize)?.id,
+								variantId: ProductService.getVariantId(pizza, selectedVariant),
+								sizeId: ProductService.getSizeId(
+									pizza,
+									selectedVariant,
+									selectedSize
+								),
 								ingredients: pizza.ingredients
 									? pizza.ingredients
 											.map(ingredient => ingredient.name)
 											.join(', ')
 									: '',
-								price: pizza.productVariant
-									.find(
-										variant =>
-											variant.productAttribute.variantTypesId ===
-											selectedVariant
-									)
-									?.sizes.find(size => size.proportionId === selectedSize)
-									?.price,
+								price: ProductService.getPrice(
+									pizza,
+									selectedVariant,
+									selectedSize
+								),
 							})
 						}
 					>

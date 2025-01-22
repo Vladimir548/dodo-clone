@@ -28,11 +28,11 @@ export interface IChangeSubProduct {
 
 export interface IChangeSubProductInfo {
 	type?: TypeProduct
-	productId: number
-	variantId: number
-	proportionId: number
+	productId?: number
+	variantId?: number
+	proportionId?: number
 	price?: number
-	sizeId: number
+	sizeId?: number
 	variantTypesId: number | null
 }
 export interface ISubProductVariantAndSize {
@@ -147,14 +147,17 @@ export const useChangeKit = create<IStore>()((set, get) => ({
 						index: state.findIndexChangedProduct,
 					},
 					infoProduct: {
-						productId: newArrayProduct[state.findIndexChangedProduct].productId,
+						productId:
+							newArrayProduct[state.findIndexChangedProduct].productId ?? 0,
 						type: newArrayProduct[state.findIndexChangedProduct].type,
 						proportionId:
 							newArrayProduct[state.findIndexChangedProduct].proportionId,
-						variantId: newArrayProduct[state.findIndexChangedProduct].variantId,
+						variantId:
+							newArrayProduct[state.findIndexChangedProduct].variantId ?? 0,
 						price: newArrayProduct[state.findIndexChangedProduct].price,
 						variantTypesId:
 							newArrayProduct[state.findIndexChangedProduct].variantTypesId,
+						sizeId: newArrayProduct[state.findIndexChangedProduct].sizeId,
 					},
 				}
 			}
@@ -169,8 +172,8 @@ export const useChangeKit = create<IStore>()((set, get) => ({
 			if (products) {
 				const listProduct = products.map((product, index) => ({
 					productId: product.productId,
-					sizeId: product.subSizeId,
-					variantId: product.variantId,
+					sizeId: product.subSizeId ?? 0,
+					variantId: product.variantId ?? 0,
 					variantTypesValue:
 						product.variant.productAttribute.variantTypes?.value,
 					weight: product.size.weight,
@@ -191,7 +194,8 @@ export const useChangeKit = create<IStore>()((set, get) => ({
 
 					variantTypesId:
 						product.variant.productAttribute.variantTypesId ??
-						product.variantId,
+						product.variantId ??
+						null,
 					index: index,
 				}))
 

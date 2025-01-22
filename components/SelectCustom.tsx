@@ -13,7 +13,9 @@ interface ISelectCustom<T extends FieldValues> {
 	label: string
 	control: Control<T>
 	field: Path<T>
-	renderItems: { value: string | number; name: string }[] | undefined
+	renderItems:
+		| { value: string | number | null; name: string | null }[]
+		| undefined
 }
 export default function SelectCustom<T extends FieldValues>({
 	label,

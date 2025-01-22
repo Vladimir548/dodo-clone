@@ -21,7 +21,7 @@ interface IProductId {
 
 function ProductIdCombo({ data, modalClass }: IProductId) {
 	const { selectedSize, selectedVariant, setSelectedVariant } =
-		useGetSizeAndVariant({ data })
+		useGetSizeAndVariant()
 	const addProductList = useChangeKit(state => state.addProductList)
 	const removeSelectedProduct = useChangeKit(
 		state => state.removeSelectedAndChangedProduct

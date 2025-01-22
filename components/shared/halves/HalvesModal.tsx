@@ -12,11 +12,9 @@ function HalvesModal({ data }: { data: IProduct }) {
 	const leftHalf = useHalvesStore(state => state.leftHalf)
 	const rightHalf = useHalvesStore(state => state.rightHalf)
 	const getDefaultVariant = ProductService.setDefaultVariantProduct(data)
-	const selectedVariant = useHalvesStore(state => state.selectedVariant)
 	const selectedSize = useHalvesStore(state => state.selectedSize)
 	const arraySubProduct = useHalvesStore(state => state.arraySubProduct)
 	const arrayPriceProduct = useHalvesStore(state => state.arrayPriceProduct)
-	console.log('arrayPriceProduct', arrayPriceProduct)
 
 	return (
 		<div className='flex gap-x-3'>

@@ -7,8 +7,8 @@ interface IHalf {
 	name: string
 	img: string
 	ingredients: string
-	variantId: number
-	sizeId: number
+	variantId: number | null
+	sizeId: number | null
 	price: number
 }
 

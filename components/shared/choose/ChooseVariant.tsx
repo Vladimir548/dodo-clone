@@ -7,7 +7,7 @@ import { ProductService } from '@/services/product.service'
 import { useEffect, useState } from 'react'
 interface IChooseVariant {
 	data: IProduct | undefined
-	defaultVariantProps?: number
+	defaultVariantProps?: number | null | undefined
 	setSelectVariant?: (variant: number) => void
 }
 function ChooseVariant({
@@ -41,8 +41,10 @@ function ChooseVariant({
 				data={data?.productVariant
 					.sort(
 						(a, b) =>
-							a?.productAttribute?.variantTypesId -
-							b?.productAttribute?.variantTypesId
+							(a.productAttribute.variantTypesId ??
+								a.productAttribute.productVariantId) -
+							(b.productAttribute.variantTypesId ??
+								b.productAttribute.productVariantId)
 					)
 					.map(variant => ({
 						name: variant.productAttribute.variantTypes?.value

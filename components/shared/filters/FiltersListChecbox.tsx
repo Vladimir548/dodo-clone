@@ -20,7 +20,7 @@ interface Props {
 	searchInputPlaceholder?: string
 	onClickCheckbox?: (id: number) => void
 	defaultValue?: string[]
-	selected?: number[] | string[]
+	selected?: number[]
 	className?: string
 	name?: string
 }

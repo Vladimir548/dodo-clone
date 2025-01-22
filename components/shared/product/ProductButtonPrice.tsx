@@ -19,8 +19,8 @@ import { toast } from 'react-toastify'
 
 interface IProductPrice {
 	data: IProduct
-	selectedSize: number | undefined
-	selectedVariant?: number | undefined
+	selectedSize: number | undefined | null
+	selectedVariant?: number | undefined | null
 	subProduct?: ICartSubProduct[]
 	priceSubProduct?: ISubProductForPrice[]
 }
@@ -54,14 +54,13 @@ export default function ProductButtonPrice({
 	const productVariantId = ProductService.getVariantId(data, selectedVariant)
 	const sizeId = ProductService.getSizeId(data, selectedVariant, selectedSize)
 
-	const { sumPrice, ingredients } = usePriceIngredients()
+	const { ingredients } = usePriceIngredients()
 	const totalPrice = ProductService.calcSumPrice(
 		data,
 		sizeId,
 		productVariantId,
 		priceSubProduct
 	)
-	console.log('total price', totalPrice)
 	const cartId = useCurrentUser()?.cartId
 	const userId = useCurrentUser()?.userId
 	const addToCart = () => {

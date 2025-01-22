@@ -7,8 +7,8 @@ export interface IAddItemCart {
 	productId: number
 	ingredientIds: number[]
 	customSubProduct: ICartSubProduct[] | undefined
-	productVariantId: number | undefined
-	sizeId: number | undefined
+	productVariantId: number | undefined | null
+	sizeId: number | undefined | null
 }
 export interface ICartSubProduct {
 	subProductId: number

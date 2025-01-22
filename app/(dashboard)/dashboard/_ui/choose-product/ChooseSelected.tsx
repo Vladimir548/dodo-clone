@@ -23,9 +23,9 @@ function ChooseSelected() {
 			<div className=' overflow-x-auto w-[calc(100%_-_210px)] scrollbar pb-2'>
 				<Title className='pb-2' text='Добавленное' size='sm' />
 				<div className='flex gap-x-3 p-1   '>
-					{products.map(product => (
+					{products.map((product, index) => (
 						<DialogCustom
-							key={product.productId + product?.subSizeId + product?.variantId}
+							key={index}
 							trigger={
 								<div
 									className={
