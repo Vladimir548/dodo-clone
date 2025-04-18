@@ -11,7 +11,7 @@ import { productTypesWithSubProducts } from '@/data/productTypesWithSubProducts'
 import { IProduct } from '@/interface/interface-product'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 import SelectIngredient from '../_ui/select/SelectIngredient'
 
 export default function CreateProduct() {

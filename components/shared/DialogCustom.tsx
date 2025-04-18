@@ -14,13 +14,15 @@ function DialogCustom({
 	trigger,
 	content,
 	classContent,
+	key,
 }: {
 	trigger: ReactNode
 	content: ReactNode
-	classContent?: string
+	classContent?: string,
+	key?:number | string
 }) {
 	return (
-		<Dialog>
+		<Dialog key={key}>
 			<DialogTrigger asChild>{trigger}</DialogTrigger>
 			<DialogContent className={cn(classContent)}>
 				<VisuallyHidden.Root>

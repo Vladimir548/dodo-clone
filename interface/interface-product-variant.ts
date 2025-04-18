@@ -3,6 +3,7 @@ import { IIngredient } from '@/interface/interface-ingredient'
 import { IProduct } from '@/interface/interface-product'
 import { IProductAttribute } from '@/interface/interface-product-attribute'
 import { IProportion } from '@/interface/IProportion'
+import { TypeProduct } from './enums'
 
 export interface IProductVariant {
 	id: number
@@ -17,6 +18,7 @@ export interface IProductVariant {
 	priceKit?: number
 	productAttribute: IProductAttribute
 	subProduct: IProductsSub[]
+	parentType?: TypeProduct
 }
 export interface ISize {
 	id: number

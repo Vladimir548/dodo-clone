@@ -6,7 +6,7 @@ export const PriceCalcService = (data: ICartItem) => {
 	let totalPrice = 0
 
 	if (productTypesWithSubProducts.includes(data.product.type)) {
-		if (data.productVariant.subProduct.length > 0) {
+		if (data.productVariant?.subProduct.length > 0) {
 			let priceCartProduct = 0
 			data.productVariant.subProduct.forEach((product, index) => {
 				if (data.cartSubProduct.some(product => product.index === index)) {
@@ -27,7 +27,7 @@ export const PriceCalcService = (data: ICartItem) => {
 	}
 	if (
 		data.cartSubProduct.length === 0 &&
-		data.productVariant.subProduct.length === 0
+		data.productVariant?.subProduct.length === 0
 	) {
 		totalPrice =
 			(data?.size?.price +

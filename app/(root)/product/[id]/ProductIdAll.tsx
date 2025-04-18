@@ -19,7 +19,7 @@ interface IProductId {
 
 export default function ProductIdAll({ modalClass, data }: IProductId) {
 	const { selectedSize, setSelectedSize, selectedVariant, setSelectedVariant } =
-		useGetSizeAndVariant({ data })
+		useGetSizeAndVariant()
 
 	const proportion = ProductService.getProportion(
 		data,
@@ -80,7 +80,6 @@ export default function ProductIdAll({ modalClass, data }: IProductId) {
 					<ProductButtonPrice
 						data={data}
 						selectedSize={selectedSize}
-						price={getPrice}
 						selectedVariant={selectedVariant}
 					/>
 				</div>

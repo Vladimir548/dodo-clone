@@ -4,11 +4,9 @@ import { RangeSlider } from '@/components/shared/filters/FilterRangeSlider'
 import { Title } from '@/components/shared/Title'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
-import useCustomLocation from '@/hooks/useCustomLocation'
 import { useFiltersStore } from '@/store/filters'
 import { useQuery } from '@tanstack/react-query'
-import queryString from 'query-string'
-import { memo, useCallback, useEffect, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { NumericFormat } from 'react-number-format'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -33,13 +31,6 @@ export default memo(function FilterPrice({ categoryId }: IProps) {
 	const priceFrom = useFiltersStore(
 		useShallow(state => state?.prices?.[currentSlug]?.priceFrom)
 	)
-	const location = useCustomLocation()
-	const parsed = queryString.parse(location?.search ?? '')
-
-	useEffect(() => {
-		setPrices('priceFrom', Number(parsed.priceFrom))
-		setPrices('priceTo', Number(parsed.priceTo))
-	}, [])
 
 	const handleSliderChange = useCallback(
 		(prices: number[]) => {
@@ -69,10 +60,9 @@ export default memo(function FilterPrice({ categoryId }: IProps) {
 		},
 		[data]
 	)
-	const sliderValue = useMemo(
-		() => [priceFrom ?? 0, priceTo ?? Number(data)],
-		[priceFrom, priceTo, data]
-	)
+	const sliderValue = useMemo(() => {
+		return [priceFrom ?? 0, priceTo ?? Number(data)]
+	}, [priceFrom, priceTo, data])
 
 	if (isPending) {
 		return (
@@ -107,7 +97,9 @@ export default memo(function FilterPrice({ categoryId }: IProps) {
 
 					<NumericFormat
 						isAllowed={isPriceToAllowed}
-						onValueChange={values => setPrices('priceTo', Number(values.value))}
+						onValueChange={values => {
+							setPrices('priceTo', Number(values.value))
+						}}
 						customInput={Input}
 						value={priceTo ?? Number(data)}
 						max={Number(data)}

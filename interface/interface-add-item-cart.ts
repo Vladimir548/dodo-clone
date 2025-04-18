@@ -1,10 +1,10 @@
 import { TypeProduct } from './enums'
 
 export interface IAddItemCart {
-	typeProduct: TypeProduct
+	typeProduct?: TypeProduct
 	quantity: number
 	cartId: number | undefined
-	productId: number
+	productId?: number
 	ingredientIds: number[]
 	customSubProduct: ICartSubProduct[] | undefined
 	productVariantId: number | undefined | null

@@ -1,14 +1,16 @@
 import { ICartSubProduct } from '@/interface/interface-add-item-cart'
-import { ISubProductForPrice } from '@/services/product.service'
+import { IIngredient } from '@/interface/interface-ingredient'
+import { IProduct } from '@/interface/interface-product'
+import { ISubProductForPrice, ProductService } from '@/services/product.service'
 import { create } from 'zustand'
 
 interface IHalf {
 	id: number
 	name: string
 	img: string
-	ingredients: string
-	variantId: number | null
-	sizeId: number | null
+	ingredients?: IIngredient[]
+	variantId?: number | null
+	sizeId?: number | null
 	price: number
 }
 
@@ -16,32 +18,52 @@ interface IHalvesStore {
 	leftHalf: IHalf | null
 	rightHalf: IHalf | null
 	arraySubProduct: ICartSubProduct[]
-	addHalf: (value: IHalf) => void
+	addHalf: (value: IProduct) => void
 	selectedVariant: number | null
 	selectedSize: number | null
 	setSelectedVariant: (value: number) => void
 	setSelectedSize: (value: number) => void
 	arrayPriceProduct: ISubProductForPrice[]
+	defaultProduct: IProduct[]
+	removeProduct: (id: number, additional: number) => void
 }
 
-export const useHalvesStore = create<IHalvesStore>()(set => ({
+export const useHalvesStore = create<IHalvesStore>()((set, get) => ({
 	leftHalf: null,
 	rightHalf: null,
 	selectedVariant: null,
 	selectedSize: null,
 	arrayPriceProduct: [],
-	addHalf: (value: IHalf) =>
+	defaultProduct: [],
+	addHalf: (value: IProduct) =>
+		// @ts-ignore
 		set(state => {
+			// @ts-ignore
 			const half: IHalf = {
 				id: value.id,
 				name: value.name,
-				img: value.img,
-				ingredients: value.ingredients,
-				variantId: value.variantId,
-				sizeId: value.sizeId,
+				img: value.image,
+				ingredients: ProductService.getIngredients(
+					value,
+					state.selectedVariant,
+					state.selectedSize
+				),
+				variantId: ProductService.getVariantId(value, state.selectedVariant),
+				sizeId: ProductService.getProportionId(
+					value,
+					state.selectedVariant,
+					state.selectedSize
+				),
 			}
-			const halfPrice = Math.round(value.price / 2)
-			console.log('value.price', value.price)
+			const halfPrice = Math.ceil(
+				Number(
+					ProductService.getPrice(
+						value,
+						state.selectedVariant,
+						state.selectedSize
+					)
+				) / 2
+			)
 
 			if (!state.leftHalf?.id && state.rightHalf?.id !== value.id) {
 				return {
@@ -61,9 +83,10 @@ export const useHalvesStore = create<IHalvesStore>()(set => ({
 						{
 							index: 0,
 							price: halfPrice,
-							id: value.id,
+							id: half.id,
 						},
 					],
+					defaultProduct: [...state.defaultProduct, value],
 				}
 			}
 			if (state?.leftHalf?.id === value.id) {
@@ -74,6 +97,9 @@ export const useHalvesStore = create<IHalvesStore>()(set => ({
 						val => val.subProductId !== value.id
 					),
 					arrayPriceProduct: state.arrayPriceProduct.filter(
+						val => val.id !== value.id
+					),
+					defaultProduct: state.defaultProduct.filter(
 						val => val.id !== value.id
 					),
 				}
@@ -99,6 +125,7 @@ export const useHalvesStore = create<IHalvesStore>()(set => ({
 							id: value.id,
 						},
 					],
+					defaultProduct: [...state.defaultProduct, value],
 				}
 			}
 			if (state?.rightHalf?.id === value.id) {
@@ -109,6 +136,9 @@ export const useHalvesStore = create<IHalvesStore>()(set => ({
 						val => val.subProductId !== value.id
 					),
 					arrayPriceProduct: state.arrayPriceProduct.filter(
+						val => val.id !== value.id
+					),
+					defaultProduct: state.defaultProduct.filter(
 						val => val.id !== value.id
 					),
 				}
@@ -133,6 +163,7 @@ export const useHalvesStore = create<IHalvesStore>()(set => ({
 							id: value.id,
 						},
 					],
+					defaultProduct: [value],
 				}
 			}
 			if (state.arraySubProduct.some(val => val.subProductId === value.id)) {
@@ -146,7 +177,53 @@ export const useHalvesStore = create<IHalvesStore>()(set => ({
 
 			return state
 		}),
-	setSelectedVariant: (value: number) => set({ selectedVariant: value }),
-	setSelectedSize: (value: number) => set({ selectedSize: value }),
+
+	removeProduct: (id: number, additional?: number | string) =>
+		set(state => {
+			if (!additional) {
+				return {
+					arraySubProduct: state.arraySubProduct.filter(
+						val => val.subProductId !== id
+					),
+					arrayPriceProduct: state.arrayPriceProduct.filter(
+						val => val.id !== id
+					),
+					defaultProduct: state.defaultProduct.filter(val => val.id !== id),
+					leftHalf: state.leftHalf?.id === id ? null : state.leftHalf,
+					rightHalf: state.rightHalf?.id === id ? null : state.rightHalf,
+				}
+			}
+			return {}
+		}),
+	setSelectedVariant: (value: number) =>
+		set(state => {
+			state.defaultProduct.map((product, index) => {
+				return (state.arrayPriceProduct[index].price = Math.ceil(
+					Number(ProductService.getPrice(product, value, state.selectedSize)) /
+						2
+				))
+			})
+			state.arrayPriceProduct.map(product => {
+				return get().removeProduct(product.id, product.price)
+			})
+			return {
+				selectedVariant: value,
+			}
+		}),
+	setSelectedSize: (value: number) =>
+		set(state => {
+			state.defaultProduct.map((product, index) => {
+				return (state.arrayPriceProduct[index].price = Math.ceil(
+					Number(
+						ProductService.getPrice(product, state.selectedVariant, value)
+					) / 2
+				))
+			})
+			state.arrayPriceProduct.map(product => {
+				return get().removeProduct(product.id, product.price)
+			})
+			return { selectedSize: value }
+		}),
+
 	arraySubProduct: [],
 }))

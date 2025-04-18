@@ -5,6 +5,7 @@ import Image from 'next/image'
 function HalfRightSide() {
 	const leftHalf = useHalvesStore(state => state.leftHalf)
 	const rightHalf = useHalvesStore(state => state.rightHalf)
+
 	return (
 		<div className='flex flex-col gap-y-3 w-[370px]'>
 			<div className='flex items-center gap-x-2 shadow-[0px_1px_2px] shadow-[#0605323d] dark:shadow-[#8e8be448] p-3 rounded-md min-h-20'>
@@ -39,7 +40,7 @@ function HalfRightSide() {
 					)}
 					{leftHalf?.ingredients ? (
 						<p className='text-secondary-black dark:text-secondary-white text-sm'>
-							{leftHalf.ingredients}
+							{leftHalf.ingredients.join(', ')}
 						</p>
 					) : (
 						''
@@ -78,7 +79,7 @@ function HalfRightSide() {
 					)}
 					{rightHalf?.ingredients ? (
 						<p className='text-secondary-black dark:text-secondary-white text-sm'>
-							{rightHalf.ingredients}
+							{rightHalf.ingredients.join(', ')}
 						</p>
 					) : (
 						''

@@ -13,16 +13,17 @@ import { ISubProductForPrice, ProductService } from '@/services/product.service'
 import { useIngredientsStore } from '@/store/ingredients'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ShoppingCart } from 'lucide-react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 
 interface IProductPrice {
-	data: IProduct
+	data?: IProduct
 	selectedSize: number | undefined | null
 	selectedVariant?: number | undefined | null
 	subProduct?: ICartSubProduct[]
 	priceSubProduct?: ISubProductForPrice[]
+	isDisabled?: boolean
 }
 
 export default function ProductButtonPrice({
@@ -31,6 +32,7 @@ export default function ProductButtonPrice({
 	selectedVariant,
 	subProduct,
 	priceSubProduct,
+	isDisabled = false,
 }: IProductPrice) {
 	const queryClient = useQueryClient()
 	const { mutate } = useMutation({
@@ -40,7 +42,7 @@ export default function ProductButtonPrice({
 			queryClient.invalidateQueries({
 				queryKey: ['cart-id'],
 			})
-			toast.success(`${data.name} добавлен в корзину`)
+			toast.success(`${data?.name} добавлен в корзину`)
 		},
 		onError: () => {
 			toast.error('Ошибка при добавлении в корзину')
@@ -51,10 +53,12 @@ export default function ProductButtonPrice({
 		clearIngredients()
 	}, [selectedSize])
 
+	const { push } = useRouter()
+
 	const productVariantId = ProductService.getVariantId(data, selectedVariant)
 	const sizeId = ProductService.getSizeId(data, selectedVariant, selectedSize)
 
-	const { ingredients } = usePriceIngredients()
+	const { ingredients, sumPrice } = usePriceIngredients()
 	const totalPrice = ProductService.calcSumPrice(
 		data,
 		sizeId,
@@ -63,50 +67,41 @@ export default function ProductButtonPrice({
 	)
 	const cartId = useCurrentUser()?.cartId
 	const userId = useCurrentUser()?.userId
+
 	const addToCart = () => {
-		const objItem: IAddItemCart = {
-			ingredientIds: ingredients,
-			productId: data.id,
-			productVariantId,
-			customSubProduct: subProduct,
-			sizeId,
-			quantity: 1,
-			cartId,
-			typeProduct: data.type,
+		if (userId) {
+			const objItem: IAddItemCart = {
+				ingredientIds: ingredients,
+				productId: data?.id,
+				productVariantId,
+				customSubProduct: subProduct,
+				sizeId,
+				quantity: 1,
+				cartId,
+				typeProduct: data?.type,
+			}
+			mutate(objItem)
+		} else {
+			push('/auth?type=login', {
+				scroll: false,
+			})
 		}
-		mutate(objItem)
 	}
 	return (
 		<>
-			{userId ? (
-				<div className={'w-full flex gap-x-2 items-center'}>
-					<Button
-						onClick={addToCart}
-						className={'w-full flex gap-x-2 items-center text-lg h-12 '}
-					>
-						<span>
-							<ShoppingCart />
-						</span>
-						<span>В корзину</span>
-						<b>{totalPrice} ₽</b>
-					</Button>
-				</div>
-			) : (
-				<Link
-					href={'/auth?type=login'}
-					className={'w-full flex gap-x-2 items-center'}
+			<div className={'w-full flex gap-x-2 items-center'}>
+				<Button
+					disabled={isDisabled}
+					onClick={addToCart}
+					className={'w-full flex gap-x-2 items-center text-lg h-12 '}
 				>
-					<Button className={'w-full flex gap-x-2 items-center text-lg h-12 '}>
-						<>
-							<span>
-								<ShoppingCart />
-							</span>
-							<span>В корзину</span>
-							<b>{totalPrice} ₽</b>
-						</>
-					</Button>
-				</Link>
-			)}
+					<span>
+						<ShoppingCart />
+					</span>
+					<span>В корзину</span>
+					{totalPrice && <b>{totalPrice + Number(sumPrice ?? 0)} ₽</b>}
+				</Button>
+			</div>
 		</>
 	)
 }

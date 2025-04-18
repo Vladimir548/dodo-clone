@@ -37,29 +37,7 @@ function HalfListPizza() {
 								: 'border-transparent'
 						}`}
 						key={pizza.id}
-						onClick={() =>
-							addHalf({
-								id: pizza.id,
-								name: pizza.name,
-								img: pizza.image,
-								variantId: ProductService.getVariantId(pizza, selectedVariant),
-								sizeId: ProductService.getSizeId(
-									pizza,
-									selectedVariant,
-									selectedSize
-								),
-								ingredients: pizza.ingredients
-									? pizza.ingredients
-											.map(ingredient => ingredient.name)
-											.join(', ')
-									: '',
-								price: ProductService.getPrice(
-									pizza,
-									selectedVariant,
-									selectedSize
-								),
-							})
-						}
+						onClick={() => addHalf(pizza)}
 					>
 						<div className='relative'>
 							<span

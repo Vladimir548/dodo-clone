@@ -64,7 +64,7 @@ interface IStore {
 		variant: number,
 		variantValue: string | null | undefined,
 		image: string,
-		variantId: number
+		variantId: number | null
 	) => void
 
 	handleIsChange: (val: boolean) => void
@@ -253,7 +253,7 @@ export const useChangeKit = create<IStore>()((set, get) => ({
 		variant: number,
 		variantValue: string | null | undefined,
 		image: string,
-		variantId: number
+		variantId: number | null
 	) => {
 		set(state => {
 			if (state.findIndexChangedProduct === null) {
@@ -263,7 +263,7 @@ export const useChangeKit = create<IStore>()((set, get) => ({
 			newArrayProduct[state.findIndexChangedProduct] = {
 				...newArrayProduct[state.findIndexChangedProduct],
 				variantTypesId: variant,
-				variantId: variantId,
+				...(variantId && { variantId: variantId }),
 				...(variantValue && { variantTypesValue: variantValue }),
 				...(image && { image }),
 			}

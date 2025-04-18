@@ -29,6 +29,10 @@ export const QueryVariantProduct = {
 		if (dto.subProduct) {
 			formData.append('subProduct', JSON.stringify(dto.subProduct))
 		}
+		if (dto.parentType) {
+			console.log('dto',dto.parentType)
+			formData.append('parentType', dto.parentType)
+		}
 
 		formData.append('file', dto?.image)
 

@@ -6,4 +6,8 @@ export const QueryOrder = {
 		const { data } = await axiosClassic.post(`/order/create`, dto)
 		return data as IOrder
 	},
+	async findId() {
+		const { data } = await axiosClassic.get(`/order/user`)
+		return data as IOrder[]
+	},
 }

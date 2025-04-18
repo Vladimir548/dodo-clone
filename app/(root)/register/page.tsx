@@ -1,10 +1,9 @@
-import Register from "@/components/auth/Register";
+import RegisterForm from '@/app/features/auth/components/RegisterForm'
 
 export default function Page() {
-    return (
-        <div>
-            <Register/>
-
-        </div>
-    );
-};
+	return (
+		<div>
+			<RegisterForm />
+		</div>
+	)
+}

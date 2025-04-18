@@ -83,10 +83,11 @@ export const QueryProduct = {
 		return data as IProduct[]
 	},
 	async getListBySizeAndVariant(params: {
-		type: TypeProduct
-		size: number
-		variant: number
+		type: TypeProduct | undefined
+		size: number | undefined
+		variant: number | undefined
 	}) {
+		console.log('params', params)
 		const { data } = await axiosClassic.get('/product/list-by-size-variant', {
 			params: {
 				params,

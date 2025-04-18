@@ -27,7 +27,7 @@ function SubProductChangeVariant({
 		return data?.find(variant => variant.id === info?.productId)
 	}, [info, data])
 
-	const { setSelectedVariant, selectedVariant } = useGetSizeAndVariant({})
+	const { setSelectedVariant, selectedVariant } = useGetSizeAndVariant()
 
 	const getValueVariant = ProductService.getVariant(product, selectedVariant)
 	const getImageVariant = ProductService.getImage(product, selectedVariant)

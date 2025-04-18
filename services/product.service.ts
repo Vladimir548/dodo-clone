@@ -14,7 +14,8 @@ export const ProductService = {
 		data: IProduct | undefined,
 		selectedSize: number | undefined | null,
 		selectedVariant?: number | null,
-		customProducts?: ISubProductForPrice[]
+		customProducts?: ISubProductForPrice[],
+		priceIngredients?: number
 	) {
 		if (customProducts && customProducts?.length > 0) {
 			let totalPrice = 0
@@ -47,10 +48,8 @@ export const ProductService = {
 				)?.priceKit
 			} else {
 				return data?.productVariant
-					.find(val =>
-						val.productAttribute.variantTypesId
-							? val.productAttribute.variantTypesId === selectedVariant
-							: val.productAttribute.productVariantId === selectedVariant
+					.find(
+						val => val.productAttribute.productVariantId === selectedVariant
 					)
 					?.sizes.find(size => size.id === selectedSize)?.price
 			}
@@ -200,8 +199,8 @@ export const ProductService = {
 	},
 	getProportionId(
 		data: IProduct | undefined,
-		selectedVariant: number | undefined,
-		selectedSize: number | undefined
+		selectedVariant: number | undefined | null,
+		selectedSize: number | undefined | null
 	) {
 		if (data) {
 			return (
@@ -265,8 +264,8 @@ export const ProductService = {
 	},
 	getIngredients(
 		data: IProduct | undefined,
-		selectedVariant: number | undefined,
-		selectedSize: number | undefined
+		selectedVariant: number | undefined | null,
+		selectedSize: number | undefined | null
 	) {
 		if (data) {
 			return data.productVariant

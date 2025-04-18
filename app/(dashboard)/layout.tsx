@@ -1,12 +1,11 @@
-import type {Metadata} from "next";
-import {Nunito} from "next/font/google";
-import "../globals.css";
-import {ThemeProvider} from "@/providers/ThemeProvider";
-import Header from "@/components/shared/header/Header";
-import ProviderQuery from "@/providers/ProviderQuery";
-import {ToastContainer} from "react-toastify";
-import ToastProvider from "@/providers/ToastProvider";
-import Sidebar from "@/components/sidebar/Sidebar";
+import { ThemeProvider } from "@/providers/ThemeProvider"
+import type { Metadata } from "next"
+import { Nunito } from "next/font/google"
+import "../globals.css"
+
+import Sidebar from "@/components/sidebar/Sidebar"
+import ProviderQuery from "@/providers/ProviderQuery"
+import ToastProvider from "@/providers/ToastProvider"
 
 const nunito = Nunito({
     subsets: ["cyrillic"],

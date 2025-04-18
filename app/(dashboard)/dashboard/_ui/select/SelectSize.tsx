@@ -108,6 +108,7 @@ export default function SelectSize({ control, categoryId, watch }: ISizeProps) {
 											value={value}
 											thousandSeparator=','
 											suffix=' г'
+											defaultValue={null}
 											customInput={InputCustom}
 											label={`Масса для ${sizeLabel}`}
 										/>

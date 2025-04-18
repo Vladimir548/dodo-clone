@@ -1,6 +1,6 @@
 import { axiosClassic } from '@/app/api/axios/axios'
 
-import { IProportion } from '@/interface/IProportion'
+import { IProportion, IProportionData } from '@/interface/IProportion'
 
 export const QueryProportion = {
 	async create(dto: IProportion) {
@@ -11,7 +11,7 @@ export const QueryProportion = {
 		return data as IProportion
 	},
 	async all() {
-		const { data } = await axiosClassic.get<IProportion[]>('/size/all')
+		const { data } = await axiosClassic.get<IProportion[]>('/proportion/all')
 		return data as IProportion[]
 	},
 	async byCategory(categoryId: number | null | undefined) {
@@ -24,5 +24,12 @@ export const QueryProportion = {
 			}
 		)
 		return data as IProportion[]
+	},
+	async update(dto: IProportionData) {
+		const { data } = await axiosClassic.patch<IProportionData>(
+			`/proportion/update/${dto.id}`,
+			dto
+		)
+		return data as IProportionData
 	},
 }

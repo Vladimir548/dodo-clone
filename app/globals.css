@@ -43,9 +43,10 @@ html {
 		--ring: 24.6 95% 53.1%;
 		--radius: 18px;
 	}
-	root[class~='dark'] {
-		--foreground: 136, 0%, 97%;
-	}
+}
+.dark {
+	--foreground: 136, 0%, 97%;
+
 }
 
 * {
@@ -59,12 +60,10 @@ html {
 
 .scrollbar::-webkit-scrollbar-track {
 	border-radius: 6px;
-
 	background: #e7e7e7;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-	/*background: #dbdadd;*/
 	@apply dark:bg-primary bg-primary;
 	border-radius: 6px;
 }
@@ -110,4 +109,13 @@ input:-webkit-autofill:active {
 }
 .text-secondary {
 	@apply text-secondary-foreground dark:text-secondary-white;
+}
+/*---break---*/
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+	}
+  body {
+    @apply bg-background text-foreground;
+	}
 }

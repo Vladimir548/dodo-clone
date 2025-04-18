@@ -25,7 +25,7 @@ export default function ProductIdPizza({
 }: IProductId) {
 	const { data: sizesByCategory } = useGetSizeByCategory(data?.categoryId)
 	const { selectedSize, setSelectedSize, selectedVariant, setSelectedVariant } =
-		useGetSizeAndVariant({ data })
+		useGetSizeAndVariant()
 
 	const getVariant = ProductService.getVariant(data, selectedVariant)
 
@@ -46,7 +46,6 @@ export default function ProductIdPizza({
 		selectedVariant,
 		selectedSize
 	)
-
 	const arrSizeImg = [400, 450, 500]
 
 	if (!data) return null
@@ -104,7 +103,6 @@ export default function ProductIdPizza({
 					data={data}
 					selectedSize={selectedSize}
 					selectedVariant={selectedVariant}
-					price={getPrice}
 				/>
 			</div>
 		</Container>

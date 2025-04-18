@@ -13,7 +13,7 @@ import {
 	IProductVariant,
 } from '@/interface/interface-product-variant'
 import { useMutation } from '@tanstack/react-query'
-import { toast } from 'react-toastify'
+import { toast } from 'sonner'
 
 import { InputCustom } from '@/components/shared/InputCustom'
 import { productTypesWithSubProducts } from '@/data/productTypesWithSubProducts'
@@ -23,6 +23,7 @@ import { useEffect } from 'react'
 import ChooseProduct from '../_ui/choose-product/ChooseProduct'
 import SelectPizzaVariant from '../_ui/select/SelectPizzaVariant'
 import SelectSize from '../_ui/select/SelectSize'
+import { toastMessageHandler } from '@/lib/toast-message-handler'
 
 export default function CreateVariantProduct() {
 	const products = useChooseProduct(state => state.products)
@@ -44,7 +45,7 @@ export default function CreateVariantProduct() {
 			toast.success('Данные добавлены')
 		},
 		onError: error => {
-			console.log('error', error)
+			toastMessageHandler(error)
 			toast.error('Ошибка при добавлении данных')
 		},
 	})
@@ -66,8 +67,9 @@ export default function CreateVariantProduct() {
 	useEffect(() => {
 		if (type && productTypesWithSubProducts.includes(type)) {
 			setValue('subProduct', subProduct as IProductsSub[])
+			setValue('parentType', type as never )
 		}
-	}, [products, setValue])
+	}, [products, setValue, type])
 
 	return (
 		<FormLayout

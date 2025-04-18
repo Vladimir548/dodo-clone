@@ -1,9 +1,9 @@
-import AuthTabs from "@/components/auth/AuthTabs";
+import AuthTabs from '@/app/features/auth/components/AuthTabs'
 
 export default function Page() {
-    return (
-        <div>
-            <AuthTabs/>
-        </div>
-    );
-};
+	return (
+		<div>
+			<AuthTabs />
+		</div>
+	)
+}

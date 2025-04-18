@@ -1,16 +1,23 @@
 'use client'
 
-import Cookies from "js-cookie";
-import {jwtDecode} from "jwt-decode";
-import {useEffect, useState} from "react";
+import { UserService } from '@/app/features/auth/services/user.service'
+import { useQuery } from '@tanstack/react-query'
 
-export default function useCurrentUser(): { userId: number; cartId: number } | null {
-    const accessToken = Cookies.get('accessToken');
+export default function useCurrentUser(): {
+	userId: number
+	cartId: number
+} | null {
+	const { data, isError } = useQuery({
+		queryKey: ['user data'],
+		queryFn: () => UserService.profile(),
+	})
 
-    if (accessToken) {
-        const { cartId, userId } = jwtDecode<{ userId: number; cartId: number }>(accessToken);
-        return { userId, cartId };
-    }
+	if (data) {
+		return { userId: Number(data.id), cartId: Number(data?.cart?.id) }
+	}
+	if (isError) {
+		return null
+	}
 
-    return null;
+	return null
 }
