@@ -35,6 +35,7 @@ function SubProductList({ variant }: { variant: IProductsSub[] | undefined }) {
 	}
 
 	if (!variant) return
+
 	return (
 		<div className='flex flex-col gap-y-2'>
 			{subProducts?.map((product, index) => (

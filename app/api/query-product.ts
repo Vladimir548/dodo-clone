@@ -87,10 +87,11 @@ export const QueryProduct = {
 		size: number | undefined
 		variant: number | undefined
 	}) {
-		console.log('params', params)
 		const { data } = await axiosClassic.get('/product/list-by-size-variant', {
 			params: {
-				params,
+				type: params.type,
+				size: params.size,
+				variant: params.variant,
 			},
 		})
 		return data as IProduct[]

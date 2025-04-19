@@ -2,7 +2,7 @@ import { TypeProduct } from '@/interface/enums'
 import { ICartSubProduct } from '@/interface/interface-add-item-cart'
 import { IProduct } from '@/interface/interface-product'
 import { IProductsSub } from '@/interface/interface-product-variant'
-import { ISubProductForPrice } from '@/services/product.service'
+import { ISubProductForPrice, ProductService } from '@/services/product.service'
 import { create } from 'zustand'
 
 export interface IChangeSubProduct {
@@ -170,6 +170,7 @@ export const useChangeKit = create<IStore>()((set, get) => ({
 		set(state => {
 			state.subProducts = []
 			if (products) {
+				console.log('products', products)
 				const listProduct = products.map((product, index) => ({
 					productId: product.productId,
 					sizeId: product.subSizeId ?? 0,

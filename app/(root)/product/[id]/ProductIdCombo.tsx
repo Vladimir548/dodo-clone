@@ -41,6 +41,7 @@ function ProductIdCombo({ data, modalClass }: IProductId) {
 
 	const arraySubProduct = useChangeKit(state => state.arraySubProduct)
 	const priceCustomProduct = useChangeKit(state => state.priceNewProduct)
+
 	return (
 		<Container
 			className={`text-white h-full w-full grid grid-cols-2  justify-between gap-x-4 pt-8 ${

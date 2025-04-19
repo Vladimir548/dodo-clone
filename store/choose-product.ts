@@ -3,7 +3,7 @@ import { create } from 'zustand'
 export interface IProductStore {
 	productId: number
 	variantId: number | undefined
-	subSizeId: number | undefined
+	subSizeId: number
 	price: number
 	name: string
 	size: string | null

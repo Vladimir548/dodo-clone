@@ -27,6 +27,13 @@ function ChooseButton({
 		selectedSize
 	)
 	const getVariant = ProductService.getVariant(data, selectedVariant)
+	const getVariantId = ProductService.getVariantId(data, selectedVariant)
+	const getSizeId = ProductService.getSizeId(
+		data,
+		selectedVariant,
+		selectedSize
+	)
+	const variantTypeId = ProductService.getVariantTypeId(data, selectedVariant)
 
 	return (
 		<Button
@@ -34,10 +41,10 @@ function ChooseButton({
 			onClick={() =>
 				addProduct({
 					productId: data.id,
-					subSizeId: selectedSize,
-					variantId: selectedVariant,
+					subSizeId: getSizeId ?? 0,
+					variantId: getVariantId ?? 0,
 					img: getImage,
-					variantTypeId: selectedSize,
+					variantTypeId: variantTypeId,
 					proportionId: getProportionId,
 					name: data.name,
 					price: getPrice,
